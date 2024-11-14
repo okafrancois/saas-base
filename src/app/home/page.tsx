@@ -1,11 +1,9 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import imagePicture from '@/assets/contact-ga-image.png'
 import Image from 'next/image'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog'
 import DarkModeToggle from '@/components/ui/darkmode-toggle'
 import { useTranslations } from 'next-intl'
 import LangSwitcher from '@/components/LangSwitcher'
@@ -20,35 +18,33 @@ export default function HomePage() {
       }
     >
       <header className={'fixed top-4 z-40 w-full md:top-6'}>
-        <div className={'container flex items-start justify-between gap-4'}>
-          <div className="logo flex w-max flex-col gap-2 sm:w-full sm:flex-row sm:items-center sm:gap-x-6">
-            <div className='image flex items-center'>
-              <span className="hidden text-xs font-bold uppercase min-[380px]:inline sm:text-base">
+        <div className={'container flex w-full items-center justify-between gap-4'}>
+          <span className="hidden text-md font-bold uppercase min-[380px]:inline sm:text-base">
                 {t('consulat')}
-              </span>
-            </div>
-            <DarkModeToggle />
+          </span>
+          <div className="flex w-max gap-3">
             <LangSwitcher />
+            <Link
+              href={PAGE_ROUTES.login}
+              className={
+                buttonVariants({
+                  variant: 'default',
+                }) + ' !rounded-full max-[480px]:!px-2'
+              }
+            >
+              <span>{t('nav.login')}</span>
+            </Link>
           </div>
-          <Link
-            href={PAGE_ROUTES.login}
-            className={
-              buttonVariants({
-                variant: 'default',
-              }) + ' !rounded-full max-[480px]:!px-2'
-            }
-          >
-            <span>{t('nav.login')}</span>
-          </Link>
+
         </div>
       </header>
       <div
         className="container relative flex h-full grow flex-col-reverse justify-evenly gap-4 py-12 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
-        <div className='relative max-w-[55%] space-y-4'>
+        <div className='relative max-w-[70%] md:max-w-full space-y-4'>
           <h2 className={'text-lg font-semibold uppercase lg:text-6xl'}>
             {t('title')}
           </h2>
-          <p className={'max-w-[500px]'}>{t('subtitle')}</p>
+          <p>{t('subtitle')}</p>
           <div className='actions flex flex-wrap items-center gap-4'>
             <Link
               href={PAGE_ROUTES.consular_registration}
@@ -56,58 +52,26 @@ export default function HomePage() {
                 buttonVariants({
                   variant: 'default',
                 }) +
-                ' !rounded-full leading-none flex flex-col items-center  px-6 !py-7 text-center'
+                ' !rounded-full !text-lg !p-5 leading-none flex flex-col items-center text-center'
               }
             >
-              <span className={'text-xl leading-none'}>
+              <span className={'leading-none'}>
                 {t('cta.request_card')}
               </span>
             </Link>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant='outline' className={'rounded-full'}>
-                  {t('cta.learn_more')}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-[360px] rounded-md p-0 lg:container">
-                <DialogBody>
-                  <iframe
-                    className={'aspect-[1497/776] h-auto w-full rounded-md'}
-                    width='1497'
-                    height='776'
-                    src='https://www.youtube.com/embed/v5snnfUFZw0'
-                    title='NFC-vCard: the modern digital alternative to the classic business card'
-                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                    referrerPolicy='strict-origin-when-cross-origin'
-                    allowFullScreen
-                  ></iframe>
-                </DialogBody>
-              </DialogContent>
-            </Dialog>
           </div>
         </div>
-        <div className="image-cover flex items-end justify-center lg:items-center">
-          <div className="image relative  aspect-square w-[270px] lg:w-[400px]">
-            <Link
-              href={PAGE_ROUTES.listing}
-              className={
-                'loop -translate-y-1/6 absolute right-0 top-0 flex aspect-square min-w-[130px] translate-x-1/4 rotate-[-30deg] items-center justify-center rounded-full border-8 border-[#D19D01] bg-white dark:text-background lg:min-w-[200px]'
-              }
-            >
-              <div
-                className={
-                  'flex rotate-[30deg] flex-col gap-0 p-1 text-center text-sm uppercase lg:text-xl'
-                }
-              ></div>
-              <span
-                className={
-                  'absolute bottom-0  h-[70px] w-[20px] translate-y-[99%] rounded-b-md bg-[#D19D01]'
-                }
-              />
-            </Link>
+        <div className="image-cover w-full md:max-w-[40%]">
+          <div className="relative w-full overflow-hidden rounded max-w-[400px] md:max-w-[500px]">
+            <iframe
+              className={'w-full absolut top-0 left-0 object-cover h-full max-w-full aspect-[1440/1080]'}
+              src="https://player.vimeo.com/video/1023725393?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              width="1440" height="1080" allow="autoplay; picture-in-picture; clipboard-write"
+              title="Présentation carte consulaire"></iframe>
           </div>
+          <script src="https://player.vimeo.com/api/player.js"></script>
         </div>
-        <div className="image absolute -right-16 bottom-0 -z-10 w-[70%] lg:hidden">
+        <div className="image absolute w-full -right-16 bottom-0 -z-10 max-w-[50%] md:hidden">
           <Image
             src={imagePicture}
             alt={'business card cover'}
