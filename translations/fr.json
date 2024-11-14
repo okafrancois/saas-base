@@ -1,0 +1,1230 @@
+{
+  "messages": {
+    "errors": {
+      "identifier_required": "Identifiant requis",
+      "invalid_email": "Email invalide",
+      "invalid_phone": "Numéro de téléphone invalide",
+      "doc_required": "Ce document est requis",
+      "doc_one_max": "Un seul document est autorisé",
+      "doc_invalid": "Document invalide",
+      "doc_size_3": "La taille du fichier doit être inférieure à 3 Mo",
+      "doc_size_5": "La taille du fichier doit être inférieure à 5 Mo",
+      "doc_size_10": "La taille du fichier doit être inférieure à 10 Mo",
+      "doc_type_image": "Le fichier doit être au format PNG, JPEG ou JPG",
+      "doc_type_pdf": "Le fichier doit être au format PDF",
+      "doc_type_image_pdf": "Le fichier doit être au format PNG, JPEG, JPG ou PDF",
+      "invalid_phone_number": "Format invalide, veuillez utiliser le format +33XXXXXXXXX"
+    }
+  },
+  "countries": {
+    "afghanistan": "Afghanistan",
+    "south_africa": "Afrique du Sud",
+    "albania": "Albanie",
+    "algeria": "Algérie",
+    "germany": "Allemagne",
+    "andorra": "Andorre",
+    "angola": "Angola",
+    "antigua_and_barbuda": "Antigua-et-Barbuda",
+    "saudi_arabia": "Arabie Saoudite",
+    "argentina": "Argentine",
+    "armenia": "Arménie",
+    "australia": "Australie",
+    "austria": "Autriche",
+    "azerbaijan": "Azerbaïdjan",
+    "bahamas": "Bahamas",
+    "bahrain": "Bahreïn",
+    "bangladesh": "Bangladesh",
+    "barbados": "Barbade",
+    "belgium": "Belgique",
+    "belize": "Belize",
+    "benin": "Bénin",
+    "bhutan": "Bhoutan",
+    "belarus": "Biélorussie",
+    "myanmar": "Birmanie",
+    "bolivia": "Bolivie",
+    "bosnia_and_herzegovina": "Bosnie-Herzégovine",
+    "botswana": "Botswana",
+    "brazil": "Brésil",
+    "brunei": "Brunei",
+    "bulgaria": "Bulgarie",
+    "burkina_faso": "Burkina Faso",
+    "burundi": "Burundi",
+    "cambodia": "Cambodge",
+    "cameroon": "Cameroun",
+    "canada": "Canada",
+    "cape_verde": "Cap-Vert",
+    "central_african_republic": "République centrafricaine",
+    "chile": "Chili",
+    "china": "Chine",
+    "cyprus": "Chypre",
+    "colombia": "Colombie",
+    "comoros": "Comores",
+    "republic_of_congo": "République du Congo",
+    "democratic_republic_of_congo": "République démocratique du Congo",
+    "north_korea": "Corée du Nord",
+    "south_korea": "Corée du Sud",
+    "costa_rica": "Costa Rica",
+    "ivory_coast": "Côte d'Ivoire",
+    "croatia": "Croatie",
+    "cuba": "Cuba",
+    "denmark": "Danemark",
+    "djibouti": "Djibouti",
+    "dominica": "Dominique",
+    "egypt": "Égypte",
+    "united_arab_emirates": "Émirats arabes unis",
+    "ecuador": "Équateur",
+    "eritrea": "Érythrée",
+    "spain": "Espagne",
+    "estonia": "Estonie",
+    "united_states": "États-Unis",
+    "ethiopia": "Éthiopie",
+    "fiji": "Fidji",
+    "finland": "Finlande",
+    "france": "France",
+    "gabon": "Gabon",
+    "gambia": "Gambie",
+    "georgia": "Géorgie",
+    "ghana": "Ghana",
+    "greece": "Grèce",
+    "grenada": "Grenade",
+    "guatemala": "Guatemala",
+    "guinea": "Guinée",
+    "guinea_bissau": "Guinée-Bissau",
+    "equatorial_guinea": "Guinée équatoriale",
+    "guyana": "Guyana",
+    "haiti": "Haïti",
+    "honduras": "Honduras",
+    "hong_kong": "Hong",
+    "hungary": "Hongrie",
+    "marshall_islands": "Îles Marshall",
+    "solomon_islands": "Îles Salomon",
+    "india": "Inde",
+    "indonesia": "Indonésie",
+    "iran": "Iran",
+    "iraq": "Iraq",
+    "ireland": "Irlande",
+    "iceland": "Islande",
+    "israel": "Israël",
+    "italy": "Italie",
+    "jamaica": "Jamaïque",
+    "japan": "Japon",
+    "jordan": "Jordanie",
+    "kazakhstan": "Kazakhstan",
+    "kenya": "Kenya",
+    "kyrgyzstan": "Kirghizistan",
+    "kiribati": "Kiribati",
+    "kuwait": "Koweït",
+    "laos": "Laos",
+    "lesotho": "Lesotho",
+    "latvia": "Lettonie",
+    "lebanon": "Liban",
+    "liberia": "Liberia",
+    "libya": "Libye",
+    "liechtenstein": "Liechtenstein",
+    "lithuania": "Lituanie",
+    "luxembourg": "Luxembourg",
+    "macedonia": "Macédoine",
+    "madagascar": "Madagascar",
+    "malaysia": "Malaisie",
+    "malawi": "Malawi",
+    "maldives": "Maldives",
+    "mali": "Mali",
+    "malta": "Malte",
+    "morocco": "Maroc",
+    "cook_islands": "Îles Cook",
+    "mauritius": "Maurice",
+    "mauritania": "Mauritanie",
+    "mexico": "Mexique",
+    "micronesia": "Micronésie",
+    "moldova": "Moldavie",
+    "monaco": "Monaco",
+    "mongolia": "Mongolie",
+    "montenegro": "Monténégro",
+    "mozambique": "Mozambique",
+    "namibia": "Namibie",
+    "nauru": "Nauru",
+    "nepal": "Népal",
+    "nicaragua": "Nicaragua",
+    "niger": "Niger",
+    "nigeria": "Nigeria",
+    "niue": "Niue",
+    "norway": "Norvège",
+    "new_zealand": "Nouvelle-Zélande",
+    "oman": "Oman",
+    "uganda": "Ouganda",
+    "uzbekistan": "Ouzbékistan",
+    "pakistan": "Pakistan",
+    "palau": "Palaos",
+    "panama": "Panama",
+    "papua_new_guinea": "Papouasie-Nouvelle-Guinée",
+    "paraguay": "Paraguay",
+    "netherlands": "Pays-Bas",
+    "peru": "Pérou",
+    "philippines": "Philippines",
+    "poland": "Pologne",
+    "portugal": "Portugal",
+    "qatar": "Qatar",
+    "dominican_republic": "République dominicaine",
+    "czech_republic": "République tchèque",
+    "romania": "Roumanie",
+    "united_kingdom": "Royaume-Uni",
+    "russia": "Russie",
+    "rwanda": "Rwanda",
+    "saint_kitts_and_nevis": "Saint-Christophe-et-Niévès",
+    "saint_lucia": "Sainte-Lucie",
+    "san_marino": "Saint-Marin",
+    "saint_vincent_and_grenadines": "Saint-Vincent-et-les-Grenadines",
+    "el_salvador": "Salvador",
+    "samoa": "Samoa",
+    "sao_tome_and_principe": "São Tomé-et-Principe",
+    "senegal": "Sénégal",
+    "serbia": "Serbie",
+    "seychelles": "Seychelles",
+    "sierra_leone": "Sierra Leone",
+    "singapore": "Singapour",
+    "slovakia": "Slovaquie",
+    "slovenia": "Slovénie",
+    "somalia": "Somalie",
+    "sudan": "Soudan",
+    "south_sudan": "Soudan du Sud",
+    "sri_lanka": "Sri Lanka",
+    "sweden": "Suède",
+    "switzerland": "Suisse",
+    "suriname": "Suriname",
+    "swaziland": "Swaziland",
+    "syria": "Syrie",
+    "tajikistan": "Tadjikistan",
+    "tanzania": "Tanzanie",
+    "chad": "Tchad",
+    "thailand": "Thaïlande",
+    "east_timor": "Timor oriental",
+    "togo": "Togo",
+    "tonga": "Tonga",
+    "trinidad_and_tobago": "Trinité-et-Tobago",
+    "tunisia": "Tunisie",
+    "turkmenistan": "Turkménistan",
+    "turkey": "Turquie",
+    "tuvalu": "Tuvalu",
+    "ukraine": "Ukraine",
+    "uruguay": "Uruguay",
+    "vanuatu": "Vanuatu",
+    "vatican": "Vatican",
+    "venezuela": "Venezuela",
+    "vietnam": "Viêt Nam",
+    "yemen": "Yémen",
+    "zambia": "Zambie",
+    "zimbabwe": "Zimbabwe"
+  },
+  "chatbot": {
+    "chat_with_ray": "Discuter avec Ray",
+    "welcome_message": "Bonjour ! Je suis Ray, votre assistant virtuel consulaire. Comment puis-je vous aider aujourd'hui avec vos démarches consulaires ?",
+    "error_message": "Désolé, une erreur s'est produite. Veuillez contacter le service consulaire pour obtenir de l'aide.",
+    "typing": "Ray est en train d'écrire...",
+    "input_placeholder": "Posez votre question sur les services consulaires...",
+    "send": "Envoyer"
+  },
+  "auth": {
+    "layout": {
+      "create_card_prompt": "Créez votre carte consulaire gratuitement."
+    },
+    "otp": {
+      "email_subject": "Code de vérification - Consulat.ga",
+      "email_title": "Code de vérification",
+      "email_description": "Voici votre code de vérification pour vous connecter sur Consulat.ga",
+      "email_warning": "Si vous n'avez pas demandé ce code, veuillez ignorer cet email.",
+      "email_expiry": "Ce code est valable pendant 10 minutes. Ne le partagez avec personne.",
+      "phone_verify": "Votre code de vérification pour Consulat.ga est : {otp}. Ce code expirera dans 10 minutes."
+    },
+    "actions": {
+      "otp": "Code de vérification",
+      "otp_placeholder": "Entrez le code à 6 chiffres",
+      "login_method": "Méthode de connexion",
+      "send_otp": "Envoyer le code",
+      "login": "S'identifier'",
+      "logout": "Se déconnecter",
+      "reset": "Réinitialiser le mot de passe",
+      "login_with": "Utiliser {provider}",
+      "verify": "Vérifier le code",
+      "email": "Email",
+      "email_placeholder": "email@example.com",
+      "phone": "Numéro de téléphone",
+      "phone_placeholder": "ex: +33612345678",
+      "login_with_email": "Se connecter avec l'email",
+      "login_with_phone": "Se connecter avec le téléphone"
+    },
+    "labels": {
+      "otp": "Code de vérification",
+      "otp_placeholder": "Entrez le code à 6 chiffres",
+      "phone": "Numéro de téléphone",
+      "phone_placeholder": "ex: +33XXXXXXXXXX",
+      "login_method": "Méthode de connexion",
+      "email": "Email",
+      "email_placeholder": "email@example.com",
+      "login_with_email": "Utiliser l'email",
+      "login_with_phone": "Utiliser le tel"
+    },
+    "messages": {
+      "otp_sent": "Un code de vérification a été envoyé",
+      "otp_expired": "Le code de vérification a expiré",
+      "otp_invalid": "Code de vérification invalide ou expiré",
+      "otp_required": "Le code de vérification est requis",
+      "CredentialsSignin": "Code de vérification invalide ou expiré",
+      "invalid_credentials": "Email ou mot de passe incorrect",
+      "user_not_found": "Aucun utilisateur trouvé avec cet e-mail",
+      "login_success": "Connexion réussi",
+      "account_created": "Compte créé avec succès",
+      "or_continue_with": "Ou continuer avec",
+      "oauth_account_not_linked": "Compte OAuth non lié",
+      "oauth_account_linked": "Compte OAuth déjà lié",
+      "email_required": "L'email est requis",
+      "invalid_email": "Format d'email invalide",
+      "enter_credentials": "Connectez-vous pour accéder à votre espace",
+      "loading": "Chargement...",
+      "something_went_wrong": "Une erreur est survenue"
+    },
+    "page_titles": {
+      "login": "S'identifier"
+    },
+    "errors": {
+      "invalid_phone": "Numéro de téléphone invalide",
+      "invalid_email": "Adresse email invalide",
+      "required_field": "Ce champ est requis"
+    }
+  },
+  "profile": {
+    "loading": "Chargement du profil...",
+    "title": "Mon Profil",
+    "edit_profile": "Modifier mon profil",
+    "create_profile": "Créer mon profil",
+    "tabs": {
+      "view": "Aperçu",
+      "edit": "Modifier",
+      "settings": "Paramètres"
+    },
+    "labels": {
+      "profession": "Profession",
+      "employer": "Employeur",
+      "employer_address": "Adresse de l'employeur",
+      "gabon_activity": "Dernière activité au Gabon",
+      "district": "Quartier",
+      "emergency_contact_name": "Nom complet",
+      "emergency_contact_phone": "Numéro de téléphone",
+      "emergency_contact_relationship": "Lien de parenté",
+      "emergency_contact": "Contact d'urgence",
+      "first_request": "Première demande",
+      "renewal": "Renouvellement",
+      "modification": "Modification",
+      "nationality_birth": "De naissance",
+      "nationality_acquisition": "Mode d'acquisition de la nationalité",
+      "nationality_naturalization": "Par naturalisation",
+      "nationality_marriage": "Par mariage",
+      "nationality_other": "Autre",
+      "document_type": "Type de document",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "address_line1": "Adresse",
+      "gabon_address": "Adresse au Gabon",
+      "address_line2": "Complément d'adresse",
+      "name": "Nom",
+      "birth_date": "Date de naissance",
+      "birth_place": "Lieu de naissance",
+      "birth_country": "Pays de naissance",
+      "gender": "Genre",
+      "marital_status": "Situation matrimoniale",
+      "work_status": "Statut professionnel",
+      "phone": "Numéro de téléphone",
+      "address": "Adresse",
+      "city": "Ville",
+      "zip_code": "Code postal",
+      "country": "Pays",
+      "email": "Adresse Email",
+      "profile_status": "Statut du profil",
+      "identity_picture": "Photo d'identité",
+      "logo": "Logo",
+      "consulate": "Consulat",
+      "general": "Général",
+      "passport": "Passeport",
+      "birth_certificate": "Acte de naissance",
+      "residence_permit": "Titre de séjour",
+      "address_proof": "Justificatif de domicile",
+      "political_affiliation": "Affiliation Politique",
+      "financial_situation": "Situation Financière",
+      "properties": "Propriétés et Biens",
+      "social_media_presence": "Présence sur les Réseaux Sociaux",
+      "travel_habits": "Habitudes de Déplacement",
+      "family_situation": "Situation Familiale",
+      "criminal_record": "Casier Judiciaire"
+    },
+    "placeholders": {
+      "address": "Entrez votre adresse",
+      "birth_place": "Entrez votre lieu de naissance",
+      "first_name": "Entrez votre prénom",
+      "last_name": "Entrez votre nom",
+      "email": "votre.email@exemple.com",
+      "phone": "ex: +241612345678",
+      "address_line1": "Numéro et nom de rue",
+      "address_line2": "Appartement, bâtiment, etc.",
+      "city": "Entrez votre ville",
+      "district": "Entrez votre quartier",
+      "zip_code": "Entrez votre code postal",
+      "select_country": "Sélectionnez un pays",
+      "search_country": "Rechercher un pays...",
+      "select_marital_status": "Sélectionnez votre situation",
+      "spouse_name": "Nom complet de votre conjoint(e)",
+      "father_name": "Nom complet de votre père",
+      "mother_name": "Nom complet de votre mère",
+      "emergency_contact_name": "Nom complet du contact",
+      "emergency_contact_relationship": "Ex: Frère, Sœur, Parent...",
+      "emergency_contact_phone": "ex: +33612345678",
+      "select_work_status": "Sélectionnez votre situation",
+      "profession": "Votre profession actuelle",
+      "employer": "Nom de votre employeur",
+      "employer_address": "Adresse de votre lieu de travail",
+      "gabon_activity": "Décrivez brièvement votre dernière activité au Gabon"
+    },
+    "descriptions": {
+      "emergency_contact": "Cette personne sera contactée en cas d'urgence",
+      "gabon_activity": "Si vous avez déjà exercé une activité au Gabon, veuillez la décrire brièvement"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "save": "Enregistrer",
+      "delete": "Supprimer le profil",
+      "share": "Partager",
+      "contact": "Contacter",
+      "download": "Télécharger",
+      "view_card": "Voir la carte",
+      "view": "Voir le profil de {name}",
+      "delete_profile": "Supprimer le profil",
+      "share_profile": "Partager",
+      "save_contact": "Télécharger",
+      "search_country": "Rechercher un pays",
+      "send_message": "Contacter",
+      "show_card": "Voir la carte",
+      "back": "Retour",
+      "create": "Créer",
+      "cancel": "Annuler",
+      "submit": "Soumettre",
+      "next": "Suivant",
+      "previous": "Précédent"
+    },
+    "sections": {
+      "documents": "Documents officiels",
+      "settings": "Paramètres du profil",
+      "consulate": "Consulat de tutelle",
+      "intelligence_file": "Dossier renseignements",
+      "request_type": "Type de demande",
+      "basic_info": "Informations personnelles",
+      "contact_info": "Coordonnées",
+      "family_info": "Informations familiales",
+      "professional_info": "Informations professionnelles"
+    },
+    "status": {
+      "pending": "En traitement",
+      "approved": "Valide",
+      "rejected": "Invalide",
+      "incomplete": "Incomplet"
+    },
+    "marital_status": {
+      "single": "Célibataire",
+      "married": "Marié(e)",
+      "divorced": "Divorcé(e)",
+      "widowed": "Veuf(ve)",
+      "cohabiting": "En concubinage"
+    },
+    "work_status": {
+      "employee": "Salarié",
+      "entrepreneur": "Entrepreneur",
+      "unemployed": "Sans emploi",
+      "student": "Etudiant",
+      "retired": "Retraité",
+      "other": "Autre"
+    },
+    "messages": {
+      "profile_added": "Profil ajouté avec succès",
+      "error_adding": "Erreur lors de l'ajout du profil",
+      "error_updating": "Erreur lors de la mise à jour du profil",
+      "error_deleting": "Erreur lors de la suppression du profil",
+      "not_found": "Le profil auquel vous essayez d'accéder n'existe pas",
+      "unauthorized": "Vous n'êtes pas autorisé à accéder à cette page",
+      "file_size_error": "La taille du fichier doit être inférieure à 3 Mo",
+      "file_type_error": "Le fichier doit être au format PNG, JPEG ou JPG",
+      "add_country": "Ajouter un pays",
+      "share_profile": "Partagez le profil",
+      "contact_request": "Échanger avec {name}",
+      "contact_description": "Saisissez vos informations et un court message et {name} recevra une demande de contact de votre part.",
+      "scan_qr": "Scannez ce code QR pour accéder au profil {name}.",
+      "no_registered_yet": "Vous n'avez pas encore enregistré de profil",
+      "add_profile_to_start": "Ajoutez un profil pour commencer à traiter les profils.",
+      "profile_updated": "Profil mis à jour avec succès",
+      "profile_created": "Profil créé avec succès",
+      "profile_deleted": "Profil supprimé avec succès",
+      "no_country_found": "Aucun pays trouvé",
+      "confirm_delete": "Êtes-vous sûr de vouloir supprimer votre profil ?",
+      "delete_warning": "Cette action est irréversible"
+    },
+    "form": {
+      "select_country": "Choisir un pays",
+      "search_country": "Rechercher un pays",
+      "select_marital_status": "Sélectionnez votre situation",
+      "select_work_status": "Sélectionnez votre statut",
+      "messages": {
+        "profile_creating": "Création de votre profil en cours...",
+        "profile_created": "Votre profil a été créé avec succès !",
+        "view_profile": "Voir mon profil",
+        "profile_updated": "Profil mis à jour avec succès",
+        "profile_deleted": "Profil supprimé avec succès",
+        "error_creating": "Erreur lors de la création du profil",
+        "error_updating": "Erreur lors de la mise à jour du profil",
+        "error_deleting": "Erreur lors de la suppression du profil"
+      },
+      "labels": {
+        "logo": "Logo du consulat",
+        "document_type": "Type de document",
+        "nationality_acquisition": "Mode d'acquisition de la nationalité",
+        "first_request": "Première demande",
+        "renewal": "Renouvellement",
+        "modification": "Modification",
+        "nationality_birth": "De naissance",
+        "nationality_naturalization": "Par naturalisation",
+        "nationality_marriage": "Par mariage",
+        "nationality_other": "Autre",
+
+        "identity_picture": "Photo d'identité",
+        "passport": "Passeport",
+        "birth_certificate": "Acte de naissance",
+        "residence_permit": "Titre de séjour",
+        "address_proof": "Justificatif de domicile",
+
+        "gender": "Genre",
+        "first_name": "Prénom",
+        "last_name": "Nom",
+        "birth_date": "Date de naissance",
+        "birth_place": "Lieu de naissance",
+        "birth_country": "Pays de naissance",
+
+        "email": "Email",
+        "phone": "Téléphone",
+        "address": "Adresse",
+        "address_line1": "Adresse (ligne 1)",
+        "address_line2": "Complément d'adresse (facultatif)",
+        "city": "Ville",
+        "district": "Quartier",
+        "zip_code": "Code postal",
+        "country": "Pays",
+        "gabon_address": "Adresse au Gabon",
+
+        "marital_status": "Situation matrimoniale",
+        "spouse_name": "Nom complet du/de la conjoint(e)",
+        "father_name": "Nom complet du père",
+        "mother_name": "Nom complet de la mère",
+        "emergency_contact": "Contact d'urgence",
+        "emergency_contact_name": "Nom complet",
+        "emergency_contact_relationship": "Lien de parenté",
+        "emergency_contact_phone": "Numéro de téléphone",
+
+        "work_status": "Situation professionnelle",
+        "profession": "Profession",
+        "employer": "Employeur",
+        "employer_address": "Adresse de l'employeur",
+        "gabon_activity": "Dernière activité au Gabon",
+        "profile_status": "Statut du profil"
+      },
+      "create_new_profile": "Créer un nouveau profil",
+      "personal_info": "Informations personnelles",
+      "identity_photo": "Photo d'identité",
+      "contact_info": "Informations de contact",
+      "legal_documents": "Documents légaux",
+      "first_name": "Prénom(s)",
+      "last_name": "Nom(s)",
+      "gender": "Genre",
+      "birth_date": "Date de naissance",
+      "birth_place": "Ville de naissance",
+      "birth_country": "Pays de naissance",
+      "marital_status": "Situation familiale",
+      "work_status": "Statut professionnel",
+      "phone": "N° de téléphone",
+      "email": "Email",
+      "email_placeholder": "name@example.com",
+      "first_line": "Votre adresse",
+      "address": "Adresse",
+      "address_placeholder": "N° et rue",
+      "second_line": "Complément d'adresse",
+      "address_complement_placeholder": "Batiment, étage, porte...",
+      "address_complement": "Batiment, étage, porte...",
+      "city": "Ville",
+      "city_placeholder": "Paris...",
+      "zip_code_placeholder": "0000",
+      "zip_code": "Code postal",
+      "country_of_residence": "Pays de résidence",
+      "passport": "Passeport",
+      "birth_certificate": "Acte de naissance",
+      "residence_permit": "Titre de séjour",
+      "address_proof": "Justificatif de domicile",
+      "choose_identity_photo": "Veuillez choisir une photo d'identité",
+      "save": "Sauvegarder",
+      "submit": "Enregistrer",
+      "basic_info": "Informations personnelles",
+      "documents": "Documents justificatifs",
+      "documents_optional": "Le téléchargement des documents est optionnel à cette étape",
+      "documents_later": "Vous pourrez compléter ces informations plus tard dans votre espace personnel",
+      "country": "Pays",
+      "back": "Retour",
+      "next": "Suivant",
+      "complete_later": "Compléter plus tard",
+      "validate": "Valider"
+    },
+    "business_card": {
+      "consulat_card": "Carte consulaire",
+      "issue_date": "Date d'émission",
+      "expiry_date": "Date d'expiration",
+      "general_consulate": "Général",
+      "tel": "Tel",
+      "consulate_full": "Consulat {isGeneral} {countryPrefixe} {country}"
+    },
+    "identification": {
+      "title": "Identifiez-vous",
+      "description": "Pour créer votre profil consulaire, vous devez d'abord vous identifier",
+      "methods": {
+        "phone": "Par téléphone",
+        "email": "Par email"
+      }
+    },
+    "review": {
+      "document_uploaded": "Document téléchargé",
+      "document_missing": "Document manquant"
+    },
+    "creation": {
+      "title": "Création de votre profil consulaire",
+      "subtitle": "Suivez les étapes pour créer votre profil consulaire",
+      "steps": {
+        "identification": {
+          "title": "Identification",
+          "description": "Vérifiez votre identité",
+          "subtitle": "Connectez-vous ou créez un compte pour commencer"
+        },
+        "basic_info": {
+          "title": "Informations de base",
+          "description": "Vos informations personnelles",
+          "subtitle": "Renseignez vos informations d'identité"
+        },
+        "contact": {
+          "title": "Contact",
+          "description": "Vos coordonnées",
+          "subtitle": "Ajoutez vos informations de contact"
+        },
+        "documents": {
+          "title": "Documents",
+          "description": "Vos documents justificatifs",
+          "subtitle": "Téléchargez vos documents officiels"
+        },
+        "review": {
+          "title": "Récapitulatif",
+          "description": "Vérifiez vos informations",
+          "subtitle": "Vérifiez vos informations avant de les soumettre"
+        }
+      },
+      "documents": {
+        "title": "Documents justificatifs",
+        "description": "Téléchargez vos documents officiels",
+        "optional": "Le téléchargement des documents est optionnel à cette étape",
+        "complete_later": "Vous pourrez compléter ces informations plus tard dans votre espace personnel",
+        "types": {
+          "passport": "Passeport",
+          "birth_certificate": "Acte de naissance",
+          "residence_permit": "Titre de séjour",
+          "address_proof": "Justificatif de domicile"
+        }
+      },
+      "loading": {
+        "title": "Création de votre profil",
+        "description": "Merci de patienter pendant que nous créons votre profil"
+      },
+      "success": {
+        "title": "Profil créé avec succès !",
+        "description": "Vous pouvez maintenant accéder à votre espace personnel",
+        "action": "Accéder à mon profil"
+      },
+      "actions": {
+        "next": "Suivant",
+        "back": "Retour",
+        "complete_later": "Compléter plus tard",
+        "validate": "Valider",
+        "skip": "Passer cette étape"
+      }
+    },
+    "help": {
+      "request_type": "Choisissez le type de document et le mode d'acquisition de votre nationalité",
+      "documents": "Fournissez les documents requis pour votre demande",
+      "basic_info": "Renseignez vos informations personnelles de base",
+      "contact_info": "Indiquez vos coordonnées actuelles",
+      "family_info": "Renseignez les informations concernant votre famille",
+      "professional_info": "Indiquez votre situation professionnelle"
+    },
+    "errors": {
+      "required": "Ce champ est requis",
+      "invalid_email": "Email invalide",
+      "invalid_phone": "Numéro de téléphone invalide",
+      "file_too_large": "Le fichier est trop volumineux",
+      "invalid_file_type": "Type de fichier non supporté",
+      "upload_failed": "L'envoi du fichier a échoué"
+    }
+  },
+  "consulate": {
+    "labels": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "website": "Site web",
+      "address": "Adresse",
+      "countries": "Pays pris en charge",
+      "consulate": "Consulat",
+      "general": "Général",
+      "logo": "Logo du consulat",
+      "country_of_residence": "Pays de résidence",
+      "first_line": "Adresse",
+      "second_line": "Complément d'adresse",
+      "city": "Ville",
+      "zip_code": "Code postal",
+      "country": "Pays",
+      "is_general": "Consulat général"
+    },
+    "actions": {
+      "add": "Ajouter un consulat",
+      "edit": "Modifier",
+      "back": "Retour",
+      "save": "Enregistrer",
+      "delete": "Supprimer le consulat",
+      "share": "Partager",
+      "contact": "Contacter",
+      "view_card": "Voir la carte",
+      "visit_website": "Visiter notre site",
+      "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce consulat ?",
+      "delete_warning": "Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm_delete": "Confirmer la suppression",
+      "view": "Voir le profil de {name}",
+      "send_message": "Contacter",
+      "show_card": "Voir la carte"
+    },
+    "sections": {
+      "profile_settings": "Paramètres du profil",
+      "basic_info": "Informations de base",
+      "contact_info": "Informations de contact",
+      "settings": "Paramètres du consulat",
+      "about_us": "Plus sur nous",
+      "online_presence": "Sur internet",
+      "legal_documents": "Documents légaux",
+      "covered_countries": "Pays couverts"
+    },
+    "messages": {
+      "consulate_added": "Consulat ajouté avec succès",
+      "consulate_updated": "Consulat mis à jour avec succès",
+      "consulate_deleted": "Consulat supprimé avec succès",
+      "error_adding": "Erreur lors de l'ajout du consulat",
+      "error_updating": "Erreur lors de la mise à jour du consulat",
+      "error_deleting": "Erreur lors de la suppression du consulat",
+      "no_countries": "Aucun pays trouvé",
+      "select_country": "Sélectionner un pays...",
+      "search_country": "Rechercher un pays...",
+      "not_found": "Le consulat  auquel vous essayez d'accéder n'existe pas ou n'est pas accessible.",
+      "file_size_error": "La taille du fichier doit être inférieure à 3 Mo",
+      "file_type_error": "Le fichier doit être au format PNG, JPEG ou JPG",
+      "add_country": "Ajouter un pays",
+      "share_profile": "Partagez le profil",
+      "contact_request": "Échanger avec {name}",
+      "contact_description": "Saisissez vos informations et un court message et {name} recevra une demande de contact de votre part.",
+      "scan_qr": "Scannez ce code QR pour accéder au profil {name}.",
+      "no_registered_yet": "Vous n'avez pas encore enregistré d'entreprise",
+      "add_consulate_to_start": "Ajoutez un consulat pour commencer à traiter les profils."
+    },
+    "placeholders": {
+      "enter_name": "Entrez le nom du consulat",
+      "enter_email": "Entrez l'email du consulat",
+      "enter_phone": "ex: +33612345678",
+      "enter_website": "Entrez l'URL du site web",
+      "enter_address": "Entrez l'adresse",
+      "enter_city": "Entrez la ville",
+      "enter_zip": "Entrez le code postal",
+      "enter_country": "Entrez le pays"
+    },
+    "title": "Mes consulats",
+    "new": {
+      "title": "Ajouter un consulat"
+    },
+    "view": {
+      "title": "Consulat {isGeneral, select, true {Général} other {}} {name}"
+    },
+    "tabs": {
+      "dashboard": "Tableau de bord",
+      "settings": "Paramètres",
+      "overview": "Aperçu"
+    },
+    "form": {
+      "labels": {
+        "logo": "Logo du consulat",
+        "name": "Nom",
+        "email": "Email",
+        "phone": "Téléphone",
+        "website": "Site web",
+        "address": "Adresse",
+        "countries": "Pays pris en charge",
+        "is_general": "Consulat général"
+      },
+      "placeholders": {
+        "enter_name": "Entrez le nom du consulat",
+        "enter_email": "Entrez l'email du consulat",
+        "enter_phone": "+33XXXXXXXX",
+        "enter_website": "Entrez l'URL du site web",
+        "enter_address": "Entrez l'adresse",
+        "enter_city": "Entrez la ville",
+        "enter_zip": "Entrez le code postal",
+        "enter_country": "Entrez le pays"
+      }
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "actions": {
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "back": "Retour",
+      "next": "Suivant",
+      "submit": "Soumettre",
+      "retry": "Réessayer"
+    },
+    "labels": {
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "success": "Succès",
+      "to_complete": "À compléter"
+    },
+    "messages": {
+      "not_found": "Page non trouvée",
+      "access_denied": "Accès refusé",
+      "something_went_wrong": "Une erreur s'est produite",
+      "error": "Erreur",
+      "retry": "Réessayer",
+      "back": "Retour"
+    },
+    "lang_switcher": {
+      "fr": "Français",
+      "en": "English",
+      "es": "Español",
+      "label": "Langue"
+    },
+    "upload": {
+      "drag_drop_files_or_click": "Glissez & déposez ou cliquez pour les télécharger",
+      "clear_files": "Supprimer tous les fichiers",
+      "drop_files": "Déposez vos fichiers",
+      "attached_files": "Fichiers joints"
+    }
+  },
+  "navigation": {
+    "my_profile": "Mon profil",
+    "my_account": "Mon compte",
+    "notifications": "Mes notifications",
+    "messages": "Mes messages",
+    "consular_steps": "Mes démarches",
+    "consulates": "Consulats",
+    "profiles": "Profils",
+    "admin": "Admin",
+    "dashboard": "Tableau de bord",
+    "my_space": "Mon espace",
+    "my_documents": "Mes documents",
+    "my_applications": "Mes demandes",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "menu": "Menu principal"
+  },
+  "home": {
+    "consulat": "Consulat",
+    "title": "La carte consulaire réinventée",
+    "subtitle": "Découvrez une nouvelle expérience en tant que membre de la diaspora",
+    "cta": {
+      "request_card": "Demander ma carte consulaire",
+      "learn_more": "En savoir plus",
+      "title": "Créez et partagez votre carte de visite",
+      "description": "Partagez votre carte de visite avec vos contacts en un clic sur contact.ga gratuitement.",
+      "create_card": "Créer ma carte de visite"
+    },
+    "nav": {
+      "login": "S'identifier"
+    },
+    "footer": {
+      "designed_by": "Conçu et développé par"
+    }
+  },
+  "assets": {
+    "marital_status": {
+      "single": "Célibataire",
+      "married": "Marié(e)",
+      "divorced": "Divorcé(e)",
+      "widowed": "Veuf(ve)",
+      "cohabiting": "En concubinage"
+    },
+    "work_status": {
+      "employee": "Salarié",
+      "entrepreneur": "Entrepreneur",
+      "unemployed": "Sans emploi",
+      "student": "Étudiant",
+      "retired": "Retraité",
+      "other": "Autre"
+    },
+    "gender": {
+      "male": "Monsieur",
+      "male_type": "Masculin",
+      "female": "Madame",
+      "female_type": "Féminin"
+    },
+    "status": {
+      "pending": "En traitement",
+      "approved": "Valide",
+      "rejected": "Invalide",
+      "incomplete": "Incomplet"
+    }
+  },
+  "contact_form": {
+    "first_name": "Nom",
+    "last_name": "Prénom",
+    "phone": "Numéro de téléphone",
+    "email": "Email",
+    "company_name": "Nom de l'entreprise",
+    "message": "Votre message",
+    "first_name_placeholder": "Nom",
+    "last_name_placeholder": "Prénom",
+    "phone_placeholder": "ex:+33612340495",
+    "email_placeholder": "Email",
+    "company_name_placeholder": "Nom de l'entreprise",
+    "message_description": "Assurez-vous d'être clair et précis",
+    "send": "Envoyer",
+    "privacy_notice": "En soumettant ce formulaire, vous acceptez que vos informations soient utilisées pour vous recontacter."
+  },
+  "add_to_home_screen": {
+    "loading": "Chargement..."
+  },
+  "add_to_browser": {
+    "best_experience": "Pour la meilleure expérience, nous recommandons d'installer l'application Valley Trader sur votre écran d'accueil !",
+    "click_the": "Cliquez sur le",
+    "icon": "icône",
+    "scroll_and_click": "Faites défiler et cliquez sur :",
+    "add_to_home_screen": "Ajouter à l'écran d'accueil",
+    "dont_show_again": "Ne plus afficher"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "sub_title": "Mes notifications",
+    "form": {
+      "title": "Titre",
+      "title_placeholder": "Titre de la notification",
+      "content": "Contenu",
+      "content_placeholder": "Rédigez votre message",
+      "submit": "Envoyer la notification",
+      "type": "Type de destinataire",
+      "type_individual": "Notification pour un profile",
+      "type_consulate": "Notification pour les profils d'un consulat",
+      "consulate": "Consulat destinataire",
+      "select_consulate": "Choisir un consulat",
+      "select_type": "Type de destinataire",
+      "add": "Ajouter une notification",
+      "new_title": "Nouvelle notification",
+      "markdown_support_info": "Le format markdown est prise en charge",
+      "search": "Rechercher",
+      "search_results": "Résultats de recherche",
+      "search_recipients": "Rechercher un profile",
+      "selected_recipients": "Profiles sélectionné",
+      "attachments": "Pièces jointes",
+      "recipients": "Profile destinataires"
+    },
+    "menu": {
+      "notifications": "Notifications"
+    },
+    "messages": {
+      "success": "Notification envoyée avec succès",
+      "error": "Erreur lors de l'envoi de la notification",
+      "no_notification": "Vous n'avez pas de notification pour le moment"
+    }
+  },
+  "uploads": {
+    "drag_drop_files": "Glissez & déposez vos fichiers",
+    "clear_files": "Supprimer tous les fichiers",
+    "drop_files": "Déposez vos fichiers",
+    "attached_files": "Fichiers joints"
+  },
+  "emails": {
+    "common": {
+      "logo_alt": "Consulat Logo",
+      "title": "Consulat.ga",
+      "footer": {
+        "copyright": "© {year} Consulat.ga - Tous droits réservés",
+        "cta": "Accéder au site"
+      }
+    },
+    "otp": {
+      "title": "Votre code de vérification",
+      "description": "Voici votre code de vérification pour vous connecter sur Consulat.ga :",
+      "expiry": "Ce code est valable pendant 10 minutes. Ne le partagez avec personne.",
+      "warning": "Si vous n'avez pas demandé ce code, veuillez ignorer cet email."
+    },
+    "contact": {
+      "logo_alt": "Consulat Logo",
+      "title": "Nouvelle prise de contact",
+      "subject": "Demande de contact de {firstName} {lastName}",
+      "greeting": "Bonjour {name},",
+      "intro": "{firstName} {lastName}{company} a envoyé une demande de contact.",
+      "with_company": " de {company}",
+      "message_header": "Message",
+      "contact_details": "Coordonnées",
+      "email": "Email",
+      "phone": "Téléphone",
+      "company": "Entreprise",
+      "footer": {
+        "copyright": "© {year} Consulat.ga - Tous droits réservés",
+        "cta": "Accéder au site"
+      },
+      "success": "Email envoyé, vous serez recontacté prochainement",
+      "error": "Échec de l'envoi de l'email"
+    }
+  },
+  "sms": {
+    "otp": {
+      "app_name": "Consulat.ga",
+      "message": "🔐 {appName}: {otp} est votre code de vérification.\n⏱️ Expire dans {expiry}.\n⚠️ Ne le partagez avec personne.",
+      "expiry_time": "10 minutes",
+      "logs": {
+        "success": "Code OTP envoyé avec succès au {phone}",
+        "error": "Échec de l'envoi du code OTP par SMS"
+      },
+      "errors": {
+        "invalid_config": "Configuration Twilio invalide",
+        "send_failed": "Échec de l'envoi du code de vérification: {error}",
+        "unknown": "Échec de l'envoi du code de vérification"
+      }
+    }
+  },
+  "consular_registration": {
+    "header": {
+      "title": "Formulaire d'Inscription",
+      "subtitle": "Suivez les étapes pour créer votre profil consulaire"
+    },
+    "steps": {
+      "request_type": "Type de demande",
+      "documents": "Documents",
+      "identity": "Identité",
+      "family": "Famille",
+      "contact": "Contact",
+      "professional": "Professionnel",
+      "review": "Révision"
+    },
+    "navigation": {
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "validation": {
+      "error": {
+        "title": "Erreur de validation",
+        "description": "Veuillez corriger les erreurs avant de continuer"
+      },
+      "submit": "Soumettre"
+    },
+    "help": {
+      "request_type": "Sélectionnez le type de demande et votre mode d'acquisition de la nationalité gabonaise",
+      "documents": "Téléchargez les documents requis. Ces documents seront analysés pour pré-remplir vos informations",
+      "identity": "Vérifiez et complétez vos informations d'identité",
+      "family": "Renseignez les informations sur votre famille",
+      "contact": "Fournissez vos coordonnées actuelles",
+      "professional": "Renseignez votre situation professionnelle",
+      "review": "Vérifiez toutes les informations avant de soumettre"
+    },
+    "messages": {
+      "step_under_construction": "Cette étape est en cours de construction"
+    },
+    "documents": {
+      "analysis": {
+        "button": "Analyser les documents",
+        "analyzing": "Analyse en cours...",
+        "help_text": "Les informations extraites des documents seront pré-remplies dans le formulaire",
+        "success_description": "Les informations ont été extraites avec succès",
+        "in_progress": "Analyse des documents en cours",
+        "error": {
+          "failed_upload": "Échec du chargement du fichier",
+          "failed_fetch": "Échec de la connexion au serveur",
+          "unknown": "Une erreur inconnue s'est produite",
+          "no_documents": "Aucun document n'a été téléchargé"
+        },
+        "success": {
+          "title": "Analyse terminée avec succès !",
+          "description": "Les informations de vos documents ont été extraites avec succès. Vous pouvez maintenant continuer avec le formulaire.",
+          "action": "Continuer"
+        }
+      },
+      "passport": {
+        "label": "Passeport gabonais"
+      },
+      "birth_certificate": {
+        "label": "Acte de naissance"
+      },
+      "address_proof": {
+        "label": "Justificatif de domicile"
+      },
+      "residence_permit": {
+        "label": "Titre de séjour"
+      },
+      "identity_picture": {
+        "label": "Photo d'identité"
+      }
+    },
+    "form": {
+      "title": "Formulaire d'inscription consulaire",
+      "subtitle": "Suivez les étapes pour créer votre carte consulaire",
+      "gender": "Genre",
+      "first_name": "Prénom(s)",
+      "last_name": "Nom(s)",
+      "first_name_placeholder": "Entrez votre/vos prénom(s)",
+      "last_name_placeholder": "Entrez votre/vos nom(s)",
+      "birth_date": "Date de naissance",
+      "birth_place": "Lieu de naissance",
+      "birth_place_placeholder": "Ville de naissance",
+      "birth_country": "Pays de naissance",
+      "nationality": "Nationalité",
+      "select_nationality": "Sélectionnez votre nationalité",
+      "search_nationality": "Rechercher une nationalité",
+      "no_nationality_found": "Aucune nationalité trouvée",
+      "required_field": "Ce champ est obligatoire",
+      "invalid_date": "Date invalide",
+      "marital_status": "Situation matrimoniale",
+      "select_marital_status": "Sélectionnez votre situation matrimoniale",
+      "spouse_name": "Nom et prénom du conjoint",
+      "spouse_name_placeholder": "Nom complet de votre conjoint",
+      "father_name": "Nom et prénom du père",
+      "father_name_placeholder": "Nom complet de votre père",
+      "mother_name": "Nom et prénom de la mère",
+      "mother_name_placeholder": "Nom complet de votre mère",
+      "emergency_contact": "Contact en cas d'urgence",
+      "emergency_contact_description": "Cette personne sera contactée en cas d'urgence",
+      "emergency_contact_name": "Nom complet",
+      "emergency_contact_name_placeholder": "Nom et prénom de la personne à contacter",
+      "emergency_contact_relationship": "Lien de parenté",
+      "emergency_contact_relationship_placeholder": "Ex: Frère, Sœur, Ami(e), etc.",
+      "emergency_contact_phone": "Numéro de téléphone",
+      "emergency_contact_phone_placeholder": "ex: +33612345678",
+      "primary_contact": "Coordonnées principales",
+      "primary_contact_description": "Ces coordonnées seront utilisées pour vous contacter",
+      "email": "Adresse email",
+      "email_placeholder": "votre@email.com",
+      "phone": "Numéro de téléphone",
+      "phone_placeholder": "ex: +33612345678",
+      "address": "Adresse de résidence",
+      "address_description": "Votre adresse de résidence actuelle",
+      "street_address": "Rue et numéro",
+      "district": "Quartier",
+      "district_placeholder": "Votre quartier de résidence",
+      "street_address_placeholder": "Numéro et nom de rue",
+      "second_line": "Complément d'adresse",
+      "address_complement_placeholder": "Batiment, étage, porte...",
+      "city": "Ville",
+      "city_placeholder": "Votre ville de résidence",
+      "postal_code": "Code postal",
+      "postal_code_placeholder": "Code postal",
+      "country": "Pays",
+      "select_country": "Sélectionnez un pays",
+      "search_country": "Rechercher un pays",
+      "no_country_found": "Aucun pays trouvé",
+      "gabon_activity": "Dernière activité au Gabon",
+      "gabon_activity_description": "Décrivez votre dernière activité professionnelle au Gabon",
+      "gabon_activity_placeholder": "Ex: Enseignant à Libreville (2018-2020)",
+      "professional_info": "Informations professionnelles",
+      "professional_status": "Statut professionnel",
+      "professional_status_description": "Votre situation professionnelle actuelle",
+      "work_status": "Activité professionnelle",
+      "select_work_status": "Sélectionnez votre activité",
+      "profession": "Profession ou métier",
+      "profession_placeholder": "Votre profession actuelle",
+      "employer": "Employeur",
+      "employer_placeholder": "Nom de votre employeur",
+      "work_address": "Adresse professionnelle",
+      "work_address_placeholder": "Adresse de votre lieu de travail",
+      "passport": "Passeport",
+      "identity_picture": "Photo d'identité",
+      "birth_certificate": "Acte de naissance",
+      "residence_permit": "Titre de séjour",
+      "address_proof": "Justificatif de domicile",
+      "address_gabon": "Adresse au Gabon",
+      "resume_saved": "Reprendre le formulaire sauvegardé",
+      "resume_title": "Formulaire sauvegardé trouvé",
+      "resume_description": "Voulez-vous reprendre où vous en étiez ou recommencer?",
+      "start_new": "Nouveau formulaire",
+      "resume": "Reprendre"
+    },
+    "request_type": {
+      "type": {
+        "label": "Type de demande",
+        "first_request": "Première demande",
+        "renewal": "Renouvellement",
+        "modification": "Modification des informations"
+      },
+      "nationality": {
+        "label": "Mode d'acquisition de la nationalité",
+        "birth": "Par naissance",
+        "naturalization": "Par naturalisation",
+        "marriage": "Par mariage",
+        "other": "Autre"
+      }
+    },
+    "review": {
+      "request_type": "Type de demande",
+      "document_type": "Type de document",
+      "nationality_acquisition": "Mode d'acquisition de la nationalité",
+      "basic_info": "Informations personnelles",
+      "contact_info": "Informations de contact",
+      "family_info": "Informations familiales",
+      "professional_info": "Informations professionnelles",
+      "documents": "Documents justificatifs",
+      "validity": "Validité",
+      "not_provided": "Non renseigné",
+      "document_uploaded": "Document fourni",
+      "document_missing": "Document manquant",
+      "section_missing": "Section non remplie",
+      "required": "Requis"
+    },
+    "assets": {
+      "document_type": {
+        "first_request": "Première demande",
+        "renewal": "Renouvellement",
+        "modification": "Modification"
+      },
+      "nationality_acquisition": {
+        "birth": "Par naissance",
+        "naturalization": "Par naturalisation",
+        "marriage": "Par mariage",
+        "other": "Autre"
+      },
+      "gender": {
+        "male": "Homme",
+        "female": "Femme"
+      },
+      "marital_status": {
+        "single": "Célibataire",
+        "married": "Marié(e)",
+        "divorced": "Divorcé(e)",
+        "widowed": "Veuf/Veuve",
+        "cohabiting": "En concubinage"
+      },
+      "work_status": {
+        "employee": "Salarié(e)",
+        "entrepreneur": "Entrepreneur(e)",
+        "unemployed": "Sans emploi",
+        "retired": "Retraité(e)",
+        "student": "Étudiant(e)",
+        "other": "Autre"
+      },
+      "status": {
+        "pending": "En attente",
+        "approved": "Approuvé",
+        "rejected": "Rejeté",
+        "incomplete": "Incomplet"
+      }
+    }
+  }
+}

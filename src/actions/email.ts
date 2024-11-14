@@ -1,0 +1,240 @@
+'use server'
+
+import { Resend } from 'resend'
+import { ContactFormInput, ContactFormSchema } from '@/schemas'
+import { sendSMS } from '@/lib/twilio'
+import { getTranslations } from 'next-intl/server'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+const resend_sender = process.env.RESEND_SENDER ?? 'contact@update.okacode.com'
+
+// Design system colors from globals.css
+const colors = {
+  primary: 'hsl(221.2 83.2% 53.3%)',
+  secondary: 'hsl(342, 99%, 45%)',
+  background: 'hsl(0 0% 100%)',
+  foreground: 'hsl(222.2 84% 4.9%)',
+  muted: 'hsl(210 40% 96.1%)',
+  mutedForeground: 'hsl(215.4 16.3% 46.9%)',
+  destructive: 'hsl(0 84.2% 60.2%)',
+  border: 'hsl(214.3 31.8% 91.4%)',
+}
+
+async function createBaseEmailTemplate(content: string) {
+  const t = await getTranslations('emails.common')
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+      <header style="height: 200px; display: flex; justify-items:center; align-items: center; text-align: center; padding: 2rem; border-bottom: 1px solid ${colors.primary}">
+         <p style="font-size: 2rem; color: ${colors.background}">${t('title')}</p>
+      </header>
+
+      <main style="padding: 20px;">
+       ${content}
+      </main>
+
+      <footer style="background-color: #f8f9fa; padding: 20px; text-align: center; margin-top: 30px;">
+        <p style="margin-bottom: 10px;">${t('footer.copyright', { year: new Date().getFullYear() })}</p>
+        <a href="https://www.consulat.ga" 
+          style="display: inline-block; padding: 10px 20px; background-color: ${colors.primary}; color: ${colors.background}; text-decoration: none; border-radius: 5px; margin-top: 10px;">
+          ${t('footer.cta')}
+        </a>
+      </footer>
+    </div>
+  `
+}
+
+export async function sendOTPEmail(email: string, otp: string) {
+  const otpEmail = await createOTPEmailTemplate(otp)
+  const t = await getTranslations('emails.otp')
+
+  try {
+    await resend.emails.send({
+      from: `Consulat <${resend_sender}>`,
+      to: email,
+      subject: t('title'),
+      html: otpEmail,
+      tags: [
+        {
+          name: 'category',
+          value: 'otp-verification',
+        },
+      ],
+    })
+  } catch (error) {
+    console.error('Failed to send OTP email:', error)
+    throw new Error('Failed to send verification code')
+  }
+}
+
+export async function sendSMSOTP(phone: string, otp: string) {
+  const t = await getTranslations('sms.otp')
+
+  try {
+    if (!process.env.TWILIO_PHONE_NUMBER) {
+      console.error('TWILIO_PHONE_NUMBER not configured')
+      throw new Error('SMS service not properly configured')
+    }
+
+    const message = t('message', {
+      otp,
+      expiry: t('expiry_time'),
+      appName: t('app_name'),
+    })
+
+    await sendSMS(phone, message)
+    console.log(t('logs.success', { phone }))
+  } catch (error) {
+    console.error(t('logs.error'), error)
+
+    if (error instanceof Error) {
+      if (error.message.includes('not a Twilio phone number')) {
+        throw new Error(t('errors.invalid_config'))
+      }
+      throw new Error(t('errors.send_failed', { error: error.message }))
+    }
+
+    throw new Error(t('errors.unknown'))
+  }
+}
+
+export async function createOTPEmailTemplate(otp: string) {
+  const t = await getTranslations('emails.otp')
+
+  const content = `
+    <div style="padding: 20px;">
+      <h1 style="color: ${colors.foreground}; font-size: 24px; margin-bottom: 20px; text-align: center;">
+        ${t('title')}
+      </h1>
+      <p style="color: ${colors.mutedForeground}; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+        ${t('description')}
+      </p>
+      <div style="text-align: center; margin: 30px 0;">
+        <div style="background-color: ${colors.muted}; border-radius: 8px; padding: 20px; display: inline-block;">
+          <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: ${colors.primary};">
+            ${otp}
+          </span>
+        </div>
+      </div>
+      <p style="color: ${colors.mutedForeground}; font-size: 14px; text-align: center;">
+        ${t('expiry')}
+      </p>
+      <div style="background-color: ${colors.destructive}; border-radius: 8px; padding: 15px; margin-top: 20px;">
+        <p style="color: ${colors.background}; margin: 0; font-size: 14px; text-align: center;">
+          ${t('warning')}
+        </p>
+      </div>
+    </div>
+  `
+
+  return createBaseEmailTemplate(content)
+}
+
+export async function sendContactEmail(
+  data: ContactFormInput,
+  target: {
+    email: string
+    fullName: string
+  },
+) {
+  const validData = ContactFormSchema.safeParse(data)
+
+  if (!validData.success) {
+    throw new Error('Invalid data')
+  }
+
+  const t = await getTranslations('emails.contact')
+
+  try {
+    await resend.emails.send({
+      from: `Consulat <${resend_sender}>`,
+      cc: [data.email],
+      to: [target.email],
+      subject: t('subject', {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }),
+      html: await createContactEmailTemplate(data, target),
+      tags: [
+        {
+          name: 'category',
+          value: 'contact-request',
+        },
+      ],
+    })
+
+    return {
+      success: t('success'),
+    }
+  } catch (error) {
+    throw new Error(t('error'))
+  }
+}
+
+async function createContactEmailTemplate(
+  data: ContactFormInput,
+  target: { email: string; fullName: string },
+) {
+  const t = await getTranslations('emails.contact')
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+      <header style="text-align: center; padding-bottom: 2rem; border-bottom: 1px solid ${colors.primary}">
+        <img src="https://utfs.io/f/383aae92-2d0c-4876-8cf7-a62b3a8b1e9f-mzxgj9.jpeg" alt="${t('logo_alt')}" style="max-width: 100%;">
+        <h1 style="color: #000;">${t('title')}</h1>
+      </header>
+
+      <main style="padding: 20px;">
+        <p style="color: #000; margin-bottom: 20px;">
+          ${t('greeting', { name: target.fullName })}
+        </p>
+        
+        <p style="color: #000; margin-bottom: 20px;">
+          ${t('intro', {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    company: data.companyName ? t('with_company', { company: data.companyName }) : '',
+  })}
+        </p>
+
+        <div style="background-color: ${colors.muted}; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <h2 style="color: ${colors.primary}; font-size: 18px; margin-bottom: 15px;">
+            ${t('message_header')}
+          </h2>
+          <p style="color: #000; margin: 0; white-space: pre-wrap;">${data.message}</p>
+        </div>
+
+        <div style="margin-top: 30px;">
+          <h3 style="color: ${colors.primary}; font-size: 16px; margin-bottom: 10px;">
+            ${t('contact_details')}
+          </h3>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: 5px;">
+              <strong>${t('email')}:</strong> ${data.email}
+            </li>
+            ${data.phoneNumber ? `
+              <li style="margin-bottom: 5px;">
+                <strong>${t('phone')}:</strong> ${data.phoneNumber}
+              </li>
+            ` : ''}
+            ${data.companyName ? `
+              <li style="margin-bottom: 5px;">
+                <strong>${t('company')}:</strong> ${data.companyName}
+              </li>
+            ` : ''}
+          </ul>
+        </div>
+      </main>
+
+      <footer style="background-color: ${colors.muted}; padding: 20px; text-align: center; margin-top: 30px;">
+        <p style="color: ${colors.mutedForeground}; font-size: 12px;">
+          ${t('footer.copyright', { year: new Date().getFullYear() })}
+        </p>
+        <a href="https://www.consulat.ga" 
+           style="background-color: ${colors.primary}; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; display: inline-block; margin-top: 10px; font-size: 14px;">
+          ${t('footer.cta')}
+        </a>
+      </footer>
+    </div>
+  `
+}

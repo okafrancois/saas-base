@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Profile" ALTER COLUMN "maritalStatus" DROP NOT NULL,
+ALTER COLUMN "workStatus" DROP NOT NULL,
+ALTER COLUMN "email" DROP NOT NULL,
+ALTER COLUMN "phone" DROP NOT NULL;
