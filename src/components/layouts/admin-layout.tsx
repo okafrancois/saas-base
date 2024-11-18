@@ -1,25 +1,22 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { AdminSidebar } from "../admin/sidebar"
-import { AdminHeader } from "../admin/header"
+import { AdminSidebar } from "@/components/admin/sidebar"
+import { AdminHeader } from "@/components/admin/header"
 import { getTranslations } from 'next-intl/server'
-import { LayoutProps, NavItem } from '@/components/layouts/types'
-import {
-  FileText,
-  LayoutDashboard,
-  Settings,
-  Users,
-} from 'lucide-react'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ProtectedLayoutProps } from "@/types/layout"
+import { PAGE_ROUTES } from "@/schemas/app-routes"
+import { NavItem } from '@/components/layouts/types'
+import { FileText, LayoutDashboard, Settings, Users } from 'lucide-react'
 
-export async function AdminLayout({ children }: LayoutProps) {
+export async function AdminLayout({ children }: ProtectedLayoutProps) {
   const session = await auth()
   const t = await getTranslations('admin')
 
   // Vérifier si l'utilisateur est admin
   if (!session?.user || !['ADMIN', 'SUPER_ADMIN'].includes(session.user.role)) {
-    redirect(PAGE_ROUTES.login)
+    redirect(PAGE_ROUTES.unauthorized)
   }
+
 
   const navItems: NavItem[] = [
     {
@@ -46,9 +43,11 @@ export async function AdminLayout({ children }: LayoutProps) {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <AdminSidebar items={navItems} />
+      <AdminSidebar items={navItems}/>
+
       <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminHeader items={navItems} />
+        <AdminHeader />
+
         <main className="flex-1 overflow-y-auto p-4">
           {children}
         </main>

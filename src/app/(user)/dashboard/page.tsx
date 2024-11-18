@@ -1,9 +1,7 @@
-// src/app/(admin)/admin/page.tsx
 import { getCurrentUser } from '@/actions/user'
-import { DashboardStats } from '@/components/admin/dashboard-stats'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default async function AdminDashboardPage() {
+export default async function UserDashboardPage() {
   const current = await getCurrentUser()
 
   if (!current) {
@@ -13,29 +11,25 @@ export default async function AdminDashboardPage() {
   return (
     <div className="container">
       <h1 className="text-3xl font-bold mb-8">
-        Tableau de bord administrateur
+        Bienvenue, {current.name ?? current.email}
       </h1>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <DashboardStats />
-      </div>
-
-      <div className="grid gap-4 mt-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Activité récente</CardTitle>
+            <CardTitle>Statut de ma demande</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Liste des activités récentes */}
+            {/* Statut de la demande de l'utilisateur */}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Demandes en attente</CardTitle>
+            <CardTitle>Mes documents</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Liste des demandes en attente */}
+            {/* Liste des documents de l'utilisateur */}
           </CardContent>
         </Card>
       </div>

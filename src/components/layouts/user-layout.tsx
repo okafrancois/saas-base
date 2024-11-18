@@ -1,13 +1,14 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { UserSidebar } from "../user/sidebar"
-import { UserHeader } from "../user/header"
+import { UserSidebar } from "@/components/user/sidebar"
+import { UserHeader } from "@/components/user/header"
 import { getTranslations } from 'next-intl/server'
-import { LayoutProps, NavItem } from '@/components/layouts/types'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ProtectedLayoutProps } from "@/types/layout"
+import { PAGE_ROUTES } from "@/schemas/app-routes"
+import { NavItem } from '@/components/layouts/types'
 import { FileText, Folder, Home, User } from 'lucide-react'
 
-export async function UserLayout({ children }: LayoutProps) {
+export async function UserLayout({ children }: ProtectedLayoutProps) {
   const session = await auth()
   const t = await getTranslations('user')
 
@@ -41,8 +42,10 @@ export async function UserLayout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <UserSidebar items={navItems} />
+
       <div className="flex-1 flex flex-col">
-        <UserHeader items={navItems} />
+        <UserHeader />
+
         <main className="flex-1 p-4">
           {children}
         </main>
