@@ -1093,6 +1093,96 @@
         "expired": "Le document est expiré",
         "suspicious": "Le document présente des signes suspects"
       }
+    },
+    "analysis": {
+      "title": "Analyse du document",
+      "start_analysis": "Démarrer l'analyse",
+      "analyzing": "Analyse en cours...",
+      "steps": {
+        "format": "Vérification du format",
+        "authenticity": "Contrôle d'authenticité",
+        "data_extraction": "Extraction des données",
+        "validation": "Validation finale"
+      },
+      "status": {
+        "pending": "En attente",
+        "processing": "En cours",
+        "success": "Terminé",
+        "error": "Erreur"
+      },
+      "messages": {
+        "format": {
+          "valid": "Format valide",
+          "invalid": "Format non valide"
+        },
+        "authenticity": {
+          "valid": "Document authentique",
+          "invalid": "Document potentiellement falsifié"
+        },
+        "data_extraction": {
+          "success": "Données extraites avec succès",
+          "partial": "Extraction partielle des données",
+          "failed": "Échec de l'extraction des données"
+        },
+        "validation": {
+          "success": "Document validé",
+          "failed": "Validation échouée"
+        }
+      }
+    },
+    "preview": {
+      "zoom_in": "Zoom avant",
+      "zoom_out": "Zoom arrière",
+      "rotate_left": "Rotation gauche",
+      "rotate_right": "Rotation droite",
+      "download": "Télécharger",
+      "fullscreen": "Plein écran",
+      "exit_fullscreen": "Quitter le plein écran",
+      "loading": "Chargement",
+      "document_preview": "Aperçu du document",
+      "types": {
+        "passport": "Passeport",
+        "identity": "Photo d'identité",
+        "proof": "Justificatif",
+        "birth_certificate": "Acte de naissance",
+        "residence_permit": "Titre de séjour"
+      }
+    },
+    "validation": {
+      "confidence": "confiance",
+      "alternatives": "Alternatives",
+      "validate": "Valider",
+      "errors": {
+        "required": "Ce champ est requis"
+      },
+      "fields": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "birthDate": "Date de naissance",
+        "birthPlace": "Lieu de naissance",
+        "nationality": "Nationalité",
+        "passportNumber": "Numéro de passeport",
+        "passportIssueDate": "Date d'émission",
+        "passportExpiryDate": "Date d'expiration"
+      }
+    },
+    "photo_cropper": {
+      "instructions": {
+        "title": "Instructions pour la photo",
+        "face_centered": "Le visage doit être centré et visible",
+        "neutral_expression": "Expression neutre, regardant droit devant",
+        "no_accessories": "Pas de lunettes ni d'accessoires",
+        "min_dimensions": "Dimensions minimales : {width}x{height} pixels"
+      },
+      "loading": "Chargement de l'image",
+      "photo_to_crop": "Photo à recadrer",
+      "dimensions": "Dimensions",
+      "validate": "Valider le recadrage",
+      "cancel": "Annuler",
+      "errors": {
+        "canvas_not_supported": "Votre navigateur ne supporte pas le recadrage d'image",
+        "dimensions_too_small": "Les dimensions sont trop petites"
+      }
     }
   }
 }
