@@ -2,7 +2,7 @@ import LanguageSwitcherSelect from '@/components/ui/LanguageSwitcher'
 import { useLocale, useTranslations } from 'next-intl'
 
 export default function LangSwitcher() {
-  const t = useTranslations('common.lang_switcher')
+  const t = useTranslations('common.languages')
   const locale = useLocale()
 
   return (
@@ -11,15 +11,15 @@ export default function LangSwitcher() {
       languages={[
         {
           value: 'fr',
-          label: t('fr'),
+          label: t('fr_short'),
         },
         {
           value: 'en',
-          label: t('en'),
+          label: t('en_short'),
         },
         {
           value: 'es',
-          label: t('es'),
+          label: t('es_short'),
         },
       ]}
       label={t('label')}

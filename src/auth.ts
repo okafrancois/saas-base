@@ -3,7 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { db } from '@/lib/prisma'
 import { User } from '@prisma/client'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
-import { getUserById } from '@/lib/user'
+import { getUserById } from '@/lib/user/getters'
 import authConfig from '@/auth.config'
 
 declare module 'next-auth' {

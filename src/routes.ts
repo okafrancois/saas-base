@@ -12,10 +12,7 @@ import { Route } from 'next'
  * @type {PAGE_ROUTES[]}
  */
 export const publicRoutes: PageRoute[] | ApiRoute[] = [
-  PAGE_ROUTES.view,
-  PAGE_ROUTES.home,
-  PAGE_ROUTES.profiles,
-  PAGE_ROUTES.new_profile,
+  PAGE_ROUTES.base
 ]
 
 /**

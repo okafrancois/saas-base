@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { useTranslations } from 'next-intl'
-import { cn, useFormStorage } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { RequestTypeForm } from './steps/request-type'
 import { Icons } from '@/components/ui/icons'
 import { FormError } from '@/components/form-error'
@@ -25,8 +25,8 @@ import { ContactInfoForm } from './steps/contact-form'
 import { ProfessionalInfoForm } from './steps/professional-info'
 import { ReviewForm } from './steps/review'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
-import { postProfile } from '@/actions/profile'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useFormStorage } from '@/lib/form-storage'
 
 // Types et configurations
 type StepKey = 'request_type' | 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
@@ -135,13 +135,14 @@ export default function ConsularFormLayout() {
         identityPicture: formData.basicInfo?.identityPictureFile ? createFormDataFromFile(formData.basicInfo.identityPictureFile) : undefined,
       };
 
-      const result = await postProfile(profileData, files);
+      const result = true; // TODO: call server action to submit data
 
       if (result) {
+        console.log('Profile data:', profileData, 'Files:', files);
         // Clear stored data
         clearData();
         // Redirect on success
-        router.push(PAGE_ROUTES.my_profile);
+        router.push(PAGE_ROUTES.dashboard);
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Une erreur est survenue');

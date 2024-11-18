@@ -4,12 +4,13 @@ import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { buttonVariants } from '@/components/ui/button'
 import imagePicture from '@/assets/contact-ga-image.png'
 import Image from 'next/image'
-import DarkModeToggle from '@/components/ui/darkmode-toggle'
-import { useTranslations } from 'next-intl'
 import LangSwitcher from '@/components/LangSwitcher'
+import { auth } from '@/auth'
+import { getTranslations } from 'next-intl/server'
 
-export default function HomePage() {
-  const t = useTranslations('home')
+export default async function HomePage() {
+  const isAuth = await auth()
+  const t = await getTranslations('home')
 
   return (
     <div
@@ -19,20 +20,26 @@ export default function HomePage() {
     >
       <header className={'fixed top-4 z-40 w-full md:top-6'}>
         <div className={'container flex w-full items-center justify-between gap-4'}>
-          <span className="hidden text-md font-bold uppercase min-[380px]:inline sm:text-base">
-                {t('consulat')}
+          <span className="text-md hidden font-bold uppercase min-[380px]:inline sm:text-base">
+            <Link
+              href={PAGE_ROUTES.base}
+            >
+              <span>{t('consulat')}</span>
+            </Link>
+
           </span>
           <div className="flex w-max gap-3">
             <LangSwitcher />
             <Link
-              href={PAGE_ROUTES.login}
+              href={PAGE_ROUTES.dashboard}
               className={
                 buttonVariants({
                   variant: 'default',
                 }) + ' !rounded-full max-[480px]:!px-2'
               }
             >
-              <span>{t('nav.login')}</span>
+              {isAuth ? <span>{t('nav.dashboard')}</span> : <span>{t('nav.login')}</span>}
+
             </Link>
           </div>
 
@@ -40,7 +47,7 @@ export default function HomePage() {
       </header>
       <div
         className="container relative flex h-full grow flex-col-reverse justify-evenly gap-4 py-12 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
-        <div className='relative max-w-[70%] md:max-w-full space-y-4'>
+        <div className='relative max-w-[70%] space-y-4 md:max-w-full'>
           <h2 className={'text-lg font-semibold uppercase lg:text-6xl'}>
             {t('title')}
           </h2>
@@ -62,16 +69,16 @@ export default function HomePage() {
           </div>
         </div>
         <div className="image-cover w-full md:max-w-[40%]">
-          <div className="relative w-full overflow-hidden rounded max-w-[400px] md:max-w-[500px]">
+          <div className="relative w-full max-w-[400px] overflow-hidden rounded md:max-w-[500px]">
             <iframe
-              className={'w-full absolut top-0 left-0 object-cover h-full max-w-full aspect-[1440/1080]'}
+              className={'absolut left-0 top-0 aspect-[1440/1080] size-full max-w-full object-cover'}
               src="https://player.vimeo.com/video/1023725393?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
               width="1440" height="1080" allow="autoplay; picture-in-picture; clipboard-write"
               title="Présentation carte consulaire"></iframe>
           </div>
           <script src="https://player.vimeo.com/api/player.js"></script>
         </div>
-        <div className="image absolute w-full -right-16 bottom-0 -z-10 max-w-[50%] md:hidden">
+        <div className="image absolute -right-16 bottom-0 -z-10 w-full max-w-[50%] md:hidden">
           <Image
             src={imagePicture}
             alt={'business card cover'}

@@ -30,8 +30,7 @@ export async function uploadFiles(
       }
     }
 
-    const uploads = await utapi.uploadFiles(files)
-    return uploads
+    return await utapi.uploadFiles(files)
 
   } catch (error) {
     console.error('Upload error:', error)
@@ -43,14 +42,10 @@ export async function uploadFiles(
 
 export async function deleteFiles(
   keys: string[],
-  db: PrismaClient | undefined = undefined
 ) {
   const promises = []
   for (const key of keys) {
     promises.push(utapi.deleteFiles(key))
-    if (db) {
-      promises.push(db.file.delete({ where: { key } }))
-    }
   }
 
   try {

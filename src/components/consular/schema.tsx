@@ -1,11 +1,5 @@
 import * as z from 'zod'
-import {
-  MaritalStatus,
-  WorkStatus,
-  DocumentType,
-  NationalityAcquisition,
-  Gender,
-} from '@prisma/client'
+import {} from '@prisma/client'
 
 const FileListSchema = z.any().refine(
   (files) => {

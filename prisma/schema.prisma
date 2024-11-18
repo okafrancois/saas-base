@@ -8,11 +8,8 @@ generator client {
 }
 
 enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  MANAGER
   USER
-  SECRET
+  ADMIN
 }
 
 model Account {
@@ -43,21 +40,16 @@ model Session {
 }
 
 model User {
-  id                    String         @id @default(cuid())
-  email                 String?        @unique
-  phone                 String?        @unique
-  emailVerified         DateTime?
-  phoneVerified         DateTime?
-  name                  String?
-  image                 String?
-  role                  UserRole       @default(USER)
-  accounts              Account[]
-  sessions              Session[]
-  bio                   String?        @db.Text
-  profile               Profile?
-  Consulate             Consulate[]
-  sentNotifications     Notification[] @relation("SentNotifications")
-  receivedNotifications Notification[] @relation("ReceivedNotifications")
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  phone         String?   @unique
+  emailVerified DateTime?
+  phoneVerified DateTime?
+  name          String?
+  image         String?
+  role          UserRole  @default(USER)
+  accounts      Account[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -68,229 +60,4 @@ model VerificationToken {
   type       String
 
   @@unique([identifier, token])
-}
-
-enum Visibility {
-  PUBLIC
-  PRIVATE
-}
-
-model Consulate {
-  id            String         @id @default(cuid())
-  name          String
-  visibility    Visibility     @default(PUBLIC)
-  profiles      Profile[]
-  phone         String
-  email         String
-  address       Address        @relation("consulate_address", fields: [addressId], references: [id])
-  addressId     String
-  website       String?
-  logo          File?          @relation("consulate_logo", fields: [logoId], references: [key])
-  logoId        String?
-  user          User           @relation(fields: [userId], references: [id])
-  userId        String
-  countries     Country[]
-  notifications Notification[]
-  createdAt     DateTime       @default(now())
-  isGeneral     Boolean        @default(false)
-}
-
-model Profile {
-  id     String @id @default(cuid())
-  status Status @default(INCOMPLETE)
-
-  // Basic Identity Info
-  gender                 Gender
-  firstName              String
-  lastName               String
-  birthDate              String
-  birthPlace             String
-  birthCountry           String
-  nationality            String
-  nationalityAcquisition NationalityAcquisition
-
-  // Contact Info
-  email            String?
-  phone            String?
-  address          Address       @relation("profile_address", fields: [addressId], references: [id])
-  addressId        String
-  addressGabon     AddressGabon?
-  residenceCountry String?
-
-  // Professional Info
-  workStatus        WorkStatus?
-  profession        String?
-  employer          String?
-  employerAddress   String?
-  lastActivityGabon String?
-
-  // Family Info
-  maritalStatus  MaritalStatus?
-  fatherFullName String?
-  motherFullName String?
-
-  // Family Members
-  spouseFullName String?
-
-  // Emergency Contact
-  emergencyContact EmergencyContact?
-
-  // Documents
-  applicationNumber  String?      @unique // Numéro de dossier
-  documentType       DocumentType @default(FIRST_REQUEST)
-  passport           File?        @relation("passportFile", fields: [passportId], references: [key])
-  passportId         String?
-  passportNumber     String?
-  passportIssueDate  DateTime?
-  passportExpiryDate DateTime?
-
-  birthCertificate   File?   @relation("birthCertificate", fields: [birthCertificateId], references: [key])
-  birthCertificateId String?
-
-  residencePermit   File?   @relation("residencePermit", fields: [residencePermitId], references: [key])
-  residencePermitId String?
-
-  addressProof   File?   @relation("addressProof", fields: [addressProofId], references: [key])
-  addressProofId String?
-
-  identityPicture   File?   @relation("identityPicture", fields: [identityPictureId], references: [key])
-  identityPictureId String?
-
-  // Relations
-  consulate   Consulate? @relation(fields: [consulateId], references: [id])
-  consulateId String?
-  user        User       @relation(fields: [userId], references: [id])
-  userId      String     @unique
-
-  // Metadata
-  expiredAt DateTime?
-  profileID Int?
-  createdAt DateTime  @default(now())
-}
-
-model Country {
-  id          String    @id @default(cuid())
-  name        String
-  consulate   Consulate @relation(fields: [consulateId], references: [id])
-  consulateId String
-}
-
-model Address {
-  id            String      @id @default(cuid())
-  firstLine     String
-  secondLine    String?
-  city          String
-  zipCode       String
-  country       String
-  profile_ref   Profile[]   @relation("profile_address")
-  consulate_ref Consulate[] @relation("consulate_address")
-}
-
-model File {
-  key               String      @id @default(cuid())
-  url               String
-  appUrl            String?
-  size              Int
-  name              String
-  type              String
-  customId          String?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  consulate_logo    Consulate[] @relation("consulate_logo")
-  identity_pic_ref  Profile[]   @relation("identityPicture")
-  birth_cert_ref    Profile[]   @relation("birthCertificate")
-  address_proof_ref Profile[]   @relation("addressProof")
-  residence_permit  Profile[]   @relation("residencePermit")
-  passport_ref      Profile[]   @relation("passportFile")
-}
-
-model Notification {
-  id          String           @id @default(cuid())
-  title       String
-  content     String
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  read        Boolean          @default(false)
-  type        NotificationType
-  sender      User             @relation("SentNotifications", fields: [senderId], references: [id])
-  senderId    String
-  recipients  User[]           @relation("ReceivedNotifications")
-  consulate   Consulate?       @relation(fields: [consulateId], references: [id])
-  consulateId String?
-  attachments Attachment[]
-  viewedBy    String[]
-}
-
-model Attachment {
-  id             String       @id @default(cuid())
-  url            String
-  filename       String
-  mimeType       String
-  notification   Notification @relation(fields: [notificationId], references: [id])
-  notificationId String
-}
-
-model EmergencyContact {
-  id           String  @id @default(cuid())
-  fullName     String
-  relationship String
-  phone        String
-  profile      Profile @relation(fields: [profileId], references: [id])
-  profileId    String  @unique
-}
-
-model AddressGabon {
-  id        String  @id @default(cuid())
-  address   String
-  district  String // Quartier
-  city      String
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId String  @unique
-}
-
-enum DocumentType {
-  FIRST_REQUEST
-  RENEWAL
-  MODIFICATION
-}
-
-enum NationalityAcquisition {
-  BIRTH
-  NATURALIZATION
-  MARRIAGE
-  OTHER
-}
-
-enum NotificationType {
-  INDIVIDUAL
-  CONSULATE
-}
-
-enum Gender {
-  MALE
-  FEMALE
-}
-
-enum Status {
-  PENDING
-  APPROVED
-  REJECTED
-  INCOMPLETE
-}
-
-enum MaritalStatus {
-  SINGLE
-  MARRIED
-  DIVORCED
-  WIDOWED
-  COHABITING
-}
-
-enum WorkStatus {
-  EMPLOYEE
-  ENTREPRENEUR
-  UNEMPLOYED
-  RETIRED
-  STUDENT
-  OTHER
 }

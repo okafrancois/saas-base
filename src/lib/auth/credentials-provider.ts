@@ -1,6 +1,6 @@
 import { type Provider } from 'next-auth/providers'
 import { db } from '@/lib/prisma'
-import { validateOTP } from '@/lib/otp'
+import { validateOTP } from '@/lib/user/otp'
 
 export interface AuthPayload {
   identifier: string

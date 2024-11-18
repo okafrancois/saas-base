@@ -1,13 +1,13 @@
 'use client'
 
-import { useCurrentUser, useUserCountry } from '@/hooks/use-current-user'
+import { useCurrentUser } from '@/hooks/use-current-user'
 import {
   Menubar,
   MenubarMenu,
 } from '@/components/ui/menubar'
 import { useTranslations } from 'next-intl'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
-import { BellRingIcon, Building, UserRoundIcon } from 'lucide-react'
+import { BellRingIcon, UserRoundIcon } from 'lucide-react'
 import { UserRole } from '@prisma/client'
 import { MenuItem } from '@/components/app-sidebar'
 import { SidebarTrigger } from '@/components/ui/sidebar'
@@ -18,8 +18,6 @@ export function MenuBarMobile() {
   const path = usePathname()
   const user = useCurrentUser()
   const t_nav = useTranslations('navigation')
-  const userCountry = useUserCountry()
-
 
   function getCurrentUserMenu(): MenuItem[] {
     if (user?.role) {
@@ -29,62 +27,38 @@ export function MenuBarMobile() {
   }
 
   const mainUserMenu: MenuItem[] = [{
-    title: t_nav('my_profile'),
-    url: PAGE_ROUTES.my_profile,
+    title: t_nav("exapmle"),
+    url: PAGE_ROUTES.dashboard,
     icon: UserRoundIcon,
     isActive: true,
-    items: [
-      {
-        title: 'Informations de base',
-        url: '#base',
-      },
-      {
-        title: 'Mes documents',
-        url: '#documents',
-      },
-    ],
   }, {
-    title: t_nav('notifications'),
-    url: PAGE_ROUTES.notifications,
+    title: t_nav("notifications"),
+    url: PAGE_ROUTES.base,
     icon: BellRingIcon,
-    isActive: true,
+    isActive: true
   }]
 
   const mainAdminMenu: MenuItem[] = [{
-    title: t_nav('my_profile'),
-    url: PAGE_ROUTES.my_profile,
+    title: t_nav("example"),
+    url: PAGE_ROUTES.base,
     icon: UserRoundIcon,
     isActive: true,
     items: [
       {
-        title: 'Informations de base',
-        url: '#base',
+        title: "examples 1",
+        url: "#base",
       },
       {
-        title: 'Mes documents',
-        url: '#documents',
-      },
+        title: "example 2",
+        url: "#documents",
+      }
     ],
-  }, {
-    title: t_nav('consulates'),
-    url: PAGE_ROUTES.consulates,
-    icon: Building,
-    isActive: true,
-  },
-    {
-      title: t_nav('notifications'),
-      url: PAGE_ROUTES.notifications,
-      icon: BellRingIcon,
-      isActive: true,
-    },
+  }
   ]
 
   const menus = {
     [UserRole.USER]: mainUserMenu,
-    [UserRole.SUPER_ADMIN]: mainAdminMenu,
     [UserRole.ADMIN]: mainAdminMenu,
-    [UserRole.MANAGER]: mainAdminMenu,
-    [UserRole.SECRET]: mainAdminMenu,
   }
 
   return (

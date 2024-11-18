@@ -4,7 +4,7 @@ import { signOut } from '@/auth'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/prisma'
-import { generateOTP } from '@/lib/otp'
+import { generateOTP } from '@/lib/user/otp'
 import { sendOTPEmail, sendSMSOTP } from '@/actions/email'
 
 export const logUserOut = async () => {

@@ -17,7 +17,13 @@ export default auth((req) => {
     nextUrl.pathname.includes(`${route}`)
   )
   const isPublicRoute = publicRoutes.some((route) =>
-    nextUrl.pathname.includes(`${route}`)
+    {
+      if (route === PAGE_ROUTES.base) {
+        return nextUrl.pathname === route
+      }
+
+      return nextUrl.pathname.includes(`${route}`)
+    }
   )
 
   if (isPublicRoute) {
@@ -34,10 +40,6 @@ export default auth((req) => {
     }
 
     return
-  }
-
-  if (!isLoggedIn && nextUrl.pathname === PAGE_ROUTES.base) {
-    return Response.redirect(new URL(PAGE_ROUTES.home, nextUrl))
   }
 
   if (!isLoggedIn && !isPublicRoute) {

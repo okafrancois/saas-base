@@ -22,7 +22,6 @@ next-env.d.ts
 /prisma/migrations
 /public
 .git
-/translations
 /src/assets
 /public
 .code_base.md

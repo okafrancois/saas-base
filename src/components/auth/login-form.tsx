@@ -11,11 +11,11 @@ import * as React from 'react'
 import { signIn } from 'next-auth/react'
 import { DEFAULT_AUTH_REDIRECT } from '@/routes'
 import { Icons } from '@/components/ui/icons'
-import { LoginInput, LoginSchema } from '@/schemas'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { sendOTP } from '@/actions/auth'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { LoginInput, LoginSchema } from '@/schemas/user'
 
 export function LoginForm({ customTitle, customSubTitle }: {
   successCallback?: () => void,

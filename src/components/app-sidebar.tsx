@@ -6,7 +6,7 @@ import {
   LifeBuoy, LucideIcon,
   Send,
   UserRoundIcon,
-  BellRingIcon,Building
+  BellRingIcon
 } from 'lucide-react'
 
 import { NavMain } from "@/components/nav-main"
@@ -21,7 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useCurrentUser, useUserCountry } from '@/hooks/use-current-user'
+import { useCurrentUser } from '@/hooks/use-current-user'
 import { Route } from 'next'
 import { useTranslations } from 'next-intl'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
@@ -43,7 +43,7 @@ export type SubMenuItem = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useCurrentUser()
   const t_nav = useTranslations("navigation")
-  const userCountry = useUserCountry()
+  const userCountry = "France"
 
 
   function getCurrentUserMenu(): MenuItem[] {
@@ -54,54 +54,33 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const mainUserMenu: MenuItem[] = [{
-    title: t_nav("my_profile"),
-    url: PAGE_ROUTES.my_profile,
+    title: t_nav("exapmle"),
+    url: PAGE_ROUTES.dashboard,
     icon: UserRoundIcon,
     isActive: true,
-    items: [
-      {
-        title: "Informations de base",
-        url: "#base",
-      },
-      {
-        title: "Mes documents",
-        url: "#documents",
-      }
-    ],
   }, {
     title: t_nav("notifications"),
-    url: PAGE_ROUTES.notifications,
+    url: PAGE_ROUTES.base,
     icon: BellRingIcon,
     isActive: true
   }]
 
   const mainAdminMenu: MenuItem[] = [{
-    title: t_nav("my_profile"),
-    url: PAGE_ROUTES.my_profile,
+    title: t_nav("example"),
+    url: PAGE_ROUTES.base,
     icon: UserRoundIcon,
     isActive: true,
     items: [
       {
-        title: "Informations de base",
+        title: "examples 1",
         url: "#base",
       },
       {
-        title: "Mes documents",
+        title: "example 2",
         url: "#documents",
       }
     ],
-  }, {
-    title: t_nav("consulates"),
-    url: PAGE_ROUTES.consulates,
-    icon: Building,
-    isActive: true
-  },
-    {
-      title: t_nav("notifications"),
-      url: PAGE_ROUTES.notifications,
-      icon: BellRingIcon,
-      isActive: true
-    }
+  }
   ]
 
   const navSecondary: MenuItem[] = [{
@@ -119,10 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const menus = {
     [UserRole.USER]: mainUserMenu,
-    [UserRole.SUPER_ADMIN]: mainAdminMenu,
     [UserRole.ADMIN]: mainAdminMenu,
-    [UserRole.MANAGER]: mainAdminMenu,
-    [UserRole.SECRET]: mainAdminMenu,
   }
 
   return (
