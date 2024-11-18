@@ -1,4 +1,6 @@
 import { Prisma, Gender, MaritalStatus, WorkStatus, Address } from '@prisma/client'
+import { BasicInfoSchema, ContactInfoSchema, FamilyInfoSchema, ProfessionalInfoSchema } from '@/schemas/registration'
+import { z } from 'zod'
 
 export type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
@@ -61,4 +63,11 @@ export enum RequestType {
   REGISTRATION = 'REGISTRATION',
   RENEWAL = 'RENEWAL',
   REPLACEMENT = 'REPLACEMENT',
+}
+
+export type ConsularFormData = {
+  basicInfo: z.infer<typeof BasicInfoSchema>
+  contactInfo: z.infer<typeof ContactInfoSchema>
+  familyInfo: z.infer<typeof FamilyInfoSchema>
+  professionalInfo: z.infer<typeof ProfessionalInfoSchema>
 }

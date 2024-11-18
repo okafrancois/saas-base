@@ -27,6 +27,11 @@ import {
   RequestTypeFormData,
 } from '@/schemas/registration'
 import { AnalysisData } from '@/types'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useFormAutosave } from '@/hooks/use-form-autosave'
+import { useToast } from '@/hooks/use-toast'
+import { submitConsularForm } from '@/actions/consular'
 
 // Types et configurations
 type StepKey = 'request_type' | 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
@@ -50,18 +55,25 @@ export type ConsularFormData = {
   professionalInfo?: ProfessionalInfoFormData
 }
 
-export default function ConsularFormLayout() {
-  const router = useRouter()
+// Schéma de validation complet
 
+export default function ConsularForm() {
+  const router = useRouter()
   const t = useTranslations('consular_registration')
   const { loadSavedData, saveData, clearData } = useFormStorage()
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const {toast} = useToast()
 
   // État local
   const [formData, setFormData] = useState<ConsularFormData>(() => loadSavedData() || {})
+  const form = useForm<ConsularFormData>({
+    resolver: zodResolver(CompleteFormSchema)
+  })
   const [error, setError] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState<number>(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { clearSavedData } = useFormAutosave(form, 'consular-form')
 
   // Référence pour le formulaire actuel
   const currentFormRef = useRef<HTMLFormElement>(null)
@@ -110,46 +122,45 @@ export default function ConsularFormLayout() {
     }
   }
 
-  const handleFinalSubmit = async () => {
+  const handleFinalSubmit = async (formData: ConsularFormData) => {
     try {
-      setIsLoading(true);
-      setError(undefined);
+      setIsSubmitting(true)
 
-      const profileData = {
-        requestType: formData.requestType as RequestTypeFormData,
-        basicInfo:{
-          ...formData.basicInfo,
-          identityPictureFile: undefined,
-        } as BasicInfoFormData,
-        familyInfo: formData.familyInfo as FamilyInfoFormData,
-        contactInfo: formData.contactInfo as ContactInfoFormData,
-        professionalInfo: formData.professionalInfo as ProfessionalInfoFormData,
-      };
+      const result = await submitConsularForm(formData)
 
-      // Create FormData objects for each file
-      const files = {
-        passport: formData.documents?.passportFile ? createFormDataFromFile(formData.documents.passportFile) : undefined,
-        birthCertificate: formData.documents?.birthCertificateFile ? createFormDataFromFile(formData.documents.birthCertificateFile) : undefined,
-        residencePermit: formData.documents?.residencePermitFile ? createFormDataFromFile(formData.documents.residencePermitFile) : undefined,
-        addressProof: formData.documents?.addressProofFile ? createFormDataFromFile(formData.documents.addressProofFile) : undefined,
-        identityPicture: formData.basicInfo?.identityPictureFile ? createFormDataFromFile(formData.basicInfo.identityPictureFile) : undefined,
-      };
-
-      const result = true; // TODO: call server action to submit data
-
-      if (result) {
-        console.log('Profile data:', profileData, 'Files:', files);
-        // Clear stored data
-        clearData();
-        // Redirect on success
-        router.push(PAGE_ROUTES.dashboard);
+      if (result.error) {
+        toast({
+          title: t('errors.common.error_title'),
+          description: result.error,
+          variant: "destructive"
+        })
+        return
       }
+
+      // Succès
+      toast({
+        title: t('success.title'),
+        description: t('success.form_submitted'),
+        variant: "success"
+      })
+
+      // Nettoyer le stockage local
+      clearFormData()
+
+      // Rediriger vers la page de succès ou le dashboard
+      router.push(PAGE_ROUTES.dashboard)
+
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Une erreur est survenue');
+      console.error('Form submission error:', error)
+      toast({
+        title: t('errors.common.error_title'),
+        description: t('errors.common.unknown_error'),
+        variant: "destructive"
+      })
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
 // Helper function to create FormData from a file
   const createFormDataFromFile = (file: File | FileList) => {

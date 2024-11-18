@@ -208,42 +208,136 @@ export const BasicInfoPostSchema = z.object({
   passportIssueAuthority: z.string().optional(),
 })
 
+// Constantes de validation
+export const VALIDATION_RULES = {
+  NAME_MIN_LENGTH: 2,
+  NAME_MAX_LENGTH: 50,
+  PHONE_REGEX: /^\+[1-9]\d{1,14}$/,
+  EMAIL_MAX_LENGTH: 255,
+  ADDRESS_MAX_LENGTH: 100,
+} as const
+
+// Validation pour la section Contact
 export const ContactInfoSchema = z.object({
-  email: z.string().email('Email invalide').optional(),
-  phone: z.string().min(1, 'Le numéro de téléphone est requis').optional(),
+  email: z
+    .string()
+    .email('errors.validation.contact.invalid_email')
+    .max(VALIDATION_RULES.EMAIL_MAX_LENGTH, 'errors.validation.contact.email_too_long')
+    .optional(),
+
+  phone: z
+    .string()
+    .regex(VALIDATION_RULES.PHONE_REGEX, 'errors.validation.contact.invalid_phone')
+    .optional(),
+
   address: z.object({
-    firstLine: z.string().min(1, 'L\'adresse est requise'),
-    secondLine: z.string().optional(),
-    city: z.string().min(1, 'La ville est requise'),
-    zipCode: z.string().min(1, 'Le code postal est requis'),
-    country: z.string().min(1, 'Le pays est requis'),
+    firstLine: z
+      .string()
+      .min(1, 'errors.validation.address.street_required')
+      .max(VALIDATION_RULES.ADDRESS_MAX_LENGTH),
+
+    secondLine: z.string().max(VALIDATION_RULES.ADDRESS_MAX_LENGTH).optional(),
+
+    city: z
+      .string()
+      .min(1, 'errors.validation.address.city_required'),
+
+    zipCode: z
+      .string()
+      .min(1, 'errors.validation.address.zipcode_required'),
+
+    country: z
+      .string()
+      .min(1, 'errors.validation.address.country_required'),
   }),
-  addressGabon: z.object({
-    address: z.string().min(1, 'L\'adresse au Gabon est requise'),
-    district: z.string().min(1, 'Le quartier est requis'),
-    city: z.string().min(1, 'La ville est requise'),
-  }).optional(),
 })
 
+// Validation pour la section Famille
 export const FamilyInfoSchema = z.object({
-  maritalStatus: z.nativeEnum(MaritalStatus).optional(),
-  fatherFullName: z.string().min(1, 'Le nom complet du père est requis'),
-  motherFullName: z.string().min(1, 'Le nom complet de la mère est requis'),
-  emergencyContact: z.object({
-    fullName: z.string().min(1, 'Le nom complet est requis'),
-    relationship: z.string().min(1, 'Le lien de parenté est requis'),
-    phone: z.string().min(1, 'Le numéro de téléphone est requis'),
-  }).optional(),
-  spouseFullName: z.string().min(1, 'Le nom complet du/de la conjoint(e) est requis').optional(),
-})
+  maritalStatus: z.nativeEnum(MaritalStatus),
 
+  fatherFullName: z
+    .string()
+    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.family.father_name_too_short')
+    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.family.father_name_too_long'),
+
+  motherFullName: z
+    .string()
+    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.family.mother_name_too_short')
+    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.family.mother_name_too_long'),
+
+  spouseFullName: z
+    .string()
+    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.family.spouse_name_too_short')
+    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.family.spouse_name_too_long')
+    .optional(),
+
+  emergencyContact: z.object({
+    fullName: z
+      .string()
+      .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.emergency.name_too_short')
+      .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.emergency.name_too_long'),
+
+    relationship: z
+      .string()
+      .min(1, 'errors.validation.emergency.relationship_required'),
+
+    phone: z
+      .string()
+      .regex(VALIDATION_RULES.PHONE_REGEX, 'errors.validation.emergency.invalid_phone'),
+  }).optional(),
+}).refine(
+  (data) => {
+    // Si marié, le nom du conjoint est requis
+    if (data.maritalStatus === MaritalStatus.MARRIED) {
+      return !!data.spouseFullName;
+    }
+    return true;
+  },
+  {
+    message: 'errors.validation.family.spouse_name_required_if_married',
+    path: ['spouseFullName'],
+  }
+);
+
+// Validation pour la section Professionnelle
 export const ProfessionalInfoSchema = z.object({
-  workStatus: z.nativeEnum(WorkStatus).optional(),
-  profession: z.string().optional(),
-  employer: z.string().optional(),
-  employerAddress: z.string().optional(),
-  lastActivityGabon: z.string().optional(),
-})
+  workStatus: z.nativeEnum(WorkStatus),
+
+  profession: z
+    .string()
+    .min(2, 'errors.validation.professional.profession_too_short')
+    .max(100, 'errors.validation.professional.profession_too_long')
+    .optional(),
+
+  employer: z
+    .string()
+    .min(2, 'errors.validation.professional.employer_too_short')
+    .max(100, 'errors.validation.professional.employer_too_long')
+    .optional(),
+
+  employerAddress: z
+    .string()
+    .max(200, 'errors.validation.professional.address_too_long')
+    .optional(),
+
+  lastActivityGabon: z
+    .string()
+    .max(200, 'errors.validation.professional.activity_too_long')
+    .optional(),
+}).refine(
+  (data) => {
+    // Si employé, l'employeur est requis
+    if (data.workStatus === WorkStatus.EMPLOYEE) {
+      return !!data.employer;
+    }
+    return true;
+  },
+  {
+    message: 'errors.validation.professional.employer_required_if_employee',
+    path: ['employer'],
+  }
+);
 
 export const DocumentsSchema = z.object({
   passportFile: DocumentFileSchema,
