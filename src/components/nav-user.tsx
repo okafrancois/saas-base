@@ -36,9 +36,9 @@ export function NavUser({
   user,
 }: {
   user: {
-    name: string
-    identifier: string
-    avatar: string
+    name?: string
+    identifier?: string
+    avatar?: string
   }
 }) {
   const { isMobile } = useSidebar()
@@ -58,8 +58,8 @@ export function NavUser({
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.identifier}</span>
+                <span className="truncate font-semibold">{user?.name ?? 'No User Name'}</span>
+                <span className="truncate text-xs">{user.identifier ?? 'ID'}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -73,12 +73,12 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="size-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user.avatar ?? undefined} alt={user?.name ?? 'No User Name'} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.identifier}</span>
+                  <span className="truncate font-semibold">{user?.name ?? 'No User Name'}</span>
+                  <span className="truncate text-xs">{user.identifier ?? 'ID'}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

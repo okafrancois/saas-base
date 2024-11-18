@@ -44,7 +44,6 @@ export function MobileNav({ items = [] }: MobileNavProps) {
           <nav className="flex flex-col space-y-2">
             {items.map((item) => {
               const isActive = pathname === item.href
-              const Icon = item.icon
 
               return (
                 <Link
@@ -58,7 +57,7 @@ export function MobileNav({ items = [] }: MobileNavProps) {
                       : "hover:bg-accent"
                   )}
                 >
-                  <Icon className="mr-2 h-4 w-4" />
+                  {item.icon}
                   {item.title}
                 </Link>
               )

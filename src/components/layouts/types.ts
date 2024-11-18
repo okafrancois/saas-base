@@ -1,6 +1,7 @@
 import { UserRole } from "@prisma/client"
 import { Route } from 'next'
-import { LucideIcon } from 'lucide-react'
+import { LucideProps } from 'lucide-react'
+import { ReactElement } from 'react'
 
 export type LayoutProps = {
   children: React.ReactNode
@@ -9,7 +10,8 @@ export type LayoutProps = {
 export type NavItem = {
   title: string
   href: Route<string>
-  icon: LucideIcon
+  icon: ReactElement<LucideProps>
   roles?: UserRole[]
   items?: Omit<NavItem, 'icon' | 'items'>[]
+  isActive?: boolean
 }

@@ -2,7 +2,7 @@
 
 import { useCurrentUser } from "@/hooks/use-current-user"
 import { UserRole } from "@prisma/client"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from "react"
 import { PAGE_ROUTES } from "@/schemas/app-routes"
 
@@ -14,10 +14,11 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
   const user = useCurrentUser()
   const router = useRouter()
+  const path = usePathname()
 
   useEffect(() => {
     if (!user) {
-      router.push(PAGE_ROUTES.login)
+      router.push(`${PAGE_ROUTES.login}?callbackUrl=${encodeURIComponent(path)}`)
       return
     }
 

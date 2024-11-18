@@ -363,7 +363,16 @@
     "my_applications": "Mes demandes",
     "settings": "Paramètres",
     "help": "Aide",
-    "menu": "Menu principal"
+    "menu": "Menu principal",
+    "logout": "Déconnexion",
+    "back": "Retour",
+    "home": "Accueil",
+    "profile": "Profil",
+    "consular_registration": "Inscription consulaire",
+    "consular_card": "Carte consulaire",
+    "consular_card_request": "Demande de carte consulaire",
+    "feedback": "Feedback",
+    "assistance": "Assistance"
   },
   "home": {
     "consulat": "Consulat",

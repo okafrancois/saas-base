@@ -4,7 +4,8 @@ import {
   apiAuthPrefix,
   authRoutes,
   DEFAULT_AUTH_REDIRECT,
-  publicRoutes, roleRoutes,
+  publicRoutes,
+  roleRoutes,
 } from '@/routes'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { nanoid } from 'nanoid'
@@ -17,78 +18,63 @@ export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
   const userRole = req.auth?.user?.role || UserRole.USER
+
+  // Setup nonce pour la sécurité
   const nonce = nanoid()
   const requestHeaders = new Headers(req.headers)
   requestHeaders.set('x-nonce', nonce)
 
-  console.log({
-    nextUrl,
-    isLoggedIn,
-    userRole,
-    nonce,
-  })
-
+  // Vérification des types de routes
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
-  const isAuthRoute = authRoutes.some((route) =>
-    nextUrl.pathname.includes(`${route}`)
-  )
+  const isAuthRoute = authRoutes.some((route) => nextUrl.pathname === route)
   const isPublicRoute = publicRoutes.some((route) => {
     if (route === PAGE_ROUTES.base) {
       return nextUrl.pathname === route
     }
-    return nextUrl.pathname.includes(`${route}`)
+    return nextUrl.pathname === route
   })
 
-  if (isPublicRoute) {
-    return
+  // Autoriser les routes API auth
+  if (isApiAuthRoute) {
+    return NextResponse.next({
+      request: { headers: requestHeaders }
+    })
   }
 
-  // Vérification des routes protégées par rôle
+  // Autoriser les routes publiques
+  if (isPublicRoute) {
+    return NextResponse.next({
+      request: { headers: requestHeaders }
+    })
+  }
+
+  // Rediriger les utilisateurs connectés qui tentent d'accéder aux pages d'auth
+  if (isLoggedIn && isAuthRoute) {
+    return Response.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl))
+  }
+
+  // Vérifier l'authentification pour les routes protégées
+  if (!isLoggedIn && !isAuthRoute) {
+    const callbackUrl = nextUrl.pathname
+    return Response.redirect(
+      new URL(`${PAGE_ROUTES.login}?callbackUrl=${encodeURIComponent(callbackUrl)}`, nextUrl)
+    )
+  }
+
+  // Vérifier les permissions de rôle
   const isRoleProtectedRoute = roleRoutes.some(route => {
     if (nextUrl.pathname.startsWith(route.path)) {
-      return !route.roles.includes(userRole)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return !route.roles.includes(userRole as any)
     }
     return false
   })
 
-  console.log({
-    isApiAuthRoute,
-    isAuthRoute,
-    isPublicRoute,
-    isRoleProtectedRoute
-  })
-
-  if (!isLoggedIn && !isPublicRoute) {
-    let callbackUrl = nextUrl.pathname
-    if (nextUrl.search) {
-      callbackUrl += nextUrl.search
-    }
-    const encodedCallbackUrl = encodeURIComponent(callbackUrl)
-    return Response.redirect(
-      new URL(`${PAGE_ROUTES.login}?callbackUrl=${encodedCallbackUrl}`, nextUrl)
-    )
-  }
-
-  // Si la route nécessite un rôle spécifique et l'utilisateur n'a pas le bon rôle
   if (isRoleProtectedRoute) {
     return Response.redirect(new URL(PAGE_ROUTES.unauthorized, nextUrl))
   }
 
-  console.log({
-    isRoleProtectedRoute
-  })
-
-  if (isApiAuthRoute) {
-    return
-  }
-
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl))
-    }
-    return
-  }
-
+  // Autoriser l'accès pour toutes les autres routes
   return NextResponse.next({
     request: {
       headers: requestHeaders,

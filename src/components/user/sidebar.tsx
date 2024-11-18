@@ -44,7 +44,7 @@ export function UserSidebar({items}: UserSidebarProps) {
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton asChild tooltip={item.title}>
                   <a href={item.href}>
-                    <item.icon className="h-4 w-4" />
+                    {item.icon}
                     <span>{item.title}</span>
                   </a>
                 </SidebarMenuButton>

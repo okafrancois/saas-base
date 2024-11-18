@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { PAGE_ROUTES } from "@/schemas/app-routes"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from '@/components/ui/button'
 import LangSwitcher from "@/components/LangSwitcher"
 import { auth } from "@/auth"
 
@@ -22,7 +22,7 @@ export async function PublicHeader() {
           <LangSwitcher />
           <Link
             href={PAGE_ROUTES.dashboard}
-            className={Button({ variant: "default" }) + " !rounded-full max-[480px]:!px-2"}
+            className={buttonVariants({ variant: "default" }) + " !rounded-full max-[480px]:!px-2"}
           >
             {isAuth ? (
               <span>{t('nav.dashboard')}</span>

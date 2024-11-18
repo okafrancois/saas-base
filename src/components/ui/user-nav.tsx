@@ -13,10 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu"
 import { useCurrentUser } from "@/hooks/use-current-user"
-import { LogoutButton } from "../auth/logout-button"
 import { useTranslations } from 'next-intl'
 import Link from "next/link"
 import { PAGE_ROUTES } from "@/schemas/app-routes"
+import { LogoutButton } from '@/components/logout-button'
 
 export function UserNav() {
   const user = useCurrentUser()
@@ -70,7 +70,7 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <LogoutButton className="w-full" />
+        <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>
   )

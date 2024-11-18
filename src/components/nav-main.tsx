@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 
 import {
   Collapsible,
@@ -19,20 +19,12 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { useTranslations } from 'next-intl'
+import { NavItem } from '@/components/layouts/types'
 
 export function NavMain({
   items,
 }: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+  items: NavItem[]
 }) {
   const t = useTranslations("navigation")
   return (
@@ -45,8 +37,8 @@ export function NavMain({
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon />
+                <a href={item.href}>
+                  {item.icon}
                   <span>{item.title}</span>
                 </a>
               </SidebarMenuButton>
@@ -63,7 +55,7 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <a href={subItem.href}>
                               <span>{subItem.title}</span>
                             </a>
                           </SidebarMenuSubButton>

@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react'
 
 const UnauthorizedPage = () => {
   return (
-    <div className={"flex flex-col h-dvh items-center justify-center gap-4"}>
+    <div className={"flex flex-col w-full items-center justify-center gap-4"}>
       <h1>
         Accès refusé
       </h1>
