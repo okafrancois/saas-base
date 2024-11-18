@@ -11,13 +11,31 @@ export type ApiRoute = (typeof API_ROUTES)[keyof typeof API_ROUTES]
 
 export const PAGE_ROUTES = {
   base: '/' as Route<string>,
+
+  // Pages d'authentification
   login: '/auth/login' as Route<string>,
   auth_error: '/auth/error' as Route<string>,
-  dashboard: '/dashboard' as Route<string>,
+
+  // Pages utilisateur
   profile: '/profile' as Route<string>,
-  unauthorized: '/unauthorized' as Route<string>,
+  settings: '/settings' as Route<string>,
+  requests: '/requests' as Route<string>,
+  documents: '/documents' as Route<string>,
+
+  // Pages admin
   admin: '/admin' as Route<string>,
+  admin_dashboard: '/admin' as Route<string>,
   admin_users: '/admin/users' as Route<string>,
+  admin_requests: '/admin/requests' as Route<string>,
+  admin_settings: '/admin/settings' as Route<string>,
+
+  // Pages partagées
+  dashboard: '/dashboard' as Route<string>,
+  help: '/help' as Route<string>,
+  feedback: '/feedback' as Route<string>,
+
+  // Pages publiques
+  unauthorized: '/unauthorized' as Route<string>,
   consular_registration: '/consular-registration' as Route<string>,
   privacy_policy: '#' as Route<string>,
   terms: '#' as Route<string>,

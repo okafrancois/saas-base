@@ -1,7 +1,6 @@
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/app-sidebar'
 import { MenuBarMobile } from '@/components/menu-bar-mobile'
 
 export default async function AuthenticatedLayout({
@@ -14,7 +13,6 @@ export default async function AuthenticatedLayout({
   return (
     <SessionProvider session={session}>
       <SidebarProvider>
-        <AppSidebar />
         <main
           className={
             'min-h-screen w-screen overflow-auto overflow-x-hidden bg-muted pb-16 pt-4 md:py-6'

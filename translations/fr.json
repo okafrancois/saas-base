@@ -8,6 +8,12 @@
         "en_short": "EN",
         "es": "Espagnol",
         "es_short": "ES"
+    },
+    "nav": {
+      "home": "Accueil",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
     }
   },
   "messages": {
@@ -728,6 +734,20 @@
       "delete_success": "Utilisateur supprimé avec succès",
       "delete_confirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
       "delete_warning": "Cette action est irréversible"
+    },
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "users": "Utilisateurs",
+      "requests": "Demandes",
+      "settings": "Paramètres"
+    }
+  },
+  "user": {
+    "nav": {
+      "dashboard": "Mon espace",
+      "requests": "Mes demandes",
+      "profile": "Mon profil",
+      "documents": "Mes documents"
     }
   },
   "actions": {
