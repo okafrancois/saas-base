@@ -21,6 +21,7 @@ import { UserRole } from '@prisma/client'
 import { NavItem } from '@/components/layouts/types'
 import { getCurrentUser } from '@/actions/user'
 import { getTranslations } from 'next-intl/server'
+import Link from 'next/link'
 
 export default async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = await getCurrentUser()
@@ -109,7 +110,7 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href={PAGE_ROUTES.base}>
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
@@ -117,7 +118,7 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
                   <span className="truncate font-semibold">Consulat</span>
                   <span className="truncate text-xs">{userCountry}</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
