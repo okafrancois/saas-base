@@ -846,7 +846,6 @@
       "subtitle": "Suivez les étapes pour créer votre profil consulaire"
     },
     "steps": {
-      "request_type": "Type de demande",
       "documents": "Documents",
       "identity": "Identité",
       "family": "Famille",
@@ -866,7 +865,6 @@
       "submit": "Soumettre"
     },
     "help": {
-      "request_type": "Sélectionnez le type de demande et votre mode d'acquisition de la nationalité gabonaise",
       "documents": "Téléchargez les documents requis. Ces documents seront analysés pour pré-remplir vos informations",
       "identity": "Vérifiez et complétez vos informations d'identité",
       "family": "Renseignez les informations sur votre famille",
@@ -1061,6 +1059,39 @@
         "approved": "Approuvé",
         "rejected": "Rejeté",
         "incomplete": "Incomplet"
+      }
+    }
+  },
+  "consular": {
+    "documents": {
+      "upload": {
+        "click_to_upload": "Cliquer pour télécharger",
+        "or_drag_and_drop": "ou glisser-déposer",
+        "file_requirements": "PDF, JPG ou PNG jusqu'à {maxSize}MB",
+        "uploading": "Téléchargement en cours...",
+        "success": "Document téléchargé avec succès",
+        "error": {
+          "file_type": "Type de fichier non supporté",
+          "file_size": "Fichier trop volumineux",
+          "upload_failed": "Échec du téléchargement"
+        }
+      }
+    },
+    "verification": {
+      "title": "Vérification du document",
+      "rules": {
+        "format": "Format du document",
+        "quality": "Qualité de l'image",
+        "completeness": "Document complet",
+        "validity": "Validité du document",
+        "authenticity": "Authenticité"
+      },
+      "messages": {
+        "format_invalid": "Le format du document n'est pas accepté",
+        "quality_low": "La qualité de l'image est trop basse",
+        "incomplete": "Le document est incomplet",
+        "expired": "Le document est expiré",
+        "suspicious": "Le document présente des signes suspects"
       }
     }
   }
