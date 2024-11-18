@@ -41,6 +41,15 @@ const nextConfig = {
   webpack: (config) => {
     config.externals = [...(config.externals || []), 'uploadthing']
     return config
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: '/manifest.json',
+        destination: '/api/manifest'
+      }
+    ]
   }
 }
 

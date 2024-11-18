@@ -1,3 +1,5 @@
+"use server"
+
 import { signOut } from '@/auth'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { redirect } from 'next/navigation'
@@ -7,7 +9,6 @@ import { sendOTPEmail, sendSMSOTP } from '@/actions/email'
 
 export const logUserOut = async () => {
   await signOut()
-  redirect(PAGE_ROUTES.base)
 }
 
 export type AuthType = 'EMAIL' | 'PHONE'

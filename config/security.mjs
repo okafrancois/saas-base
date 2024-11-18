@@ -1,11 +1,12 @@
 export const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://uploadthing.com https://placehold.co;
-  child-src 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://uploadthing.com https://placehold.co https://player.vimeo.com;
+  child-src 'self' https://player.vimeo.com;
+  frame-src 'self' https://player.vimeo.com;
   style-src 'self' 'unsafe-inline';
   font-src 'self' data:;
   img-src 'self' https://placehold.co https://utfs.io blob: data:;
-  media-src 'self';
+  media-src 'self' https://player.vimeo.com;
   connect-src 'self' 
     https://api.openai.com 
     https://api.anthropic.com
@@ -13,13 +14,16 @@ export const ContentSecurityPolicy = `
     https://uploadthing.com
     https://utfs.io
     https://api.twilio.com
-    ${process.env.NEXT_PUBLIC_URL}
-    ${process.env.POSTGRES_URL}
+    https://lottie.host
+    https://player.vimeo.com
+    ${process.env.NODE_ENV === 'development' ? 'http://localhost:* ws://localhost:*' : ''}
     wss://*.uploadthing.com;
   frame-ancestors 'none';
   object-src 'none';
   base-uri 'self';
   form-action 'self';
+  manifest-src 'self';
+  worker-src 'self' blob:;
   upgrade-insecure-requests;
 `
 
@@ -50,7 +54,6 @@ export const securityHeaders = [
       'camera=()',
       'microphone=()',
       'geolocation=()',
-      'interest-cohort=()'
     ].join(', ')
   },
   {

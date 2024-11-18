@@ -62,6 +62,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   width: 'device-width',
   userScalable: false,
+  colorScheme: 'light dark',
 }
 
 export default async function RootLayout({

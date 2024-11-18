@@ -18,20 +18,23 @@ import { useTranslations } from 'next-intl'
 import * as React from 'react'
 import { signIn } from 'next-auth/react'
 import { Icons } from '@/components/ui/icons'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { sendOTP } from '@/actions/auth'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { LoginInput, LoginSchema } from '@/schemas/user'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { AlertCircle, CheckCircle } from 'lucide-react'
+
+interface LoginFormProps {
+  successCallback?: () => void
+  customTitle?: string
+  customSubTitle?: string
+}
 
 export function LoginForm({
                             customTitle,
                             customSubTitle
-                          }: {
-  successCallback?: () => void,
-  customTitle?: string,
-  customSubTitle?: string
-}) {
+                          }: LoginFormProps) {
   const t = useTranslations('auth.login')
   const [isOTPSent, setIsOTPSent] = useState(false)
   const [error, setError] = useState<string | undefined>()
@@ -48,7 +51,6 @@ export function LoginForm({
     mode: 'onSubmit',
   })
 
-  // Get callbackUrl from URL using URLSearchParams
   const callbackUrl = typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search).get('callbackUrl')
     : null
@@ -62,7 +64,6 @@ export function LoginForm({
       setSuccess(undefined)
 
       if (!isOTPSent) {
-        // Send OTP
         const result = await sendOTP(values.identifier, values.type)
         if (result && result.error) {
           setError(result.error)
@@ -76,13 +77,12 @@ export function LoginForm({
         return
       }
 
-      // Verify OTP and sign in
       const signInResult = await signIn('credentials', {
         identifier: values.identifier,
         type: values.type,
         otp: values.otp,
         redirect: true,
-        redirectTo: callbackUrl || PAGE_ROUTES.base,
+        redirectTo: callbackUrl || PAGE_ROUTES.dashboard,
       })
 
       if (signInResult?.error) {
@@ -109,17 +109,12 @@ export function LoginForm({
   }, [form])
 
   return (
-    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-      <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t('welcome')}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {t('description')}
-        </p>
-      </div>
-
-      <div className="grid gap-6">
+    <Card className="mx-auto shadow-card flex flex-col justify-center space-y-6 w-full sm:max-w-[400px]">
+      <CardHeader>
+        <CardTitle>{customTitle || t('welcome')}</CardTitle>
+        <CardDescription>{customSubTitle || t('description')}</CardDescription>
+      </CardHeader>
+      <CardContent className="grid gap-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <Tabs
@@ -127,13 +122,9 @@ export function LoginForm({
               value={loginType}
               onValueChange={handleTabChange}
             >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="PHONE">
-                  {t('tabs.phone')}
-                </TabsTrigger>
-                <TabsTrigger value="EMAIL">
-                  {t('tabs.email')}
-                </TabsTrigger>
+              <TabsList className="grid w-full mb-2 grid-cols-2">
+                <TabsTrigger value="PHONE">{t('tabs.phone')}</TabsTrigger>
+                <TabsTrigger value="EMAIL">{t('tabs.email')}</TabsTrigger>
               </TabsList>
 
               <FormField
@@ -168,9 +159,7 @@ export function LoginForm({
                   name="otp"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="otp">
-                        {t('inputs.otp.label')}
-                      </FormLabel>
+                      <FormLabel htmlFor="otp">{t('inputs.otp.label')}</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -192,24 +181,39 @@ export function LoginForm({
             </Tabs>
 
             {error && (
-              <p
-                className="text-sm text-red-500"
+              <div
+                className="flex items-center gap-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive"
                 role="alert"
               >
-                {error}
-              </p>
+                <AlertCircle className="h-4 w-4" />
+                <p>{error}</p>
+              </div>
+            )}
+
+            {success && (
+              <div
+                className="flex items-center gap-2 rounded-md bg-emerald-50 p-3 text-sm text-emerald-500"
+                role="alert"
+              >
+                <CheckCircle className="h-4 w-4" />
+                <p>{success}</p>
+              </div>
             )}
 
             <Button
               type="submit"
               className="w-full"
               aria-busy={isLoading}
+              disabled={isLoading}
             >
               {isLoading ? (
-                <Icons.Spinner
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
+                <>
+                  <Icons.Spinner
+                    className="mr-2 h-4 w-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                  {t('buttons.loading')}
+                </>
               ) : isOTPSent ? (
                 t('buttons.verify')
               ) : (
@@ -218,7 +222,7 @@ export function LoginForm({
             </Button>
           </form>
         </Form>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

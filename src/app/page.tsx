@@ -82,8 +82,10 @@ export default async function HomePage() {
           <Image
             src={imagePicture}
             alt={'business card cover'}
-            layout={'responsive'}
+            style={{ objectFit: 'cover' }}
             className={'!h-full !w-full object-cover'}
+            width={400}  // Spécifiez une largeur
+            height={600} //
           />
         </div>
       </div>

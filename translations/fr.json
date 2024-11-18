@@ -264,7 +264,8 @@
       },
       "buttons": {
         "get_code": "Recevoir le code",
-        "verify": "Vérifier"
+        "verify": "Vérifier",
+        "loading": "Chargement..."
       },
       "messages": {
         "otp_sent": "Un code de vérification a été envoyé",
@@ -284,6 +285,16 @@
         "enter_credentials": "Connectez-vous pour accéder à votre espace",
         "loading": "Chargement...",
         "something_went_wrong": "Une erreur est survenue"
+      },
+      "back_home": "Retour à l'accueil",
+      "hero": {
+        "quote": "La carte consulaire est plus qu'un document, c'est le lien qui unit notre diaspora.",
+        "author": "Consulat.ga"
+      },
+      "footer": {
+        "copyright": "© {year} Consulat.ga. Tous droits réservés.",
+        "privacy_policy": "Politique de confidentialité",
+        "terms": "Conditions d'utilisation"
       }
     },
     "otp": {
@@ -360,7 +371,8 @@
       "create_card": "Créer ma carte de visite"
     },
     "nav": {
-      "login": "S'identifier"
+      "login": "S'identifier",
+      "dashboard": "Mon espace"
     },
     "footer": {
       "designed_by": "Conçu et développé par"

@@ -25,7 +25,9 @@ export function LogoutButton({ customClass }: Readonly<LogoutButtonProps>) {
     <Button
       onClick={() => {
         startTransition(async () => {
-          await logUserOut()
+          await logUserOut().then(() => {
+            window.location.reload()
+          })
         })
       }}
       type={'button'}

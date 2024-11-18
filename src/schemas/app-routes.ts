@@ -15,6 +15,8 @@ export const PAGE_ROUTES = {
   auth_error: '/auth/error' as Route<string>,
   dashboard: '/dashboard' as Route<string>,
   consular_registration: '/consular-registration' as Route<string>,
+  privacy_policy: '#' as Route<string>,
+  terms: '#' as Route<string>,
 } as const
 
 export type PageRoute = (typeof PAGE_ROUTES)[keyof typeof PAGE_ROUTES]

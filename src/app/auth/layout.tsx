@@ -9,8 +9,8 @@ export default async function AuthLayout({
   const t = await getTranslations('auth.layout')
 
   return (
-    <div className="grid min-h-screen w-full lg:grid-cols-2">
-      <div className="relative hidden flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+    <div className="grid h-screen overflow-hidden w-full lg:grid-cols-2">
+      <div className="relative hidden max-h-dvh flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-zinc-900">
           <Image
             src="https://placehold.co/1200x800/1a1a1a/ffffff?text=Consulat"
