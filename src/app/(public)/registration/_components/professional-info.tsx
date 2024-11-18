@@ -36,7 +36,7 @@ export function ProfessionalInfoForm({
                                        formRef,
                                        isLoading = false,
                                      }: Readonly<ProfessionalInfoFormProps>) {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
 
   const form = useForm<ProfessionalInfoFormData>({

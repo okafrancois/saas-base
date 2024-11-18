@@ -37,7 +37,7 @@ const InfoField = ({
   value?: string | null
   isRequired?: boolean
 }) => {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
 
   return (
     <div>
@@ -67,7 +67,7 @@ const DocumentBadge = ({
   isRequired?: boolean
   className?: string
 }) => {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
@@ -81,7 +81,7 @@ const DocumentBadge = ({
 }
 
 export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
   const t_countries = useTranslations('countries')
 

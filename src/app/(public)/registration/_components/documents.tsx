@@ -36,7 +36,7 @@ export function DocumentsUploadForm({
   nextStep
                                     }: Readonly<DocumentsFormProps>) {
   const { toast } = useToast()
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const [error, setError] = React.useState<string | undefined>()
   const [isAnalyzing, setIsAnalyzing] = React.useState(false)
 

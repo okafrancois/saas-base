@@ -32,7 +32,7 @@ interface FamilyInfoFormProps {
 }
 
 export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: Readonly<FamilyInfoFormProps>) {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const tAssets = useTranslations('assets')
 
   const form = useForm<FamilyInfoFormData>({

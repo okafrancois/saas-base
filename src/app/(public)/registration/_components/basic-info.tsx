@@ -46,7 +46,7 @@ export function BasicInfoForm({
                                 formRef,
                                 isLoading,
                               }: Readonly<BasicInfoFormProps>) {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
   const t_countries = useTranslations('countries')
   const [openNationalitySelect, setOpenNationalitySelect] = React.useState(false)

@@ -28,10 +28,9 @@ import { AnalysisData } from '@/types'
 import { Gender, WorkStatus } from '@prisma/client'
 
 // Types et configurations
-type StepKey = 'request_type' | 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
+type StepKey =  'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
 
 const STEPS: StepKey[] = [
-  'request_type',
   'documents',
   'identity',
   'family',
@@ -51,7 +50,7 @@ export type ConsularFormData = {
 export default function RegistrationForm() {
   const router = useRouter()
 
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const { loadSavedData, saveData, clearData } = useFormStorage()
 
   // État local
@@ -332,7 +331,7 @@ export default function RegistrationForm() {
 
         {/* Navigation des étapes cliquables */}
         <Tabs value={STEPS[currentStep]} className="w-full">
-          <TabsList className="grid w-full h-auto grid-cols-2 gap-2 rounded-lg bg-muted p-1 md:grid-cols-7">
+          <TabsList className="grid w-full h-auto grid-cols-2 gap-2 rounded-lg bg-muted p-1 md:grid-cols-6">
             {STEPS.map((step, index) => (
               <TabsTrigger
                 key={step}

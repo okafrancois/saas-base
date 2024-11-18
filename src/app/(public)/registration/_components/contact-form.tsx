@@ -63,7 +63,7 @@ export function ContactInfoForm({
                                   isLoading = false,
                                   formRef,
                                 }: Readonly<ContactInfoFormProps>) {
-  const t = useTranslations('consular_registration')
+  const t = useTranslations('registration')
   const t_countries = useTranslations('countries')
   const [openCountrySelect, setOpenCountrySelect] = React.useState(false)
 
