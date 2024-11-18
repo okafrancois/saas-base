@@ -10,15 +10,7 @@ import { Icons } from '@/components/ui/icons'
 import { FormError } from '@/components/form-error'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import {
-  BasicInfoFormData,
-  ContactInfoFormData,
-  DocumentsFormData,
-  FamilyInfoFormData,
-  ProfessionalInfoFormData,
-  RequestTypeFormData,
-} from './schema'
-import { AnalysisData, DocumentsUploadForm } from './steps/documents'
+import { DocumentsUploadForm } from './steps/documents'
 import { BasicInfoForm } from './steps/basic-info'
 import { FamilyInfoForm } from './steps/family-info'
 import { ContactInfoForm } from './steps/contact-form'
@@ -27,6 +19,14 @@ import { ReviewForm } from './steps/review'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useFormStorage } from '@/lib/form-storage'
+import {
+  BasicInfoFormData,
+  ContactInfoFormData,
+  DocumentsFormData,
+  FamilyInfoFormData, ProfessionalInfoFormData,
+  RequestTypeFormData,
+} from '@/schemas/registration'
+import { AnalysisData } from '@/types'
 
 // Types et configurations
 type StepKey = 'request_type' | 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'

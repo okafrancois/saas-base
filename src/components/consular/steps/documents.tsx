@@ -5,11 +5,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, TradFormMessage } from '@/components/ui/form'
 import { useTranslations } from 'next-intl'
-import { type DocumentsFormData, DocumentsSchema } from '@/components/consular/schema'
 import { FormError } from '@/components/form-error'
 import DocumentUploadField from '@/components/ui/document-upload'
 import { Button } from '@/components/ui/button'
-import { Address, Gender, MaritalStatus, WorkStatus } from '@prisma/client'
 import { getFieldsForDocument } from '@/lib/document-fields'
 import { DocumentField } from '@/lib/utils'
 import { ScanBarcode } from 'lucide-react'
@@ -17,24 +15,8 @@ import { analyzeDocuments } from '@/actions/documents'
 import LottieAnimation from '@/components/ui/lottie-animation'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/hooks/use-toast'
-
-export type AnalysisData = {
-  firstName?: string
-  lastName?: string
-  gender?: Gender
-  birthDate?: string
-  birthPlace?: string
-  birthCountry?: string
-  nationality?: string
-  address?: Address
-  maritalStatus?: MaritalStatus
-  fatherFullName?: string
-  motherFullName?: string
-  workStatus?: WorkStatus
-  profession?: string
-  employer?: string
-  employerAddress?: string
-}
+import { AnalysisData } from '@/types'
+import { DocumentsFormData, DocumentsSchema } from '@/schemas/registration'
 
 interface DocumentsFormProps {
   onSubmit: (data: DocumentsFormData) => void

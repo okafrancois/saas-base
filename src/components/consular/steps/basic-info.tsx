@@ -1,3 +1,5 @@
+'use client'
+
 import React, { RefObject } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,7 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage, TradFormMessage,
+  TradFormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -30,7 +32,11 @@ import { useTranslations } from 'next-intl'
 import { countryKeys } from '@/assets/autocomplete-datas'
 import { Gender } from '@prisma/client'
 import DocumentUploadField from '@/components/ui/document-upload'
-import { BasicInfoSchema } from '@/components/consular/schema'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { BasicInfoSchema } from '@/schemas/registration'
+import { AlertCircle, CheckCircle2, HelpCircle } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 type BasicInfoFormProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,6 +55,10 @@ type BasicInfoFormData = {
   birthCountry: string
   nationality: string
   identityPictureFile?: FileList
+  passportNumber: string
+  passportIssueDate: Date
+  passportExpiryDate: Date
+  passportIssueAuthority: string
 }
 
 export function BasicInfoForm({
@@ -60,6 +70,7 @@ export function BasicInfoForm({
   const t = useTranslations('consular_registration')
   const t_assets = useTranslations('assets')
   const t_countries = useTranslations('countries')
+
   const [openNationalitySelect, setOpenNationalitySelect] = React.useState(false)
 
   const form = useForm<BasicInfoFormData>({
@@ -80,10 +91,65 @@ export function BasicInfoForm({
     }
   }
 
+  // Helper pour vérifier si un champ a une erreur
+  const hasFieldError = (fieldName: keyof BasicInfoFormData) => {
+    return !!form.formState.errors[fieldName]
+  }
+
+  // Helper pour obtenir le statut de validation d'un champ
+  const getFieldValidationStatus = (fieldName: keyof BasicInfoFormData) => {
+    if (!form.formState.touchedFields[fieldName]) return 'untouched'
+    if (hasFieldError(fieldName)) return 'error'
+    return 'valid'
+  }
+
+  // Composant pour afficher le statut de validation
+  const ValidationStatus = ({ status }: { status: string }) => {
+    if (status === 'untouched') return null
+
+    return status === 'valid' ? (
+      <CheckCircle2 className="h-4 w-4 text-green-500" />
+    ) : (
+      <AlertCircle className="h-4 w-4 text-destructive" />
+    )
+  }
+
+  // Composant amélioré pour le label avec tooltip et validation
+  const FormFieldLabel = ({
+                            label,
+                            tooltipKey,
+                            required = false,
+                            status,
+                          }: {
+    label: string
+    tooltipKey: string
+    required?: boolean
+    status: string
+  }) => (
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
+        <FormLabel>
+          {label}
+          {required && <span className="text-destructive">*</span>}
+        </FormLabel>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-sm">{t(`tooltips.passport.${tooltipKey}`)}</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+      <ValidationStatus status={status} />
+    </div>
+  )
+
   return (
     <Form {...form}>
       <form ref={formRef} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="grid gap-6">
+          {/* Photo d'identité */}
           <FormField
             control={form.control}
             name={"identityPictureFile"}
@@ -138,11 +204,12 @@ export function BasicInfoForm({
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />
 
+          {/* Informations de base */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField
               control={form.control}
@@ -157,7 +224,7 @@ export function BasicInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -175,7 +242,7 @@ export function BasicInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -194,7 +261,7 @@ export function BasicInfoForm({
                       max={new Date().toISOString().split('T')[0]}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -212,7 +279,7 @@ export function BasicInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -264,7 +331,7 @@ export function BasicInfoForm({
                                 'ml-auto h-4 w-4',
                                 field.value === country
                                   ? 'opacity-100'
-                                  : 'opacity-0',
+                                  : 'opacity-0'
                               )}
                             />
                           </CommandItem>
@@ -273,10 +340,170 @@ export function BasicInfoForm({
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />
+
+          {/* Section Passeport avec validation améliorée */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                {t('form.passport.section_title')}
+                {Object.keys(form.formState.errors).some(key =>
+                  key.startsWith('passport')
+                ) && (
+                  <AlertCircle className="h-5 w-5 text-destructive" />
+                )}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                {t('form.passport.section_description')}
+              </p>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              {/* Alerte de validation du passeport */}
+              {Object.keys(form.formState.errors).some(key =>
+                key.startsWith('passport')
+              ) && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {t('form.passport.validation_errors')}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <FormField
+                control={form.control}
+                name="passportNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormFieldLabel
+                      label={t('form.passport.number.label')}
+                      tooltipKey="number"
+                      required
+                      status={getFieldValidationStatus('passportNumber')}
+                    />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={t('form.passport.number.placeholder')}
+                        disabled={isLoading}
+                        className={cn(
+                          hasFieldError('passportNumber') && 'border-destructive',
+                          getFieldValidationStatus('passportNumber') === 'valid' && 'border-green-500'
+                        )}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                    {field.value && !hasFieldError('passportNumber') && (
+                      <p className="text-xs text-muted-foreground">
+                        {t('form.passport.number.help')}
+                      </p>
+                    )}
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="passportIssueDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormFieldLabel
+                        label={t('form.passport.issue_date.label')}
+                        tooltipKey="issue_date"
+                        required
+                        status={getFieldValidationStatus('passportIssueDate')}
+                      />
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="date"
+                          disabled={isLoading}
+                          max={new Date().toISOString().split('T')[0]}
+                          onChange={(e) => {
+                            field.onChange(new Date(e.target.value))
+                          }}
+                          value={field.value ? field.value.toISOString().split('T')[0] : ''}
+                          className={cn(
+                            hasFieldError('passportIssueDate') && 'border-destructive',
+                            getFieldValidationStatus('passportIssueDate') === 'valid' && 'border-green-500'
+                          )}
+                        />
+                      </FormControl>
+                      <TradFormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="passportExpiryDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormFieldLabel
+                        label={t('form.passport.expiry_date.label')}
+                        tooltipKey="expiry_date"
+                        required
+                        status={getFieldValidationStatus('passportExpiryDate')}
+                      />
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="date"
+                          disabled={isLoading}
+                          min={new Date().toISOString().split('T')[0]}
+                          onChange={(e) => {
+                            field.onChange(new Date(e.target.value))
+                          }}
+                          value={field.value ? field.value.toISOString().split('T')[0] : ''}
+                          className={cn(
+                            hasFieldError('passportExpiryDate') && 'border-destructive',
+                            getFieldValidationStatus('passportExpiryDate') === 'valid' && 'border-green-500'
+                          )}
+                        />
+                      </FormControl>
+                      <TradFormMessage />
+                      {hasFieldError('passportExpiryDate') && (
+                        <p className="text-xs text-destructive">
+                          {t('form.passport.expiry_date.minimum_validity')}
+                        </p>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="passportIssueAuthority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormFieldLabel
+                      label={t('form.passport.authority.label')}
+                      tooltipKey="authority"
+                      required
+                      status={getFieldValidationStatus('passportIssueAuthority')}
+                    />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={t('form.passport.authority.placeholder')}
+                        disabled={isLoading}
+                        className={cn(
+                          hasFieldError('passportIssueAuthority') && 'border-destructive',
+                          getFieldValidationStatus('passportIssueAuthority') === 'valid' && 'border-green-500'
+                        )}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
         </div>
       </form>
     </Form>

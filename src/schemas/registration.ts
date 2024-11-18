@@ -1,5 +1,6 @@
 import * as z from 'zod'
-import {} from '@prisma/client'
+import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
+import { RequestType } from '@/types'
 
 const FileListSchema = z.any().refine(
   (files) => {
@@ -60,38 +61,123 @@ const DocumentFileSchema = FileListSchema
 
 // Request Type Schema - Première étape
 export const RequestTypeSchema = z.object({
-  documentType: z.nativeEnum(DocumentType),
+  documentType: z.nativeEnum(RequestType),
   nationalityAcquisition: z.nativeEnum(NationalityAcquisition),
 })
 
-// Basic Information Schema
+const PASSPORT_MIN_VALIDITY_MONTHS = 6;
+const PASSPORT_MAX_VALIDITY_YEARS = 10;
+
+// Helper functions pour la validation des dates
+const addMonths = (date: Date, months: number) => {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() + months);
+  return newDate;
+};
+
+const addYears = (date: Date, years: number) => {
+  const newDate = new Date(date);
+  newDate.setFullYear(newDate.getFullYear() + years);
+  return newDate;
+};
+
 export const BasicInfoSchema = z.object({
   gender: z.nativeEnum(Gender, {
-    required_error: 'Le genre est requis',
+    required_error: 'errors.validation.gender_required'
   }),
+
   firstName: z.string({
-    required_error: 'Le prénom est requis',
-  }).min(2, 'Le prénom doit contenir au moins 2 caractères'),
+    required_error: 'errors.validation.first_name_required'
+  }).min(2, 'errors.validation.first_name_too_short'),
+
   lastName: z.string({
-    required_error: 'Le nom est requis',
-  }).min(2, 'Le nom doit contenir au moins 2 caractères'),
+    required_error: 'errors.validation.last_name_required'
+  }).min(2, 'errors.validation.last_name_too_short'),
+
   birthDate: z.string({
-    required_error: 'La date de naissance est requise',
+    required_error: 'errors.validation.birth_date_required'
   }),
+
   birthPlace: z.string({
-    required_error: 'Le lieu de naissance est requis',
+    required_error: 'errors.validation.birth_place_required'
   }),
+
   birthCountry: z.string({
-    required_error: 'Le pays de naissance est requis',
+    required_error: 'errors.validation.birth_country_required'
   }),
+
   nationality: z.string({
-    required_error: 'La nationalité est requise',
+    required_error: 'errors.validation.nationality_required'
   }),
+
   identityPictureFile: DocumentFileSchema,
-  passportNumber: z.string().optional(),
-  passportIssueDate: z.date().optional(),
-  passportExpiryDate: z.date().optional(),
+
+  passportNumber: z
+    .string({
+      required_error: 'errors.validation.passport.number_required',
+    })
+    .min(8, 'errors.validation.passport.number_too_short')
+    .max(9, 'errors.validation.passport.number_too_long')
+    .regex(
+      /^[A-Z0-9]{8,9}$/,
+      'errors.validation.passport.number_invalid_format'
+    ),
+
+  passportIssueDate: z
+    .date({
+      required_error: 'errors.validation.passport.issue_date_required',
+      invalid_type_error: 'errors.validation.passport.issue_date_invalid',
+    })
+    .refine(
+      (date) => date <= new Date(),
+      'errors.validation.passport.issue_date_future'
+    )
+    .refine(
+      (date) => date >= addYears(new Date(), -10),
+      'errors.validation.passport.issue_date_too_old'
+    ),
+
+  passportExpiryDate: z
+    .date({
+      required_error: 'errors.validation.passport.expiry_date_required',
+      invalid_type_error: 'errors.validation.passport.expiry_date_invalid',
+    })
+    .refine(
+      (date) => date > new Date(),
+      'errors.validation.passport.already_expired'
+    )
+    .refine(
+      (date) => date > addMonths(new Date(), PASSPORT_MIN_VALIDITY_MONTHS),
+      'errors.validation.passport.expires_soon'
+    ),
+
+  passportIssueAuthority: z
+    .string({
+      required_error: 'errors.validation.passport.authority_required',
+    })
+    .min(2, 'errors.validation.passport.authority_too_short')
+    .max(100, 'errors.validation.passport.authority_too_long'),
 })
+  // Validation croisée des dates
+  .refine(
+    (data) => {
+      if (data.passportIssueDate && data.passportExpiryDate) {
+        // Vérifier que la date d'expiration est après la date d'émission
+        if (data.passportExpiryDate <= data.passportIssueDate) {
+          return false;
+        }
+
+        // Vérifier que la durée de validité ne dépasse pas 10 ans
+        const validityYears = (data.passportExpiryDate.getTime() - data.passportIssueDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+        return validityYears <= PASSPORT_MAX_VALIDITY_YEARS;
+      }
+      return true;
+    },
+    {
+      message: 'errors.validation.passport.invalid_validity_period',
+      path: ['passportExpiryDate'], // Le message s'affichera sous ce champ
+    }
+  );
 
 export const BasicInfoPostSchema = z.object({
   gender: z.nativeEnum(Gender, {
@@ -115,9 +201,11 @@ export const BasicInfoPostSchema = z.object({
   nationality: z.string({
     required_error: 'La nationalité est requise',
   }),
+
   passportNumber: z.string().optional(),
   passportIssueDate: z.date().optional(),
   passportExpiryDate: z.date().optional(),
+  passportIssueAuthority: z.string().optional(),
 })
 
 export const ContactInfoSchema = z.object({

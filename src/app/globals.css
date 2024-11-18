@@ -172,3 +172,36 @@ html {
 .animate-progress {
   animation: progress 2s linear infinite;
 }
+
+.hover-card-content {
+  width: 320px;
+  padding: 1rem;
+  background-color: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hover-card-content p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Styles pour les champs de formulaire validés/invalides */
+.form-field-valid {
+  @apply border-green-500 focus-visible:ring-green-500;
+}
+
+.form-field-error {
+  @apply border-destructive focus-visible:ring-destructive;
+}
+
+/* Animation pour les icônes de validation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.validation-icon {
+  animation: fadeIn 0.2s ease-in-out;
+}

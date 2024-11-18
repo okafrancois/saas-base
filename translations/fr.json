@@ -14,6 +14,12 @@
       "profile": "Profil",
       "settings": "Paramètres",
       "logout": "Déconnexion"
+    },
+    "form": {
+      "required_field": "Champ requis",
+      "optional_field": "Optionnel",
+      "select_date": "Sélectionner une date",
+      "invalid_format": "Format invalide"
     }
   },
   "messages": {
@@ -490,230 +496,6 @@
       }
     }
   },
-  "consular_registration": {
-    "header": {
-      "title": "Formulaire d'Inscription",
-      "subtitle": "Suivez les étapes pour créer votre profil consulaire"
-    },
-    "steps": {
-      "request_type": "Type de demande",
-      "documents": "Documents",
-      "identity": "Identité",
-      "family": "Famille",
-      "contact": "Contact",
-      "professional": "Professionnel",
-      "review": "Révision"
-    },
-    "navigation": {
-      "previous": "Précédent",
-      "next": "Suivant"
-    },
-    "validation": {
-      "error": {
-        "title": "Erreur de validation",
-        "description": "Veuillez corriger les erreurs avant de continuer"
-      },
-      "submit": "Soumettre"
-    },
-    "help": {
-      "request_type": "Sélectionnez le type de demande et votre mode d'acquisition de la nationalité gabonaise",
-      "documents": "Téléchargez les documents requis. Ces documents seront analysés pour pré-remplir vos informations",
-      "identity": "Vérifiez et complétez vos informations d'identité",
-      "family": "Renseignez les informations sur votre famille",
-      "contact": "Fournissez vos coordonnées actuelles",
-      "professional": "Renseignez votre situation professionnelle",
-      "review": "Vérifiez toutes les informations avant de soumettre"
-    },
-    "messages": {
-      "step_under_construction": "Cette étape est en cours de construction"
-    },
-    "documents": {
-      "analysis": {
-        "button": "Analyser les documents",
-        "analyzing": "Analyse en cours...",
-        "help_text": "Les informations extraites des documents seront pré-remplies dans le formulaire",
-        "success_description": "Les informations ont été extraites avec succès",
-        "in_progress": "Analyse des documents en cours",
-        "error": {
-          "failed_upload": "Échec du chargement du fichier",
-          "failed_fetch": "Échec de la connexion au serveur",
-          "unknown": "Une erreur inconnue s'est produite",
-          "no_documents": "Aucun document n'a été téléchargé"
-        },
-        "success": {
-          "title": "Analyse terminée avec succès !",
-          "description": "Les informations de vos documents ont été extraites avec succès. Vous pouvez maintenant continuer avec le formulaire.",
-          "action": "Continuer"
-        }
-      },
-      "passport": {
-        "label": "Passeport gabonais"
-      },
-      "birth_certificate": {
-        "label": "Acte de naissance"
-      },
-      "address_proof": {
-        "label": "Justificatif de domicile"
-      },
-      "residence_permit": {
-        "label": "Titre de séjour"
-      },
-      "identity_picture": {
-        "label": "Photo d'identité"
-      }
-    },
-    "form": {
-      "title": "Formulaire d'inscription consulaire",
-      "subtitle": "Suivez les étapes pour créer votre carte consulaire",
-      "gender": "Genre",
-      "first_name": "Prénom(s)",
-      "last_name": "Nom(s)",
-      "first_name_placeholder": "Entrez votre/vos prénom(s)",
-      "last_name_placeholder": "Entrez votre/vos nom(s)",
-      "birth_date": "Date de naissance",
-      "birth_place": "Lieu de naissance",
-      "birth_place_placeholder": "Ville de naissance",
-      "birth_country": "Pays de naissance",
-      "nationality": "Nationalité",
-      "select_nationality": "Sélectionnez votre nationalité",
-      "search_nationality": "Rechercher une nationalité",
-      "no_nationality_found": "Aucune nationalité trouvée",
-      "required_field": "Ce champ est obligatoire",
-      "invalid_date": "Date invalide",
-      "marital_status": "Situation matrimoniale",
-      "select_marital_status": "Sélectionnez votre situation matrimoniale",
-      "spouse_name": "Nom et prénom du conjoint",
-      "spouse_name_placeholder": "Nom complet de votre conjoint",
-      "father_name": "Nom et prénom du père",
-      "father_name_placeholder": "Nom complet de votre père",
-      "mother_name": "Nom et prénom de la mère",
-      "mother_name_placeholder": "Nom complet de votre mère",
-      "emergency_contact": "Contact en cas d'urgence",
-      "emergency_contact_description": "Cette personne sera contactée en cas d'urgence",
-      "emergency_contact_name": "Nom complet",
-      "emergency_contact_name_placeholder": "Nom et prénom de la personne à contacter",
-      "emergency_contact_relationship": "Lien de parenté",
-      "emergency_contact_relationship_placeholder": "Ex: Frère, Sœur, Ami(e), etc.",
-      "emergency_contact_phone": "Numéro de téléphone",
-      "emergency_contact_phone_placeholder": "ex: +33612345678",
-      "primary_contact": "Coordonnées principales",
-      "primary_contact_description": "Ces coordonnées seront utilisées pour vous contacter",
-      "email": "Adresse email",
-      "email_placeholder": "votre@email.com",
-      "phone": "Numéro de téléphone",
-      "phone_placeholder": "ex: +33612345678",
-      "address": "Adresse de résidence",
-      "address_description": "Votre adresse de résidence actuelle",
-      "street_address": "Rue et numéro",
-      "district": "Quartier",
-      "district_placeholder": "Votre quartier de résidence",
-      "street_address_placeholder": "Numéro et nom de rue",
-      "second_line": "Complément d'adresse",
-      "address_complement_placeholder": "Batiment, étage, porte...",
-      "city": "Ville",
-      "city_placeholder": "Votre ville de résidence",
-      "postal_code": "Code postal",
-      "postal_code_placeholder": "Code postal",
-      "country": "Pays",
-      "select_country": "Sélectionnez un pays",
-      "search_country": "Rechercher un pays",
-      "no_country_found": "Aucun pays trouvé",
-      "gabon_activity": "Dernière activité au Gabon",
-      "gabon_activity_description": "Décrivez votre dernière activité professionnelle au Gabon",
-      "gabon_activity_placeholder": "Ex: Enseignant à Libreville (2018-2020)",
-      "professional_info": "Informations professionnelles",
-      "professional_status": "Statut professionnel",
-      "professional_status_description": "Votre situation professionnelle actuelle",
-      "work_status": "Activité professionnelle",
-      "select_work_status": "Sélectionnez votre activité",
-      "profession": "Profession ou métier",
-      "profession_placeholder": "Votre profession actuelle",
-      "employer": "Employeur",
-      "employer_placeholder": "Nom de votre employeur",
-      "work_address": "Adresse professionnelle",
-      "work_address_placeholder": "Adresse de votre lieu de travail",
-      "passport": "Passeport",
-      "identity_picture": "Photo d'identité",
-      "birth_certificate": "Acte de naissance",
-      "residence_permit": "Titre de séjour",
-      "address_proof": "Justificatif de domicile",
-      "address_gabon": "Adresse au Gabon",
-      "resume_saved": "Reprendre le formulaire sauvegardé",
-      "resume_title": "Formulaire sauvegardé trouvé",
-      "resume_description": "Voulez-vous reprendre où vous en étiez ou recommencer?",
-      "start_new": "Nouveau formulaire",
-      "resume": "Reprendre"
-    },
-    "request_type": {
-      "type": {
-        "label": "Type de demande",
-        "first_request": "Première demande",
-        "renewal": "Renouvellement",
-        "modification": "Modification des informations"
-      },
-      "nationality": {
-        "label": "Mode d'acquisition de la nationalité",
-        "birth": "Par naissance",
-        "naturalization": "Par naturalisation",
-        "marriage": "Par mariage",
-        "other": "Autre"
-      }
-    },
-    "review": {
-      "request_type": "Type de demande",
-      "document_type": "Type de document",
-      "nationality_acquisition": "Mode d'acquisition de la nationalité",
-      "basic_info": "Informations personnelles",
-      "contact_info": "Informations de contact",
-      "family_info": "Informations familiales",
-      "professional_info": "Informations professionnelles",
-      "documents": "Documents justificatifs",
-      "validity": "Validité",
-      "not_provided": "Non renseigné",
-      "document_uploaded": "Document fourni",
-      "document_missing": "Document manquant",
-      "section_missing": "Section non remplie",
-      "required": "Requis"
-    },
-    "assets": {
-      "document_type": {
-        "first_request": "Première demande",
-        "renewal": "Renouvellement",
-        "modification": "Modification"
-      },
-      "nationality_acquisition": {
-        "birth": "Par naissance",
-        "naturalization": "Par naturalisation",
-        "marriage": "Par mariage",
-        "other": "Autre"
-      },
-      "gender": {
-        "male": "Homme",
-        "female": "Femme"
-      },
-      "marital_status": {
-        "single": "Célibataire",
-        "married": "Marié(e)",
-        "divorced": "Divorcé(e)",
-        "widowed": "Veuf/Veuve",
-        "cohabiting": "En concubinage"
-      },
-      "work_status": {
-        "employee": "Salarié(e)",
-        "entrepreneur": "Entrepreneur(e)",
-        "unemployed": "Sans emploi",
-        "retired": "Retraité(e)",
-        "student": "Étudiant(e)",
-        "other": "Autre"
-      },
-      "status": {
-        "pending": "En attente",
-        "approved": "Approuvé",
-        "rejected": "Rejeté",
-        "incomplete": "Incomplet"
-      }
-    }
-  },
   "errors": {
     "common": {
       "error_title": "Erreur",
@@ -733,7 +515,49 @@
       "required": "Ce champ est requis",
       "invalid_format": "Format invalide",
       "too_short": "Trop court",
-      "too_long": "Trop long"
+      "too_long": "Trop long",
+      "gender_required": "Le genre est requis",
+      "first_name_required": "Le prénom est requis",
+      "first_name_too_short": "Le prénom doit contenir au moins 2 caractères",
+      "last_name_required": "Le nom est requis",
+      "last_name_too_short": "Le nom doit contenir au moins 2 caractères",
+      "birth_date_required": "La date de naissance est requise",
+      "birth_place_required": "Le lieu de naissance est requis",
+      "birth_country_required": "Le pays de naissance est requis",
+      "nationality_required": "La nationalité est requise",
+
+      "passport": {
+        "number_required": "Le numéro de passeport est requis",
+        "number_too_short": "Le numéro de passeport doit contenir au moins 8 caractères",
+        "number_too_long": "Le numéro de passeport ne peut pas dépasser 9 caractères",
+        "number_invalid_format": "Format de numéro de passeport invalide (lettres majuscules et chiffres uniquement)",
+
+        "issue_date_required": "La date d'émission est requise",
+        "issue_date_invalid": "Date d'émission invalide",
+        "issue_date_future": "La date d'émission ne peut pas être dans le futur",
+        "issue_date_too_old": "Le passeport a été émis il y a plus de 10 ans",
+
+        "expiry_date_required": "La date d'expiration est requise",
+        "expiry_date_invalid": "Date d'expiration invalide",
+        "already_expired": "Ce passeport est déjà expiré",
+        "expires_soon": "Le passeport doit être valide au moins 6 mois après la date de demande",
+
+        "authority_required": "L'autorité émettrice est requise",
+        "authority_too_short": "L'autorité émettrice doit contenir au moins 2 caractères",
+        "authority_too_long": "L'autorité émettrice ne peut pas dépasser 100 caractères",
+
+        "invalid_validity_period": "La période de validité du passeport est invalide (maximum 10 ans)",
+        "expired": "Le passeport est expiré",
+        "number_invalid": "Format de numéro de passeport invalide",
+        "expiry_date_past": "Le passeport est expiré ou expire bientôt",
+        "authority_invalid": "L'autorité émettrice n'est pas valide"
+      }
+    },
+    "form": {
+      "submission_failed": "Échec de l'envoi du formulaire",
+      "invalid_data": "Données invalides",
+      "required_field": "Ce champ est requis",
+      "try_again": "Veuillez réessayer"
     }
   },
   "admin": {
@@ -772,5 +596,93 @@
   "profile": {
     "update_success": "Profil mis à jour avec succès",
     "update_error": "Erreur lors de la mise à jour du profil"
+  },
+  "consular_registration": {
+    "form": {
+      "title": "Formulaire d'inscription consulaire",
+      "subtitle": "Suivez les étapes pour créer votre carte consulaire",
+      "gender": "Genre",
+      "first_name": "Prénom(s)",
+      "last_name": "Nom(s)",
+      "first_name_placeholder": "Entrez votre/vos prénom(s)",
+      "last_name_placeholder": "Entrez votre/vos nom(s)",
+      "birth_date": "Date de naissance",
+      "birth_place": "Lieu de naissance",
+      "birth_place_placeholder": "Ville de naissance",
+      "birth_country": "Pays de naissance",
+      "nationality": "Nationalité",
+      "select_nationality": "Sélectionnez votre nationalité",
+      "search_nationality": "Rechercher une nationalité",
+      "no_nationality_found": "Aucune nationalité trouvée",
+      "required_field": "Ce champ est obligatoire",
+      "invalid_date": "Date invalide",
+
+      "passport": {
+        "section_title": "Informations du passeport",
+        "section_description": "Renseignez les informations de votre passeport gabonais en cours de validité",
+        "number": {
+          "label": "Numéro de passeport",
+          "placeholder": "Ex: GA123456",
+          "help": "Le numéro se trouve en haut à droite de votre passeport"
+        },
+        "issue_date": {
+          "label": "Date d'émission",
+          "placeholder": "Sélectionnez la date d'émission",
+          "help": "Date à laquelle votre passeport a été émis"
+        },
+        "expiry_date": {
+          "label": "Date d'expiration",
+          "placeholder": "Sélectionnez la date d'expiration",
+          "help": "Date à laquelle votre passeport expire"
+        },
+        "authority": {
+          "label": "Autorité émettrice",
+          "placeholder": "Ex: Ministère de l'Intérieur",
+          "help": "L'organisme qui a délivré votre passeport"
+        }
+      }
+    },
+    "steps": {
+      "request_type": "Type de demande",
+      "documents": "Documents",
+      "identity": "Identité",
+      "family": "Famille",
+      "contact": "Contact",
+      "professional": "Professionnel",
+      "review": "Révision"
+    },
+    "navigation": {
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "validation": {
+      "dates": {
+        "issue_date_future": "La date d'émission ne peut pas être dans le futur",
+        "expiry_date_past": "La date d'expiration doit être dans le futur",
+        "invalid_date_format": "Format de date invalide"
+      },
+      "error": {
+        "title": "Erreur de validation",
+        "description": "Veuillez corriger les erreurs avant de continuer"
+      },
+      "submit": "Soumettre"
+    },
+    "help": {
+      "request_type": "Sélectionnez le type de demande et votre mode d'acquisition de la nationalité gabonaise",
+      "documents": "Téléchargez les documents requis. Ces documents seront analysés pour pré-remplir vos informations",
+      "identity": "Vérifiez et complétez vos informations d'identité",
+      "family": "Renseignez les informations sur votre famille",
+      "contact": "Fournissez vos coordonnées actuelles",
+      "professional": "Renseignez votre situation professionnelle",
+      "review": "Vérifiez toutes les informations avant de soumettre"
+    }
+  },
+  "tooltips": {
+    "passport": {
+      "number": "Le numéro de passeport se trouve en haut à droite de la page d'identification",
+      "issue_date": "Date à laquelle votre passeport a été émis",
+      "expiry_date": "Date à laquelle votre passeport expire",
+      "authority": "L'organisme gouvernemental qui a délivré votre passeport"
+    }
   }
 }

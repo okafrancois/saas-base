@@ -1,4 +1,4 @@
-import { Prisma, Gender, MaritalStatus, WorkStatus } from '@prisma/client'
+import { Prisma, Gender, MaritalStatus, WorkStatus, Address } from '@prisma/client'
 
 export type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
@@ -33,4 +33,32 @@ export interface ProfileInput {
   employer?: string
   employerAddress?: string
   address?: AddressInput
+}
+
+export type AnalysisData = {
+  firstName?: string
+  lastName?: string
+  gender?: Gender
+  birthDate?: string
+  birthPlace?: string
+  birthCountry?: string
+  nationality?: string
+  passportNumber?: string
+  passportIssueDate?: Date
+  passportExpiryDate?: Date
+  passportIssueAuthority?: string
+  address?: Address
+  maritalStatus?: MaritalStatus
+  fatherFullName?: string
+  motherFullName?: string
+  workStatus?: WorkStatus
+  profession?: string
+  employer?: string
+  employerAddress?: string
+}
+
+export enum RequestType {
+  REGISTRATION = 'REGISTRATION',
+  RENEWAL = 'RENEWAL',
+  REPLACEMENT = 'REPLACEMENT',
 }
