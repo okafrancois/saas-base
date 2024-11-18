@@ -1,3 +1,5 @@
+// next.config.mjs
+import { securityHeaders } from './config/security.mjs'
 import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin()
@@ -5,7 +7,6 @@ const withNextIntl = createNextIntlPlugin()
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    // Disabling on production builds because we're running checks on PRs via GitHub Actions.
     ignoreDuringBuilds: true,
   },
   trailingSlash: false,
@@ -17,14 +18,30 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'placehold.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'utfs.io',
         pathname: '/f/**',
-        port: '',
       }
     ],
   },
-  output: "standalone"
-};
 
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      }
+    ]
+  },
+
+  webpack: (config) => {
+    config.externals = [...(config.externals || []), 'uploadthing']
+    return config
+  }
+}
 
 export default withNextIntl(nextConfig)

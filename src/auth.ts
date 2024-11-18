@@ -23,31 +23,16 @@ export const {
     signIn: PAGE_ROUTES.login,
     error: PAGE_ROUTES.auth_error,
   },
-  events: {
-    async linkAccount({ user }) {
-      if (!user.id) {
-        throw new Error('User not found')
-      }
-
-      await db.user.update({
-        where: { id: user.id },
-        data: { emailVerified: new Date() },
-      })
-    },
-  },
   callbacks: {
     async session({ session, token }) {
       if (token.sub && session.user) {
         const existingUser = await getUserById(token.sub)
-
         if (existingUser) {
           session.user.role = existingUser.role
           session.user.phone = existingUser.phone
         }
-
         session.user.id = token.sub
       }
-
       return session
     },
     async jwt({ token }) {

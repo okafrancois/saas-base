@@ -21,14 +21,17 @@ export const validateOTP = async ({
         identifier,
         token: otp,
         type,
-        expires: { gt: new Date() },
-      },
+        expires: {
+          gt: new Date()
+        }
+      }
     })
 
     if (!token) return false
-    
+
+    // Supprimer le token après utilisation
     await db.verificationToken.delete({
-      where: { id: token.id },
+      where: { id: token.id }
     })
 
     return true

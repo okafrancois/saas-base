@@ -1,5 +1,3 @@
-'use server'
-
 import { signOut } from '@/auth'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { redirect } from 'next/navigation'
@@ -9,8 +7,7 @@ import { sendOTPEmail, sendSMSOTP } from '@/actions/email'
 
 export const logUserOut = async () => {
   await signOut()
-
-  redirect(PAGE_ROUTES.home)
+  redirect(PAGE_ROUTES.base)
 }
 
 export type AuthType = 'EMAIL' | 'PHONE'
@@ -19,7 +16,7 @@ export async function sendOTP(identifier: string, type: AuthType) {
   try {
     const generatedOTP = await generateOTP()
 
-    // Delete any existing OTP for this identifier
+    // Supprimer tout OTP existant pour cet identifiant
     await db.verificationToken.deleteMany({
       where: {
         identifier,
@@ -27,7 +24,7 @@ export async function sendOTP(identifier: string, type: AuthType) {
       },
     })
 
-    // Create new token
+    // Créer nouveau token
     await db.verificationToken.create({
       data: {
         identifier,
@@ -37,7 +34,7 @@ export async function sendOTP(identifier: string, type: AuthType) {
       },
     })
 
-    // Send OTP via appropriate channel
+    // Envoyer l'OTP via le canal approprié
     if (type === 'EMAIL') {
       await sendOTPEmail(identifier, generatedOTP)
     } else {
