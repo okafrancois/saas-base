@@ -1,3 +1,5 @@
+// schema.prisma
+
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRES_URL")
@@ -7,11 +9,214 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Énumérations
 enum UserRole {
-  USER
-  ADMIN
+  USER // Utilisateur standard (Ressortissant)
+  RESPONSIBLE // Responsable (Sous-administrateur)
+  ADMIN // Administratif Consulaire
+  SUPER_ADMIN // Super administrateur
 }
 
+enum DocumentType {
+  FIRST_REQUEST // Première demande
+  RENEWAL // Renouvellement
+  MODIFICATION // Modification
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+  COHABITING
+}
+
+enum WorkStatus {
+  EMPLOYEE
+  ENTREPRENEUR
+  UNEMPLOYED
+  RETIRED
+  STUDENT
+  OTHER
+}
+
+enum NationalityAcquisition {
+  BIRTH
+  NATURALIZATION
+  MARRIAGE
+  OTHER
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  INCOMPLETE
+}
+
+// Modèles principaux
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  phone     String?  @unique
+  password  String? // Hashed password if needed
+  name      String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  profile       Profile?
+  consulateId   String?
+  consulate     Consulate?     @relation(fields: [consulateId], references: [id])
+  requests      Request[]
+  messages      Message[]
+  notifications Notification[]
+
+  // Auth related
+  emailVerified DateTime?
+  phoneVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Profile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Informations personnelles
+  firstName     String
+  lastName      String
+  gender        Gender
+  birthDate     String
+  birthPlace    String
+  birthCountry  String
+  nationality   String
+  maritalStatus MaritalStatus?
+  workStatus    WorkStatus?
+
+  // Documents
+  identityPicture  String? // URL
+  passport         String? // URL
+  birthCertificate String? // URL
+  residencePermit  String? // URL
+  addressProof     String? // URL
+
+  // Contact
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId String?  @unique
+  phone     String?
+
+  // Informations familiales
+  fatherFullName String?
+  motherFullName String?
+  spouseFullName String?
+
+  // Informations professionnelles
+  profession      String?
+  employer        String?
+  employerAddress String?
+
+  // Métadonnées
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  firstLine  String
+  secondLine String?
+  city       String
+  zipCode    String?
+  country    String
+
+  // Relations
+  profile   Profile?
+  consulate Consulate?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Consulate {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId String?  @unique
+  website   String?
+  isGeneral Boolean  @default(false)
+
+  // Relations
+  users     User[]
+  countries Country[]
+  requests  Request[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Country {
+  id          String    @id @default(cuid())
+  name        String
+  code        String
+  consulateId String
+  consulate   Consulate @relation(fields: [consulateId], references: [id])
+}
+
+model Request {
+  id          String        @id @default(cuid())
+  type        DocumentType
+  status      RequestStatus @default(PENDING)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  consulateId String
+  consulate   Consulate     @relation(fields: [consulateId], references: [id])
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  messages Message[]
+  notes    Note[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  requestId String
+  request   Request  @relation(fields: [requestId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  content   String
+  requestId String
+  request   Request  @relation(fields: [requestId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Auth related models
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -37,19 +242,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id            String    @id @default(cuid())
-  email         String?   @unique
-  phone         String?   @unique
-  emailVerified DateTime?
-  phoneVerified DateTime?
-  name          String?
-  image         String?
-  role          UserRole  @default(USER)
-  accounts      Account[]
-  sessions      Session[]
 }
 
 model VerificationToken {
