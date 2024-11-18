@@ -4,34 +4,28 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
-import { RequestTypeForm } from './steps/request-type'
+import { cn, useFormStorage } from '@/lib/utils'
 import { Icons } from '@/components/ui/icons'
 import { FormError } from '@/components/form-error'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { DocumentsUploadForm } from './steps/documents'
-import { BasicInfoForm } from './steps/basic-info'
-import { FamilyInfoForm } from './steps/family-info'
-import { ContactInfoForm } from './steps/contact-form'
-import { ProfessionalInfoForm } from './steps/professional-info'
-import { ReviewForm } from './steps/review'
+import { BasicInfoForm } from './basic-info'
+import { FamilyInfoForm } from './family-info'
+import { ContactInfoForm } from './contact-form'
+import { ProfessionalInfoForm } from './professional-info'
+import { ReviewForm } from './review'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
+// import { postProfile } from '@/actions/profile'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useFormStorage } from '@/lib/form-storage'
 import {
   BasicInfoFormData,
   ContactInfoFormData,
   DocumentsFormData,
   FamilyInfoFormData, ProfessionalInfoFormData,
-  RequestTypeFormData,
 } from '@/schemas/registration'
+import { DocumentsUploadForm } from '@/app/(public)/registration/_components/documents'
 import { AnalysisData } from '@/types'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useFormAutosave } from '@/hooks/use-form-autosave'
-import { useToast } from '@/hooks/use-toast'
-import { submitConsularForm } from '@/actions/consular'
+import { Gender, WorkStatus } from '@prisma/client'
 
 // Types et configurations
 type StepKey = 'request_type' | 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
@@ -47,7 +41,6 @@ const STEPS: StepKey[] = [
 ]
 
 export type ConsularFormData = {
-  requestType?: RequestTypeFormData
   documents?: DocumentsFormData
   basicInfo?: BasicInfoFormData
   familyInfo?: FamilyInfoFormData
@@ -55,25 +48,18 @@ export type ConsularFormData = {
   professionalInfo?: ProfessionalInfoFormData
 }
 
-// Schéma de validation complet
-
-export default function ConsularForm() {
+export default function RegistrationForm() {
   const router = useRouter()
+
   const t = useTranslations('consular_registration')
   const { loadSavedData, saveData, clearData } = useFormStorage()
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const {toast} = useToast()
 
   // État local
   const [formData, setFormData] = useState<ConsularFormData>(() => loadSavedData() || {})
-  const form = useForm<ConsularFormData>({
-    resolver: zodResolver(CompleteFormSchema)
-  })
   const [error, setError] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState<number>(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { clearSavedData } = useFormAutosave(form, 'consular-form')
 
   // Référence pour le formulaire actuel
   const currentFormRef = useRef<HTMLFormElement>(null)
@@ -86,9 +72,6 @@ export default function ConsularForm() {
     try {
       const newFormData = { ...formData }
       switch (stepKey) {
-        case 'request_type':
-          newFormData.requestType = data
-          break
         case 'documents':
           newFormData.documents = data
           break
@@ -122,45 +105,45 @@ export default function ConsularForm() {
     }
   }
 
-  const handleFinalSubmit = async (formData: ConsularFormData) => {
+  const handleFinalSubmit = async () => {
     try {
-      setIsSubmitting(true)
+      setIsLoading(true);
+      setError(undefined);
 
-      const result = await submitConsularForm(formData)
+      const profileData = {
+        basicInfo:{
+          ...formData.basicInfo,
+          identityPictureFile: undefined,
+        } as BasicInfoFormData,
+        familyInfo: formData.familyInfo as FamilyInfoFormData,
+        contactInfo: formData.contactInfo as ContactInfoFormData,
+        professionalInfo: formData.professionalInfo as ProfessionalInfoFormData,
+      };
 
-      if (result.error) {
-        toast({
-          title: t('errors.common.error_title'),
-          description: result.error,
-          variant: "destructive"
-        })
-        return
+      // Create FormData objects for each file
+      const files = {
+        passport: formData.documents?.passportFile ? createFormDataFromFile(formData.documents.passportFile) : undefined,
+        birthCertificate: formData.documents?.birthCertificateFile ? createFormDataFromFile(formData.documents.birthCertificateFile) : undefined,
+        residencePermit: formData.documents?.residencePermitFile ? createFormDataFromFile(formData.documents.residencePermitFile) : undefined,
+        addressProof: formData.documents?.addressProofFile ? createFormDataFromFile(formData.documents.addressProofFile) : undefined,
+        identityPicture: formData.basicInfo?.identityPictureFile ? createFormDataFromFile(formData.basicInfo.identityPictureFile) : undefined,
+      };
+
+      // const result = await postProfile(profileData, files);
+      const result = { success: true };
+
+      if (result) {
+        // Clear stored data
+        clearData();
+        // Redirect on success
+        router.push(PAGE_ROUTES.dashboard);
       }
-
-      // Succès
-      toast({
-        title: t('success.title'),
-        description: t('success.form_submitted'),
-        variant: "success"
-      })
-
-      // Nettoyer le stockage local
-      clearFormData()
-
-      // Rediriger vers la page de succès ou le dashboard
-      router.push(PAGE_ROUTES.dashboard)
-
     } catch (error) {
-      console.error('Form submission error:', error)
-      toast({
-        title: t('errors.common.error_title'),
-        description: t('errors.common.unknown_error'),
-        variant: "destructive"
-      })
+      setError(error instanceof Error ? error.message : 'Une erreur est survenue');
     } finally {
-      setIsSubmitting(false)
+      setIsLoading(false);
     }
-  }
+  };
 
 // Helper function to create FormData from a file
   const createFormDataFromFile = (file: File | FileList) => {
@@ -186,16 +169,20 @@ export default function ConsularForm() {
 
     // Mise à jour des données de base
     if (data.firstName || data.lastName || data.gender || data.birthDate ||
-      data.birthPlace || data.birthCountry || data.nationality) {
+      data.birthPlace || data.birthCountry || data.nationality ||  data.passportNumber || data.passportIssueDate || data.passportExpiryDate || data.passportExpiryDate) {
       newFormData.basicInfo = {
         ...newFormData.basicInfo,
-        firstName: data.firstName || newFormData.basicInfo?.firstName || '',
-        lastName: data.lastName || newFormData.basicInfo?.lastName || '',
-        gender: data.gender || newFormData.basicInfo?.gender || 'MALE',
-        birthDate: data.birthDate || newFormData.basicInfo?.birthDate || '',
-        birthPlace: data.birthPlace || newFormData.basicInfo?.birthPlace || '',
-        birthCountry: data.birthCountry?.toLowerCase() || newFormData.basicInfo?.birthCountry || '',
-        nationality: data.nationality?.toLowerCase() || newFormData.basicInfo?.nationality || '',
+        firstName: data.firstName ?? newFormData.basicInfo?.firstName ?? '',
+        lastName: data.lastName ?? newFormData.basicInfo?.lastName ?? '',
+        gender: data.gender ?? newFormData.basicInfo?.gender ?? Gender.MALE,
+        birthDate: data.birthDate ?? newFormData.basicInfo?.birthDate ?? '',
+        birthPlace: data.birthPlace ?? newFormData.basicInfo?.birthPlace ?? '',
+        birthCountry: data.birthCountry?.toLowerCase() ?? newFormData.basicInfo?.birthCountry ?? '',
+        nationality: data.nationality?.toLowerCase() ?? newFormData.basicInfo?.nationality ?? '',
+        passportNumber: data.passportNumber ?? newFormData.basicInfo?.passportNumber ?? '',
+        passportIssueDate: data.passportIssueDate ?? newFormData.basicInfo?.passportIssueDate,
+        passportExpiryDate: data.passportExpiryDate ?? newFormData.basicInfo?.passportExpiryDate,
+        passportIssueAuthority: data.passportExpiryDate ?? newFormData.basicInfo?.passportIssueAuthority,
       };
     }
 
@@ -204,33 +191,33 @@ export default function ConsularForm() {
       newFormData.contactInfo = {
         ...newFormData.contactInfo,
         address: {
-          firstLine: data.address?.firstLine || newFormData.contactInfo?.address?.firstLine || '',
-          secondLine: data.address?.secondLine || newFormData.contactInfo?.address?.secondLine || '',
-          city: data.address?.city || newFormData.contactInfo?.address?.city || '',
-          zipCode: data.address?.zipCode || newFormData.contactInfo?.address?.zipCode || '',
-          country: data.address?.country.toLowerCase() || newFormData.contactInfo?.address?.country || '',
+          firstLine: data.address?.firstLine ?? newFormData.contactInfo?.address?.firstLine ?? '',
+          secondLine: data.address?.secondLine ?? newFormData.contactInfo?.address?.secondLine ?? '',
+          city: data.address?.city ?? newFormData.contactInfo?.address?.city ?? '',
+          zipCode: data.address?.zipCode ?? newFormData.contactInfo?.address?.zipCode ?? '',
+          country: data.address?.country.toLowerCase() ?? newFormData.contactInfo?.address?.country ?? '',
         }
       };
     }
 
     // Mise à jour des données professionnelles
-    if (data.workStatus || data.profession || data.employer || data.employerAddress) {
+    if (data.workStatus ?? data.profession ?? data.employer ?? data.employerAddress) {
       newFormData.professionalInfo = {
         ...newFormData.professionalInfo,
-        workStatus: data.workStatus || newFormData.professionalInfo?.workStatus,
-        profession: data.profession || newFormData.professionalInfo?.profession || '',
-        employer: data.employer || newFormData.professionalInfo?.employer || '',
-        employerAddress: data.employerAddress || newFormData.professionalInfo?.employerAddress || '',
+        workStatus: data.workStatus ?? newFormData.professionalInfo?.workStatus ?? WorkStatus.UNEMPLOYED,
+        profession: data.profession ?? newFormData.professionalInfo?.profession ?? '',
+        employer: data.employer ?? newFormData.professionalInfo?.employer ?? '',
+        employerAddress: data.employerAddress ?? newFormData.professionalInfo?.employerAddress ?? '',
       };
     }
 
     // Mise à jour des données familiales
-    if (data.maritalStatus || data.fatherFullName || data.motherFullName) {
+    if (data.maritalStatus ?? data.fatherFullName ?? data.motherFullName) {
       newFormData.familyInfo = {
         ...newFormData.familyInfo,
-        maritalStatus: data.maritalStatus || newFormData.familyInfo?.maritalStatus || 'SINGLE',
-        fatherFullName: data.fatherFullName || newFormData.familyInfo?.fatherFullName || '',
-        motherFullName: data.motherFullName || newFormData.familyInfo?.motherFullName || '',
+        maritalStatus: data.maritalStatus ?? newFormData.familyInfo?.maritalStatus ?? 'SINGLE',
+        fatherFullName: data.fatherFullName ?? newFormData.familyInfo?.fatherFullName ?? '',
+        motherFullName: data.motherFullName ?? newFormData.familyInfo?.motherFullName ?? '',
       };
     }
 
@@ -264,15 +251,6 @@ export default function ConsularForm() {
   const renderStepContent = () => {
     const stepKey = STEPS[currentStep]
     switch (stepKey) {
-      case 'request_type':
-        return (
-          <RequestTypeForm
-            onSubmit={handleStepSubmit}
-            defaultValues={formData.requestType}
-            formRef={currentFormRef}
-            isLoading={isLoading}
-          />
-        )
       case 'documents':
         return (
           <DocumentsUploadForm

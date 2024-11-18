@@ -19,7 +19,7 @@ export default async function HomePage() {
         <p>{t('subtitle')}</p>
         <div className='actions flex flex-wrap items-center gap-4'>
           <Link
-            href={PAGE_ROUTES.consular_registration}
+            href={PAGE_ROUTES.registration}
             className={
               buttonVariants({
                 variant: 'default',

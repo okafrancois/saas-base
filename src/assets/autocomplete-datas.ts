@@ -1,4 +1,4 @@
-import { Gender, MaritalStatus, WorkStatus, Status } from '@prisma/client'
+import { Gender, MaritalStatus, WorkStatus, RequestStatus } from '@prisma/client'
 
 export const maritalStatus = [
   { [MaritalStatus.SINGLE]: 'single' },
@@ -32,10 +32,10 @@ export const genderTypes = {
 }
 
 export const profileStatus = {
-  [Status.PENDING]: 'pending',
-  [Status.APPROVED]: 'approved',
-  [Status.REJECTED]: 'rejected',
-  [Status.INCOMPLETE]: 'incomplete',
+  [RequestStatus.PENDING]: 'pending',
+  [RequestStatus.APPROVED]: 'approved',
+  [RequestStatus.REJECTED]: 'rejected',
+  [RequestStatus.INCOMPLETE]: 'incomplete',
 }
 
 type TranslationFunction = (key: string) => string

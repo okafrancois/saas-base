@@ -17,7 +17,7 @@ enum UserRole {
   SUPER_ADMIN // Super administrateur
 }
 
-enum DocumentType {
+enum RequestType {
   FIRST_REQUEST // Première demande
   RENEWAL // Renouvellement
   MODIFICATION // Modification
@@ -91,15 +91,16 @@ model Profile {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Informations personnelles
-  firstName     String
-  lastName      String
-  gender        Gender
-  birthDate     String
-  birthPlace    String
-  birthCountry  String
-  nationality   String
-  maritalStatus MaritalStatus?
-  workStatus    WorkStatus?
+  firstName       String
+  lastName        String
+  gender          Gender
+  birthDate       String
+  birthPlace      String
+  birthCountry    String
+  nationality     String
+  maritalStatus   MaritalStatus?
+  workStatus      WorkStatus?
+  acquisitionMode NationalityAcquisition? @default(BIRTH)
 
   // Documents
   identityPicture  String? // URL
@@ -109,9 +110,14 @@ model Profile {
   addressProof     String? // URL
 
   // Contact
-  address   Address? @relation(fields: [addressId], references: [id])
-  addressId String?  @unique
-  phone     String?
+  address           Address?          @relation(fields: [addressId], references: [id])
+  addressId         String?           @unique
+  phone             String?
+  emergencyContacts EmergencyContact?
+
+  // Gabonese specific
+  addressInGabon  AddressGabon?
+  activityInGabon String?
 
   // Informations familiales
   fatherFullName String?
@@ -127,6 +133,24 @@ model Profile {
   status    String   @default("PENDING")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model EmergencyContact {
+  id           String  @id @default(cuid())
+  fullName     String
+  relationship String
+  phone        String
+  profile      Profile @relation(fields: [profileId], references: [id])
+  profileId    String  @unique
+}
+
+model AddressGabon {
+  id        String  @id @default(cuid())
+  address   String
+  district  String // Quartier
+  city      String
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @unique
 }
 
 model Address {
@@ -172,7 +196,7 @@ model Country {
 
 model Request {
   id          String        @id @default(cuid())
-  type        DocumentType
+  type        RequestType
   status      RequestStatus @default(PENDING)
   userId      String
   user        User          @relation(fields: [userId], references: [id])

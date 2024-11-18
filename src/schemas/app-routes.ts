@@ -35,6 +35,7 @@ export const PAGE_ROUTES = {
   feedback: '/feedback' as Route<string>,
 
   // Pages publiques
+  registration: '/registration' as Route<string>,
   unauthorized: '/unauthorized' as Route<string>,
   consular_registration: '/consular-registration' as Route<string>,
   privacy_policy: '#' as Route<string>,

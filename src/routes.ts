@@ -5,6 +5,7 @@ export const publicRoutes = [
   PAGE_ROUTES.base,
   PAGE_ROUTES.privacy_policy,
   PAGE_ROUTES.terms,
+  PAGE_ROUTES.registration,
 ] as const
 
 export const authRoutes = [

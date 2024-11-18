@@ -55,69 +55,63 @@ export function DocumentsUploadForm({
     }
   }
 
-  export function DocumentsUploadForm({
-                                        onSubmit,
-                                        defaultValues,
-                                        formRef,
-                                        isLoading,
-                                        onDocumentsAnalysisComplete,
-                                        nextStep
-                                      }: DocumentsUploadFormProps) {
-    const { toast } = useToast()
-    const t = useTranslations('consular_registration')
-    const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const handleAnalysis = async () => {
+    const formData = form.getValues()
+    const analysisFormData = new FormData()
+    const analysisFields: {key: keyof DocumentsFormData, fields: DocumentField[]}[] = []
 
-    const handleAnalysis = async () => {
-      const formData = form.getValues()
-      // Vérifier si des documents sont présents
-      if (!hasRequiredDocuments(formData)) {
-        toast({
-          title: t('documents.error.missing_documents'),
-          description: t('documents.error.upload_required_documents'),
-          variant: "destructive"
+    // Collecter les documents et leurs champs respectifs
+    Object.entries(formData).forEach(([key, fileList]) => {
+      if (fileList?.[0]) {
+        const documentFields = getFieldsForDocument(key as keyof DocumentsFormData)
+
+        analysisFields.push({
+          key: key as keyof DocumentsFormData,
+          fields: documentFields
         })
-        return
+
+        analysisFormData.append(key, fileList[0])
+      }
+    })
+
+    if (analysisFields.length === 0) {
+      setError(t('documents.analysis.error.no_documents'))
+      return
+    }
+
+    setError(undefined)
+    setIsAnalyzing(true)
+
+    try {
+      const results = await analyzeDocuments(analysisFormData, analysisFields, 'gpt')
+
+      if (onDocumentsAnalysisComplete) {
+        onDocumentsAnalysisComplete(results.mergedData as AnalysisData)
       }
 
-      setIsAnalyzing(true)
-      try {
-        const results = await analyzeDocuments(/* ... */)
-
-        if (results.success) {
-          onDocumentsAnalysisComplete?.(results.mergedData)
-
-          toast({
-            title: t('documents.analysis.success.title'),
-            description: t('documents.analysis.success.description'),
-            variant: "success",
-            action: nextStep && (
-              <ToastAction
-                altText={t('documents.analysis.success.action_hint')}
-                onClick={nextStep}
-              >
+      toast({
+        title: t('documents.analysis.success.title'),
+        description: t('documents.analysis.success.description'),
+        variant: "success",
+        enterKeyHint: "enter",
+        action: (
+          <>
+            {nextStep && (
+              <ToastAction altText={t('documents.analysis.success.action')} onClick={nextStep}>
                 {t('documents.analysis.success.action')}
               </ToastAction>
-            )
-          })
-        }
-      } catch (error) {
-        toast({
-          title: t('documents.analysis.error.failed_analysis'),
-          description: error instanceof Error ? error.message : t('errors.common.unknown_error'),
-          variant: "destructive",
-          action: (
-            <ToastAction
-              altText={t('documents.analysis.error.retry')}
-              onClick={handleAnalysis}
-            >
-              {t('documents.analysis.error.retry')}
-            </ToastAction>
-          )
-        })
-      } finally {
-        setIsAnalyzing(false)
-      }
+            )}
+          </>
+        ),
+      })
+
+      setIsAnalyzing(false)
+      setError(undefined)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to analyze documents')
+      setIsAnalyzing(false)
     }
+  }
 
   const documents = [
     {

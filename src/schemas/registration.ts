@@ -1,6 +1,5 @@
 import * as z from 'zod'
 import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
-import { RequestType } from '@/types'
 
 const FileListSchema = z.any().refine(
   (files) => {
@@ -59,12 +58,6 @@ const DocumentFileSchema = FileListSchema
     { message: 'doc_type_image_pdf', path: [] }
   )
 
-// Request Type Schema - Première étape
-export const RequestTypeSchema = z.object({
-  documentType: z.nativeEnum(RequestType),
-  nationalityAcquisition: z.nativeEnum(NationalityAcquisition),
-})
-
 const PASSPORT_MIN_VALIDITY_MONTHS = 6;
 const PASSPORT_MAX_VALIDITY_YEARS = 10;
 
@@ -83,6 +76,9 @@ const addYears = (date: Date, years: number) => {
 
 export const BasicInfoSchema = z.object({
   gender: z.nativeEnum(Gender, {
+    required_error: 'errors.validation.gender_required'
+  }),
+  acquisitionMode: z.nativeEnum(NationalityAcquisition, {
     required_error: 'errors.validation.gender_required'
   }),
 
@@ -250,6 +246,17 @@ export const ContactInfoSchema = z.object({
       .string()
       .min(1, 'errors.validation.address.country_required'),
   }),
+
+  addressInGabon: z.object({
+    address: z
+      .string()
+      .min(1, 'errors.validation.address.street_required')
+      .max(VALIDATION_RULES.ADDRESS_MAX_LENGTH),
+    district: z.string().min(1, 'errors.validation.district.required'),
+    city: z
+      .string()
+      .min(1, 'errors.validation.address.city_required'),
+  }).optional(),
 })
 
 // Validation pour la section Famille
@@ -347,7 +354,6 @@ export const DocumentsSchema = z.object({
 })
 
 export const ProfileDataSchema = z.object({
-  requestType: RequestTypeSchema,
   contactInfo: ContactInfoSchema,
   familyInfo: FamilyInfoSchema,
   basicInfo: BasicInfoSchema,
@@ -356,16 +362,23 @@ export const ProfileDataSchema = z.object({
 });
 
 export const ProfileDataPostSchema = z.object({
-  requestType: RequestTypeSchema,
   contactInfo: ContactInfoSchema,
   familyInfo: FamilyInfoSchema,
   basicInfo: BasicInfoPostSchema,
   professionalInfo: ProfessionalInfoSchema,
 });
 
+export const CompleteFormSchema = z.object({
+  documents: DocumentsSchema,
+  basicInfo: BasicInfoSchema,
+  familyInfo: FamilyInfoSchema,
+  contactInfo: ContactInfoSchema,
+  professionalInfo: ProfessionalInfoSchema,
+})
+
+export type ConsularFormData = z.infer<typeof CompleteFormSchema>
 export type ProfileDataPostInput = z.infer<typeof ProfileDataPostSchema>;
 export type ProfileDataInput = z.infer<typeof ProfileDataSchema>;
-export type RequestTypeFormData = z.infer<typeof RequestTypeSchema>
 export type BasicInfoFormData = z.infer<typeof BasicInfoSchema>
 export type ContactInfoFormData = z.infer<typeof ContactInfoSchema>
 export type FamilyInfoFormData = z.infer<typeof FamilyInfoSchema>

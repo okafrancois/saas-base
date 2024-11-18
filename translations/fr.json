@@ -20,6 +20,14 @@
       "optional_field": "Optionnel",
       "select_date": "Sélectionner une date",
       "invalid_format": "Format invalide"
+    },
+    "acquiring_mode": {
+      "birth": "Par naissance",
+      "marriage": "Par mariage",
+      "naturalization": "Par naturalisation",
+      "option": "Par option",
+      "restoration": "Par réintégration",
+      "reacquisition": "Par réacquisition"
     }
   },
   "messages": {
@@ -525,6 +533,8 @@
       "birth_place_required": "Le lieu de naissance est requis",
       "birth_country_required": "Le pays de naissance est requis",
       "nationality_required": "La nationalité est requise",
+      "acquiring_mode_required": "Le mode d'acquisition de la nationalité est requis",
+      "marital_status_required": "Le statut matrimonial est requis",
 
       "passport": {
         "number_required": "Le numéro de passeport est requis",
@@ -616,6 +626,7 @@
       "no_nationality_found": "Aucune nationalité trouvée",
       "required_field": "Ce champ est obligatoire",
       "invalid_date": "Date invalide",
+      "acquiring_mode": "Mode d'acquisition de la nationalité",
 
       "passport": {
         "section_title": "Informations du passeport",
@@ -649,11 +660,33 @@
       "family": "Famille",
       "contact": "Contact",
       "professional": "Professionnel",
-      "review": "Révision"
+      "review": "Révision",
+      "progress": "Étape {current}/{total}",
+      "status": {
+        "complete": "Terminé",
+        "in_progress": "En cours",
+        "pending": "À venir"
+      }
+    },
+    "documents": {
+      "analysis": {
+        "success": {
+          "title": "Documents analysés avec succès",
+          "description": "Les informations ont été extraites de vos documents. Vous pouvez maintenant passer à l'étape suivante.",
+          "action": "Continuer",
+          "action_hint": "Cliquez pour passer à l'étape suivante"
+        },
+        "error": {
+          "failed_analysis": "L'analyse des documents a échoué",
+          "retry": "Réessayer"
+        }
+      }
     },
     "navigation": {
       "previous": "Précédent",
-      "next": "Suivant"
+      "next": "Suivant",
+      "submit": "Soumettre",
+      "submitting": "Envoi en cours..."
     },
     "validation": {
       "dates": {
@@ -675,6 +708,35 @@
       "contact": "Fournissez vos coordonnées actuelles",
       "professional": "Renseignez votre situation professionnelle",
       "review": "Vérifiez toutes les informations avant de soumettre"
+    },
+    "success": {
+      "title": "Demande envoyée",
+      "form_submitted": "Votre demande de carte consulaire a été envoyée avec succès"
+    },
+    "errors": {
+      "submission_failed": "Échec de l'envoi du formulaire",
+      "validation_failed": "Certaines informations sont invalides"
+    },
+    "submission": {
+      "success": {
+        "title": "Demande envoyée",
+        "description": "Votre demande a été envoyée avec succès",
+        "action": "Voir mon espace",
+        "action_hint": "Aller à mon espace personnel"
+      },
+      "error": {
+        "title": "Erreur",
+        "unknown": "Une erreur est survenue lors de l'envoi"
+      }
+    },
+    "nationality_acquisition": {
+      "label": "Mode d'acquisition de la nationalité",
+      "options":{
+        "birth": "Par naissance",
+        "marriage": "Par mariage",
+        "naturalization": "Par naturalisation",
+        "other": "Autre"
+      }
     }
   },
   "tooltips": {
