@@ -14,6 +14,8 @@ export const PAGE_ROUTES = {
   login: '/auth/login' as Route<string>,
   auth_error: '/auth/error' as Route<string>,
   dashboard: '/dashboard' as Route<string>,
+  unauthorized: '/unauthorized' as Route<string>,
+  admin: '/admin' as Route<string>,
   consular_registration: '/consular-registration' as Route<string>,
   privacy_policy: '#' as Route<string>,
   terms: '#' as Route<string>,

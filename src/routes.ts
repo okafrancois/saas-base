@@ -5,6 +5,7 @@ import {
   PageRoute,
 } from '@/schemas/app-routes'
 import { Route } from 'next'
+import { UserRole } from '@prisma/client'
 
 /**
  * An array of routes that are accessible to the public
@@ -37,3 +38,14 @@ export const apiAuthPrefix: ApiRoute = API_ROUTES.base_auth
  * @type {PageRoute}
  */
 export const DEFAULT_AUTH_REDIRECT: Route = PAGE_ROUTES.base
+
+export const roleRoutes = [
+  {
+    path: PAGE_ROUTES.admin,
+    roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]
+  },
+  {
+    path: PAGE_ROUTES.dashboard,
+    roles: [UserRole.USER, UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.RESPONSIBLE]
+  },
+]
