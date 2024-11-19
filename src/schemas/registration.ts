@@ -15,7 +15,7 @@ const DocumentFileSchemaOptional = FileListSchema
       if (typeof window === 'undefined') return true
       if (!files || files.length === 0) return true
       const file = files[0]
-      return file.size <= 10 * 1024 * 1024 // 10MB
+      return file?.size <= 10 * 1024 * 1024 // 10MB
     },
     { message: 'messages.errors.doc_size_10', path: [] }
   )
@@ -43,7 +43,7 @@ const DocumentFileSchema = FileListSchema
       if (typeof window === 'undefined') return true
       if (!files || files.length === 0) return true
       const file = files[0]
-      return file.size <= 10 * 1024 * 1024 // 10MB
+      return file?.size <= 10 * 1024 * 1024 // 10MB
     },
     { message: 'messages.errors.doc_size_10', path: [] }
   )

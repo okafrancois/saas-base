@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
+import { cn, DocumentField } from '@/lib/utils'
 import { Icons } from '@/components/ui/icons'
 import { FormError } from '@/components/form-error'
 import { Button } from '@/components/ui/button'
@@ -15,15 +15,19 @@ import { BasicInfoForm } from './basic-info'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { useToast } from '@/hooks/use-toast'
 import {
-  BasicInfoFormData,
+  BasicInfoFormData, BasicInfoSchema,
   ContactInfoFormData,
-  DocumentsFormData,
+  DocumentsFormData, DocumentsSchema,
   FamilyInfoFormData,
-  ProfessionalInfoFormData
+  ProfessionalInfoFormData,
 } from '@/schemas/registration'
 import { AnalysisData } from '@/types'
 import { MobileProgress } from '@/app/(public)/registration/_components/mobile-progress'
 import { StepGuide } from '@/app/(public)/registration/_components/step-guide'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { getFieldsForDocument } from '@/lib/document-fields'
+import { analyzeDocuments } from '@/actions/documents'
 
 type StepKey = 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
 
@@ -49,13 +53,27 @@ export function RegistrationForm() {
   const t = useTranslations('registration')
 
   // État local
-  const [currentStep, setCurrentStep] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | undefined>()
   const [formData, setFormData] = useState<ConsularFormData>(() => {
     // Charger les données sauvegardées si elles existent
     const saved = sessionStorage.getItem('consularFormData')
     return saved ? JSON.parse(saved) : {}
+  })
+  const [currentStep, setCurrentStep] = useState<number>(0)
+
+  const documentsForm = useForm<DocumentsFormData>({
+    resolver: zodResolver(DocumentsSchema),
+    defaultValues: {
+      passportFile: null,
+      birthCertificateFile: null,
+      residencePermitFile: null,
+      addressProofFile: null,
+    }
+  })
+
+  const basicInfoForm = useForm<BasicInfoFormData>({
+    resolver: zodResolver(BasicInfoSchema),
   })
 
   // Référence pour le formulaire actuel
@@ -128,6 +146,64 @@ export function RegistrationForm() {
     })
   }
 
+  const handleDocumentsAnalysis = async () => {
+    console.log('Analyzing documents...', documentsForm.getValues())
+
+    const analysisFormData = new FormData()
+    const analysisFields: {key: keyof DocumentsFormData, fields: DocumentField[]}[] = []
+
+    // Collecter les documents et leurs champs respectifs
+    Object.entries(documentsForm.getValues()).forEach(([key, fileList]) => {
+      if (fileList) {
+        const documentFields = getFieldsForDocument(key as keyof DocumentsFormData)
+
+        analysisFields.push({
+          key: key as keyof DocumentsFormData,
+          fields: documentFields
+        })
+
+        analysisFormData.append(key, fileList)
+      }
+    })
+
+    if (analysisFields.length === 0) {
+      toast({
+        title: t('documents.analysis.error.title'),
+        description: t('documents.analysis.error.no_document'),
+        variant: "destructive"
+      })
+      setError(t('documents.analysis.error.no_document'))
+      return
+    }
+
+    setIsLoading(true)
+    setError(undefined)
+
+    try {
+      console.log('analysisFormData', analysisFormData)
+      const results = await analyzeDocuments(analysisFormData, analysisFields, 'gpt')
+
+      if (results.success && results.mergedData) {
+        toast({
+          title: t('documents.analysis.success.title'),
+          description: t('documents.analysis.success.description'),
+          variant: "success"
+        })
+      } else {
+        throw new Error(results.error || t('documents.analysis.error.unknown'))
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : t('errors.unknown'))
+      toast({
+        title: t('documents.analysis.error.title'),
+        description: error instanceof Error ? error.message : t('errors.unknown'),
+        variant: "destructive"
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   // Navigation entre les étapes
   const goToNextStep = async () => {
     if (isLoading) return
@@ -180,30 +256,28 @@ export function RegistrationForm() {
     }
   }
 
-  // Rendu du contenu de l'étape actuelle
-  const renderStepContent = () => {
-    const currentStepKey = steps[currentStep].key
+  const handleDocumentSubmit = (data: DocumentsFormData) => {
+    console.log('Documents submitted', data)
+    setFormData(prev => ({
+      ...prev,
+      documents: data
+    }))
+    setCurrentStep(prev => prev + 1)
+  }
 
-    switch (currentStepKey) {
-      case 'documents':
+  // Rendu du contenu de l'étape actuelle
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 0:
         return (
           <DocumentUploadSection
-            onAnalysisComplete={handleAnalysisComplete}
-            defaultValues={formData.documents}
-            formRef={currentFormRef}
+            form={documentsForm}
+            handleAnalysis={handleDocumentsAnalysis}
+            handleSubmit={handleDocumentSubmit}
+            isLoading={isLoading}
           />
         )
-      case 'identity':
-        return (
-          <BasicInfoForm
-            onSubmit={(data) => {
-              setFormData(prev => ({ ...prev, basicInfo: data }))
-            }}
-            defaultValues={formData.basicInfo}
-            formRef={currentFormRef}
-          />
-        )
-      // ... autres cas
+      // ... autres étapes
       default:
         return null
     }
@@ -233,7 +307,7 @@ export function RegistrationForm() {
       {/* Contenu principal */}
       <Card className="mb-6">
         <CardContent className="p-6">
-          {renderStepContent()}
+          {renderCurrentStep()}
 
           {/* Navigation */}
           <div className="mt-8 flex justify-between gap-4">

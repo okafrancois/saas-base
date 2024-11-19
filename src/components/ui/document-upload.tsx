@@ -1,143 +1,83 @@
 import * as React from "react"
 import { useTranslations } from 'next-intl'
-import { motion, AnimatePresence } from "framer-motion"
-import { Upload, X, FileText, AlertCircle, CheckCircle, Eye } from "lucide-react"
+import { Upload, X, FileInput } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
+import { FieldValues, UseFormReturn } from 'react-hook-form'
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useToast } from "@/hooks/use-toast"
 import Image from "next/image"
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  TradFormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { ReactNode } from 'react'
 
-interface DocumentUploadFieldProps {
+interface DocumentUploadFieldProps<T extends FieldValues> {
   id: string
-  label: string
+  label?: string
   description?: string
-  accept?: string
-  maxSize?: number // en MB
-  required?: boolean
+  field: T,
+  form: UseFormReturn<T>
   disabled?: boolean
-  defaultValue?: File | null
-  onChange?: (file: File | null) => void
-  error?: string
-  className?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  existingFile?: any
+  aspectRatio?: "square" | "portrait",
+  accept?: string
+  maxSize?: number
 }
 
 export function DocumentUploadField({
                                       id,
                                       label,
                                       description,
-                                      accept = "application/pdf,image/*",
-                                      maxSize = 5,
-                                      required = false,
-                                      disabled = false,
-                                      defaultValue,
-                                      onChange,
-                                      error,
-                                      className,
-                                    }: DocumentUploadFieldProps) {
+                                      field,
+                                      form,
+                                      disabled,
+                                      existingFile,
+  accept = "image/*,application/pdf",
+                                      aspectRatio = "square"
+                                    }: DocumentUploadFieldProps<FieldValues>) {
   const t = useTranslations('common.upload')
-  const { toast } = useToast()
   const inputRef = React.useRef<HTMLInputElement>(null)
-
-  const [file, setFile] = React.useState<File | null>(defaultValue || null)
   const [preview, setPreview] = React.useState<string | null>(null)
+  const [pdfPreview, setPdfPreview] = React.useState<ReactNode | null>(null)
   const [isDragging, setIsDragging] = React.useState(false)
-  const [uploadProgress, setUploadProgress] = React.useState(0)
-  const [isUploading, setIsUploading] = React.useState(false)
 
   // Gérer la prévisualisation du fichier
   React.useEffect(() => {
-    if (!file) {
+    if (!field.value && !existingFile) {
       setPreview(null)
       return
     }
 
-    // Créer l'URL de prévisualisation pour les images
-    if (file.type.startsWith('image/')) {
-      const url = URL.createObjectURL(file)
-      setPreview(url)
-      return () => URL.revokeObjectURL(url)
+    // Si c'est un fichier existant (URL)
+    if (existingFile && typeof existingFile === 'string') {
+      setPreview(existingFile)
+      return
     }
 
-    // Pour les PDF, on pourrait utiliser une icône ou une prévisualisation PDF
-    if (file.type === 'application/pdf') {
-      setPreview('/icons/pdf-preview.svg')
-    }
-  }, [file])
-
-  // Simuler un upload progressif (à remplacer par votre logique d'upload réelle)
-  const simulateUpload = async (file: File) => {
-    setIsUploading(true)
-    setUploadProgress(0)
-
-    for (let progress = 0; progress <= 100; progress += 10) {
-      await new Promise(resolve => setTimeout(resolve, 100))
-      setUploadProgress(progress)
-    }
-
-    setIsUploading(false)
-    return true
-  }
-
-  const validateFile = (file: File): boolean => {
-    // Vérifier le type de fichier
-    const acceptedTypes = accept.split(',')
-    const isValidType = acceptedTypes.some(type => {
-      if (type.includes('/*')) {
-        const mainType = type.split('/')[0]
-        return file.type.startsWith(`${mainType}/`)
+    // Si c'est un nouveau fichier
+    if (field.value instanceof File) {
+      const file = field.value
+      if (file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file)
+        setPreview(url)
+        return () => URL.revokeObjectURL(url)
       }
-      return file.type === type
-    })
 
-    if (!isValidType) {
-      toast({
-        title: t('error.invalid_type.title'),
-        description: t('error.invalid_type.description'),
-        variant: "destructive"
-      })
-      return false
+      if (file.type === 'application/pdf') {
+        setPdfPreview(<FileInput/>)
+      }
     }
-
-    // Vérifier la taille
-    if (file.size > maxSize * 1024 * 1024) {
-      toast({
-        title: t('error.file_too_large.title'),
-        description: t('error.file_too_large.description', { size: maxSize }),
-        variant: "destructive"
-      })
-      return false
-    }
-
-    return true
-  }
-
-  const handleFile = async (file: File) => {
-    if (!validateFile(file)) return
-
-    try {
-      await simulateUpload(file)
-      setFile(file)
-      onChange?.(file)
-
-      toast({
-        title: t('success.title'),
-        description: t('success.description'),
-        variant: "success"
-      })
-    } catch (error) {
-      toast({
-        title: t('error.upload_failed.title'),
-        description: t('error.upload_failed.description'),
-        variant: "destructive"
-      })
-    }
-  }
+  }, [field.value, existingFile])
 
   const handleDrop = React.useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -148,199 +88,149 @@ export function DocumentUploadField({
 
       const droppedFile = e.dataTransfer.files[0]
       if (droppedFile) {
-        handleFile(droppedFile)
+        field.onChange(droppedFile)
       }
     },
-    [disabled]
+    [disabled, field]
   )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     if (selectedFile) {
-      handleFile(selectedFile)
+      field.onChange(selectedFile)
     }
   }
 
   const removeFile = () => {
-    setFile(null)
-    onChange?.(null)
+    field.onChange(null)
     if (inputRef.current) {
       inputRef.current.value = ''
     }
   }
 
   return (
-    <div className={cn("space-y-2", className)}>
-      {/* Label et description */}
-      <div className="flex flex-col space-y-1">
-        <label
-          htmlFor={id}
-          className={cn(
-            "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            required && "after:text-destructive after:content-['*']"
-          )}
-        >
-          {label}
-        </label>
-        {description && (
-          <p className="text-xs text-muted-foreground">
-            {description}
-          </p>
-        )}
-      </div>
-
-      {/* Zone de drop */}
-      <div
-        onDragOver={(e) => {
-          e.preventDefault()
-          if (!disabled) setIsDragging(true)
-        }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={handleDrop}
-        className={cn(
-          "relative rounded-lg border-2 border-dashed border-muted-foreground/25 transition-colors",
-          isDragging && "border-primary bg-primary/5",
-          disabled && "cursor-not-allowed opacity-60",
-          error && "border-destructive"
-        )}
-      >
-        <input
-          ref={inputRef}
-          id={id}
-          type="file"
-          accept={accept}
-          onChange={handleChange}
-          disabled={disabled}
-          className="hidden"
-        />
-
-        <AnimatePresence mode="wait">
-          {!file ? (
-            // État vide
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center p-6 text-center"
+    <FormField
+      control={form.control}
+      name={field.name}
+      render={() => (
+        <FormItem>
+          {label && <FormLabel>{label}</FormLabel>}
+          <FormControl>
+            <div
+              onDragOver={(e) => {
+                e.preventDefault()
+                if (!disabled) setIsDragging(true)
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+              className={cn(
+                "relative rounded-lg border-2 border-dashed border-muted-foreground/25 transition-colors",
+                isDragging && "border-primary bg-primary/5",
+                disabled && "cursor-not-allowed opacity-60"
+              )}
             >
-              <Upload className="mb-4 h-8 w-8 text-muted-foreground" />
-              <Button
-                type="button"
-                variant="ghost"
+              <Input
+                id={id}
+                ref={inputRef}
+                type="file"
+                accept={accept}
+                onChange={handleChange}
                 disabled={disabled}
-                onClick={() => inputRef.current?.click()}
-              >
-                {t('drop_zone.button')}
-              </Button>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {t('drop_zone.description', { size: maxSize })}
-              </p>
-            </motion.div>
-          ) : (
-            // Fichier sélectionné
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="relative p-4"
-            >
-              <div className="flex items-center gap-4">
-                {/* Prévisualisation */}
-                {preview && (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="ghost" className="p-0">
-                        {file.type.startsWith('image/') ? (
-                          <div className="relative h-16 w-16 overflow-hidden rounded">
+                className="hidden"
+              />
+
+              {!field.value && !existingFile ? (
+                // État vide
+                <div className="flex flex-col items-center justify-center p-6 text-center">
+                  <Upload className="mb-4 h-8 w-8 text-muted-foreground" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={disabled}
+                    onClick={() => inputRef.current?.click()}
+                  >
+                    {t('drop_zone.button')}
+                  </Button>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {t('drop_zone.description', { size: 10 })}
+                  </p>
+                </div>
+              ) : (
+                // Fichier sélectionné
+                <div className="relative p-4">
+                  <div className="flex items-center gap-4">
+                    {/* Prévisualisation */}
+                    {preview && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button type={"button"} variant="ghost" className="p-0">
+                            <div className={cn(
+                              "relative overflow-hidden rounded",
+                              aspectRatio === "square" ? "h-16 w-16" : "h-20 w-16"
+                            )}>
+                              <Image
+                                src={preview}
+                                alt="Preview"
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-3xl">
+                          <div className={cn(
+                            "relative overflow-hidden rounded-lg",
+                            aspectRatio === "square" ? "aspect-square" : "aspect-[3/4]"
+                          )}>
                             <Image
                               src={preview}
-                              alt={file.name}
+                              alt="Preview"
                               fill
-                              className="object-cover"
+                              className="object-contain"
                             />
                           </div>
-                        ) : (
-                          <FileText className="h-16 w-16 text-primary" />
-                        )}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-3xl">
-                      {file.type.startsWith('image/') ? (
-                        <div className="relative aspect-square w-full overflow-hidden rounded-lg">
-                          <Image
-                            src={preview}
-                            alt={file.name}
-                            fill
-                            className="object-contain"
-                          />
-                        </div>
-                      ) : (
-                        <iframe
-                          src={preview}
-                          className="h-[80vh] w-full"
-                          title={file.name}
-                        />
+                        </DialogContent>
+                      </Dialog>
+                    )}
+                    {pdfPreview}
+
+                    {/* Informations du fichier */}
+                    <div className="flex-1 overflow-hidden">
+                      <p className="font-medium text-sm">
+                        {field.value?.name || 'Document téléchargé'}
+                      </p>
+                      {field.value?.size && (
+                        <p className="text-sm text-muted-foreground">
+                          {(field.value.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
                       )}
-                    </DialogContent>
-                  </Dialog>
-                )}
+                    </div>
 
-                {/* Informations du fichier */}
-                <div className="flex-1">
-                  <p className="font-medium">{file.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {(file.size / (1024 * 1024)).toFixed(2)} MB
-                  </p>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => inputRef.current?.click()}
-                    disabled={disabled || isUploading}
-                  >
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={removeFile}
-                    disabled={disabled || isUploading}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Barre de progression */}
-              {isUploading && (
-                <div className="mt-4 space-y-2">
-                  <Progress value={uploadProgress} className="h-1" />
-                  <p className="text-center text-sm text-muted-foreground">
-                    {uploadProgress}%
-                  </p>
+                    {/* Actions */}
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeFile}
+                        disabled={disabled}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               )}
-            </motion.div>
+            </div>
+          </FormControl>
+          {description && (
+            <p className="text-sm text-muted-foreground">
+              {description}
+            </p>
           )}
-        </AnimatePresence>
-      </div>
-
-      {/* Message d'erreur */}
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-sm text-destructive"
-        >
-          <AlertCircle className="h-4 w-4" />
-          {error}
-        </motion.div>
+          <TradFormMessage />
+        </FormItem>
       )}
-    </div>
+    />
   )
 }

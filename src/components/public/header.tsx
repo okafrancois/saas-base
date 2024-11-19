@@ -12,9 +12,8 @@ export async function PublicHeader() {
   return (
     <header className="fixed top-4 z-40 w-full md:top-6">
       <div className="container flex w-full items-center justify-between gap-4">
-        <span className="text-md hidden font-bold uppercase min-[380px]:inline sm:text-base">
+        <span className="text-md font-bold uppercase sm:text-base">
           <Link href={PAGE_ROUTES.base}>
-            Hello
             <span>{t('consulat')}</span>
           </Link>
         </span>
