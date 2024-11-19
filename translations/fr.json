@@ -47,10 +47,38 @@
       "reacquisition": "Par réacquisition"
     },
     "upload": {
-      "drag_drop_files_or_click": "Glissez & déposez ou cliquez pour les télécharger",
-      "clear_files": "Supprimer tous les fichiers",
-      "drop_files": "Déposez vos fichiers",
-      "attached_files": "Fichiers joints"
+      "drop_zone": {
+        "button": "Sélectionner un fichier",
+        "description": "ou glissez-déposez ici (max {size}MB)",
+        "dragging": "Déposez le fichier ici..."
+      },
+      "success": {
+        "title": "Fichier téléchargé",
+        "description": "Le fichier a été téléchargé avec succès"
+      },
+      "error": {
+        "invalid_type": {
+          "title": "Type de fichier non supporté",
+          "description": "Veuillez sélectionner un fichier au format accepté"
+        },
+        "file_too_large": {
+          "title": "Fichier trop volumineux",
+          "description": "La taille du fichier ne doit pas dépasser {size}MB"
+        },
+        "upload_failed": {
+          "title": "Échec du téléchargement",
+          "description": "Une erreur est survenue lors du téléchargement"
+        }
+      },
+      "preview": {
+        "not_available": "Prévisualisation non disponible",
+        "loading": "Chargement de la prévisualisation..."
+      },
+      "actions": {
+        "remove": "Supprimer",
+        "change": "Modifier",
+        "preview": "Prévisualiser"
+      }
     },
     "loading": "Chargement...",
     "error": {
@@ -137,7 +165,46 @@
       "doc_type_image": "Le fichier doit être au format PNG, JPEG ou JPG",
       "doc_type_pdf": "Le fichier doit être au format PDF",
       "doc_type_image_pdf": "Le fichier doit être au format PNG, JPEG, JPG ou PDF",
-      "invalid_phone_number": "Format invalide, veuillez utiliser le format +33XXXXXXXXX"
+      "invalid_phone_number": "Format invalide, veuillez utiliser le format +33XXXXXXXXX",
+      "required": "Ce champ est requis",
+      "invalid_format": "Format invalide",
+      "too_short": "Trop court",
+      "too_long": "Trop long",
+      "gender_required": "Le genre est requis",
+      "first_name_required": "Le prénom est requis",
+      "first_name_too_short": "Le prénom doit contenir au moins 2 caractères",
+      "last_name_required": "Le nom est requis",
+      "last_name_too_short": "Le nom doit contenir au moins 2 caractères",
+      "birth_date_required": "La date de naissance est requise",
+      "birth_place_required": "Le lieu de naissance est requis",
+      "birth_country_required": "Le pays de naissance est requis",
+      "nationality_required": "La nationalité est requise",
+      "acquiring_mode_required": "Le mode d'acquisition de la nationalité est requis",
+      "marital_status_required": "Le statut matrimonial est requis",
+      "number_required": "Le numéro de passeport est requis",
+      "number_too_short": "Le numéro de passeport doit contenir au moins 8 caractères",
+      "number_too_long": "Le numéro de passeport ne peut pas dépasser 9 caractères",
+      "number_invalid_format": "Format de numéro de passeport invalide (lettres majuscules et chiffres uniquement)",
+      "issue_date_required": "La date d'émission est requise",
+      "issue_date_invalid": "Date d'émission invalide",
+      "issue_date_future": "La date d'émission ne peut pas être dans le futur",
+      "issue_date_too_old": "Le passeport a été émis il y a plus de 10 ans",
+      "expiry_date_required": "La date d'expiration est requise",
+      "expiry_date_invalid": "Date d'expiration invalide",
+      "already_expired": "Ce passeport est déjà expiré",
+      "expires_soon": "Le passeport doit être valide au moins 6 mois après la date de demande",
+      "authority_required": "L'autorité émettrice est requise",
+      "authority_too_short": "L'autorité émettrice doit contenir au moins 2 caractères",
+      "authority_too_long": "L'autorité émettrice ne peut pas dépasser 100 caractères",
+      "invalid_validity_period": "La période de validité du passeport est invalide (maximum 10 ans)",
+      "expired": "Le passeport est expiré",
+      "number_invalid": "Format de numéro de passeport invalide",
+      "expiry_date_past": "Le passeport est expiré ou expire bientôt",
+      "authority_invalid": "L'autorité émettrice n'est pas valide",
+      "submission_failed": "Échec de l'envoi du formulaire",
+      "invalid_data": "Données invalides",
+      "required_field": "Ce champ est requis",
+      "try_again": "Veuillez réessayer"
     }
   },
   "countries": {
@@ -612,50 +679,6 @@
       "session_expired": "Votre session a expiré, veuillez vous reconnecter",
       "invalid_credentials": "Identifiants invalides"
     },
-    "validation": {
-      "required": "Ce champ est requis",
-      "invalid_format": "Format invalide",
-      "too_short": "Trop court",
-      "too_long": "Trop long",
-      "gender_required": "Le genre est requis",
-      "first_name_required": "Le prénom est requis",
-      "first_name_too_short": "Le prénom doit contenir au moins 2 caractères",
-      "last_name_required": "Le nom est requis",
-      "last_name_too_short": "Le nom doit contenir au moins 2 caractères",
-      "birth_date_required": "La date de naissance est requise",
-      "birth_place_required": "Le lieu de naissance est requis",
-      "birth_country_required": "Le pays de naissance est requis",
-      "nationality_required": "La nationalité est requise",
-      "acquiring_mode_required": "Le mode d'acquisition de la nationalité est requis",
-      "marital_status_required": "Le statut matrimonial est requis",
-
-      "passport": {
-        "number_required": "Le numéro de passeport est requis",
-        "number_too_short": "Le numéro de passeport doit contenir au moins 8 caractères",
-        "number_too_long": "Le numéro de passeport ne peut pas dépasser 9 caractères",
-        "number_invalid_format": "Format de numéro de passeport invalide (lettres majuscules et chiffres uniquement)",
-
-        "issue_date_required": "La date d'émission est requise",
-        "issue_date_invalid": "Date d'émission invalide",
-        "issue_date_future": "La date d'émission ne peut pas être dans le futur",
-        "issue_date_too_old": "Le passeport a été émis il y a plus de 10 ans",
-
-        "expiry_date_required": "La date d'expiration est requise",
-        "expiry_date_invalid": "Date d'expiration invalide",
-        "already_expired": "Ce passeport est déjà expiré",
-        "expires_soon": "Le passeport doit être valide au moins 6 mois après la date de demande",
-
-        "authority_required": "L'autorité émettrice est requise",
-        "authority_too_short": "L'autorité émettrice doit contenir au moins 2 caractères",
-        "authority_too_long": "L'autorité émettrice ne peut pas dépasser 100 caractères",
-
-        "invalid_validity_period": "La période de validité du passeport est invalide (maximum 10 ans)",
-        "expired": "Le passeport est expiré",
-        "number_invalid": "Format de numéro de passeport invalide",
-        "expiry_date_past": "Le passeport est expiré ou expire bientôt",
-        "authority_invalid": "L'autorité émettrice n'est pas valide"
-      }
-    },
     "form": {
       "submission_failed": "Échec de l'envoi du formulaire",
       "invalid_data": "Données invalides",
@@ -821,15 +844,6 @@
         "title": "Erreur",
         "unknown": "Une erreur est survenue lors de l'envoi"
       }
-    },
-    "nationality_acquisition": {
-      "label": "Mode d'acquisition de la nationalité",
-      "options":{
-        "birth": "Par naissance",
-        "marriage": "Par mariage",
-        "naturalization": "Par naturalisation",
-        "other": "Autre"
-      }
     }
   },
   "tooltips": {
@@ -847,67 +861,130 @@
     },
     "steps": {
       "documents": "Documents",
+      "documents_description": "Téléchargez vos documents d'identité",
       "identity": "Identité",
+      "identity_description": "Informations personnelles",
       "family": "Famille",
+      "family_description": "Situation familiale",
       "contact": "Contact",
+      "contact_description": "Coordonnées",
       "professional": "Professionnel",
-      "review": "Révision"
+      "professional_description": "Situation professionnelle",
+      "review": "Révision",
+      "review_description": "Vérification finale",
+      "optional": "Optionnel",
+      "progress": "Étape {current}/{total}"
     },
     "navigation": {
       "previous": "Précédent",
-      "next": "Suivant"
+      "next": "Suivant",
+      "submit": "Soumettre"
     },
     "validation": {
       "error": {
         "title": "Erreur de validation",
         "description": "Veuillez corriger les erreurs avant de continuer"
       },
-      "submit": "Soumettre"
+      "submit": "Soumettre",
+      "required": "Ce champ est requis",
+      "invalid_format": "Format invalide"
     },
     "help": {
-      "documents": "Téléchargez les documents requis. Ces documents seront analysés pour pré-remplir vos informations",
-      "identity": "Vérifiez et complétez vos informations d'identité",
-      "family": "Renseignez les informations sur votre famille",
-      "contact": "Fournissez vos coordonnées actuelles",
-      "professional": "Renseignez votre situation professionnelle",
-      "review": "Vérifiez toutes les informations avant de soumettre"
+      "documents": {
+        "title": "Documents requis",
+        "description": "Veuillez fournir les documents suivants pour votre demande",
+        "tips": {
+          "1": "Utilisez des scans ou photos de haute qualité",
+          "2": "Assurez-vous que tous les textes sont lisibles",
+          "3": "Vérifiez que les documents sont valides",
+          "4": "Les documents doivent être complets"
+        }
+      },
+      "identity": {
+        "title": "Informations d'identité",
+        "description": "Vos informations personnelles telles qu'elles apparaissent sur vos documents officiels",
+        "tips": {
+          "1": "Utilisez exactement les mêmes informations que sur votre passeport",
+          "2": "Écrivez les noms en majuscules sans accents",
+          "3": "La date de naissance doit être au format JJ/MM/AAAA"
+        }
+      },
+      "family": {
+        "title": "Situation familiale",
+        "description": "Informations sur votre situation familiale actuelle",
+        "tips": {
+          "1": "Renseignez les noms complets de vos parents",
+          "2": "Si marié(e), fournissez les informations de votre conjoint(e)",
+          "3": "Le contact d'urgence doit être joignable facilement"
+        }
+      },
+      "contact": {
+        "title": "Coordonnées",
+        "description": "Vos coordonnées actuelles pour vous contacter",
+        "tips": {
+          "1": "Utilisez une adresse email que vous consultez régulièrement",
+          "2": "Le numéro de téléphone doit inclure l'indicatif pays",
+          "3": "L'adresse doit être votre résidence principale actuelle"
+        }
+      },
+      "professional": {
+        "title": "Situation professionnelle",
+        "description": "Informations sur votre activité professionnelle actuelle",
+        "tips": {
+          "1": "Indiquez votre situation professionnelle actuelle",
+          "2": "Si employé(e), fournissez les coordonnées de votre employeur",
+          "3": "Ces informations nous aident à mieux vous accompagner"
+        }
+      }
     },
+    "optional_step": "Cette étape est optionnelle",
     "messages": {
       "step_under_construction": "Cette étape est en cours de construction"
     },
     "documents": {
-      "analysis": {
-        "button": "Analyser les documents",
-        "analyzing": "Analyse en cours...",
-        "help_text": "Les informations extraites des documents seront pré-remplies dans le formulaire",
-        "success_description": "Les informations ont été extraites avec succès",
-        "in_progress": "Analyse des documents en cours",
-        "error": {
-          "failed_upload": "Échec du chargement du fichier",
-          "failed_fetch": "Échec de la connexion au serveur",
-          "unknown": "Une erreur inconnue s'est produite",
-          "no_documents": "Aucun document n'a été téléchargé"
-        },
-        "success": {
-          "title": "Analyse terminée avec succès !",
-          "description": "Les informations de vos documents ont été extraites avec succès. Vous pouvez maintenant continuer avec le formulaire.",
-          "action": "Continuer"
-        }
-      },
       "passport": {
-        "label": "Passeport gabonais"
-      },
-      "birth_certificate": {
-        "label": "Acte de naissance"
-      },
-      "address_proof": {
-        "label": "Justificatif de domicile"
-      },
-      "residence_permit": {
-        "label": "Titre de séjour"
+        "label": "Passeport",
+        "description": "Page principale de votre passeport en cours de validité"
       },
       "identity_picture": {
-        "label": "Photo d'identité"
+        "label": "Photo d'identité",
+        "description": "Photo récente sur fond blanc aux normes consulaires"
+      },
+      "birth_certificate": {
+        "label": "Acte de naissance",
+        "description": "Copie intégrale de votre acte de naissance"
+      },
+      "address_proof": {
+        "label": "Justificatif de domicile",
+        "description": "Document de moins de 3 mois (facture électricité, téléphone...)"
+      },
+      "residence_permit": {
+        "label": "Titre de séjour",
+        "description": "Titre de séjour en cours de validité"
+      },
+      "analysis": {
+        "start": "Analyser les documents",
+        "analyzing": "Analyse en cours...",
+        "help": "L'analyse automatique des documents permet de pré-remplir vos informations",
+        "success": {
+          "title": "Documents analysés",
+          "description": "Les informations ont été extraites avec succès"
+        },
+        "error": {
+          "title": "Erreur d'analyse",
+          "unknown": "Une erreur est survenue lors de l'analyse",
+          "no_document": "Veuillez télécharger au moins un document"
+        }
+      },
+      "tips": {
+        "title": "Conseils pour vos documents",
+        "list": {
+          "quality": "Assurez-vous que les documents sont bien lisibles",
+          "lighting": "Prenez les photos dans un endroit bien éclairé",
+          "reflection": "Évitez les reflets et les ombres sur les documents",
+          "corners": "Vérifiez que tous les coins du document sont visibles",
+          "validity": "Les documents doivent être en cours de validité"
+        }
       }
     },
     "form": {
@@ -1060,6 +1137,19 @@
         "rejected": "Rejeté",
         "incomplete": "Incomplet"
       }
+    },
+    "errors": {
+      "unknown": "Une erreur inattendue est survenue",
+      "no_documents": "Aucun document n'a été téléchargé"
+    },
+    "nationality_acquisition": {
+      "label": "Mode d'acquisition de la nationalité",
+      "modes":{
+        "birth": "Par naissance",
+        "marriage": "Par mariage",
+        "naturalization": "Par naturalisation",
+        "other": "Autre"
+      }
     }
   },
   "consular": {
@@ -1075,7 +1165,26 @@
           "file_size": "Fichier trop volumineux",
           "upload_failed": "Échec du téléchargement"
         }
-      }
+      },
+      "types": {
+        "passport": "Passeport",
+        "identity_photo": "Photo d'identité",
+        "birth_certificate": "Acte de naissance",
+        "proof_of_address": "Justificatif de domicile"
+      },
+      "descriptions": {
+        "passport": "Page principale de votre passeport en cours de validité",
+        "identity_photo": "Photo d'identité récente sur fond blanc",
+        "birth_certificate": "Copie intégrale de votre acte de naissance",
+        "proof_of_address": "Document de moins de 3 mois (facture électricité, téléphone...)"
+      },
+      "help_text": "Pour faciliter votre inscription, préparez vos documents au format numérique (photo ou scan).",
+      "help_tips": [
+        "Assurez-vous que les documents sont bien lisibles",
+        "Les photos doivent être nettes et bien éclairées",
+        "Les documents doivent être complets et non coupés",
+        "Formats acceptés : JPG, PNG, PDF"
+      ]
     },
     "verification": {
       "title": "Vérification du document",
@@ -1095,14 +1204,25 @@
       }
     },
     "analysis": {
-      "title": "Analyse du document",
-      "start_analysis": "Démarrer l'analyse",
+      "title": "Analyse des documents",
+      "start_analysis": "Analyser les documents",
       "analyzing": "Analyse en cours...",
+      "help_text": "L'analyse automatique des documents permet de pré-remplir vos informations. Vérifiez que les documents sont bien lisibles avant de lancer l'analyse.",
       "steps": {
         "format": "Vérification du format",
         "authenticity": "Contrôle d'authenticité",
         "data_extraction": "Extraction des données",
         "validation": "Validation finale"
+      },
+      "success": {
+        "title": "Analyse terminée !",
+        "description": "Vos documents ont été analysés avec succès. Les informations extraites vont être utilisées pour pré-remplir le formulaire.",
+        "action": "Continuer",
+        "action_hint": "Cliquer pour passer à l'étape suivante"
+      },
+      "error": {
+        "no_documents": "Aucun document n'a été téléchargé",
+        "failed_analysis": "L'analyse a échoué, veuillez réessayer"
       },
       "status": {
         "pending": "En attente",

@@ -6,7 +6,7 @@ const FileListSchema = z.any().refine(
     if (typeof window === 'undefined') return true
     return !files || files instanceof FileList
   },
-  'doc_invalid',
+  'messages.errors.doc_invalid',
 )
 
 const DocumentFileSchemaOptional = FileListSchema
@@ -17,7 +17,7 @@ const DocumentFileSchemaOptional = FileListSchema
       const file = files[0]
       return file.size <= 10 * 1024 * 1024 // 10MB
     },
-    { message: 'doc_size_10', path: [] }
+    { message: 'messages.errors.doc_size_10', path: [] }
   )
   .refine(
     (files) => {
@@ -27,7 +27,7 @@ const DocumentFileSchemaOptional = FileListSchema
       const acceptedTypes = ['image/jpeg', 'image/png', 'application/pdf']
       return acceptedTypes.includes(file.type)
     },
-    { message: 'doc_type_image_pdf', path: [] }
+    { message: 'messages.errors.doc_type_image_pdf', path: [] }
   )
 
 const DocumentFileSchema = FileListSchema
@@ -36,7 +36,7 @@ const DocumentFileSchema = FileListSchema
       if (typeof window === 'undefined') return true
       return files && files.length > 0
     },
-    { message: 'doc_required', path: [] }
+    { message: 'messages.errors.doc_required', path: [] }
   )
   .refine(
     (files) => {
@@ -45,7 +45,7 @@ const DocumentFileSchema = FileListSchema
       const file = files[0]
       return file.size <= 10 * 1024 * 1024 // 10MB
     },
-    { message: 'doc_size_10', path: [] }
+    { message: 'messages.errors.doc_size_10', path: [] }
   )
   .refine(
     (files) => {
@@ -55,7 +55,7 @@ const DocumentFileSchema = FileListSchema
       const acceptedTypes = ['image/jpeg', 'image/png', 'application/pdf']
       return acceptedTypes.includes(file.type)
     },
-    { message: 'doc_type_image_pdf', path: [] }
+    { message: 'messages.errors.doc_type_image_pdf', path: [] }
   )
 
 const PASSPORT_MIN_VALIDITY_MONTHS = 6;
@@ -76,83 +76,83 @@ const addYears = (date: Date, years: number) => {
 
 export const BasicInfoSchema = z.object({
   gender: z.nativeEnum(Gender, {
-    required_error: 'errors.validation.gender_required'
+    required_error: 'messages.errors.gender_required'
   }),
   acquisitionMode: z.nativeEnum(NationalityAcquisition, {
-    required_error: 'errors.validation.gender_required'
+    required_error: 'messages.errors.gender_required'
   }),
 
   firstName: z.string({
-    required_error: 'errors.validation.first_name_required'
-  }).min(2, 'errors.validation.first_name_too_short'),
+    required_error: 'messages.errors.first_name_required'
+  }).min(2, 'messages.errors.first_name_too_short'),
 
   lastName: z.string({
-    required_error: 'errors.validation.last_name_required'
-  }).min(2, 'errors.validation.last_name_too_short'),
+    required_error: 'messages.errors.last_name_required'
+  }).min(2, 'messages.errors.last_name_too_short'),
 
   birthDate: z.string({
-    required_error: 'errors.validation.birth_date_required'
+    required_error: 'messages.errors.birth_date_required'
   }),
 
   birthPlace: z.string({
-    required_error: 'errors.validation.birth_place_required'
+    required_error: 'messages.errors.birth_place_required'
   }),
 
   birthCountry: z.string({
-    required_error: 'errors.validation.birth_country_required'
+    required_error: 'messages.errors.birth_country_required'
   }),
 
   nationality: z.string({
-    required_error: 'errors.validation.nationality_required'
+    required_error: 'messages.errors.nationality_required'
   }),
 
   identityPictureFile: DocumentFileSchema,
 
   passportNumber: z
     .string({
-      required_error: 'errors.validation.passport.number_required',
+      required_error: 'messages.errors.number_required',
     })
-    .min(8, 'errors.validation.passport.number_too_short')
-    .max(9, 'errors.validation.passport.number_too_long')
+    .min(8, 'messages.errors.number_too_short')
+    .max(9, 'messages.errors.number_too_long')
     .regex(
       /^[A-Z0-9]{8,9}$/,
-      'errors.validation.passport.number_invalid_format'
+      'messages.errors.number_invalid_format'
     ),
 
   passportIssueDate: z
     .date({
-      required_error: 'errors.validation.passport.issue_date_required',
-      invalid_type_error: 'errors.validation.passport.issue_date_invalid',
+      required_error: 'messages.errors.issue_date_required',
+      invalid_type_error: 'messages.errors.issue_date_invalid',
     })
     .refine(
       (date) => date <= new Date(),
-      'errors.validation.passport.issue_date_future'
+      'messages.errors.issue_date_future'
     )
     .refine(
       (date) => date >= addYears(new Date(), -10),
-      'errors.validation.passport.issue_date_too_old'
+      'messages.errors.issue_date_too_old'
     ),
 
   passportExpiryDate: z
     .date({
-      required_error: 'errors.validation.passport.expiry_date_required',
-      invalid_type_error: 'errors.validation.passport.expiry_date_invalid',
+      required_error: 'messages.errors.expiry_date_required',
+      invalid_type_error: 'messages.errors.expiry_date_invalid',
     })
     .refine(
       (date) => date > new Date(),
-      'errors.validation.passport.already_expired'
+      'messages.errors.already_expired'
     )
     .refine(
       (date) => date > addMonths(new Date(), PASSPORT_MIN_VALIDITY_MONTHS),
-      'errors.validation.passport.expires_soon'
+      'messages.errors.expires_soon'
     ),
 
   passportIssueAuthority: z
     .string({
-      required_error: 'errors.validation.passport.authority_required',
+      required_error: 'messages.errors.authority_required',
     })
-    .min(2, 'errors.validation.passport.authority_too_short')
-    .max(100, 'errors.validation.passport.authority_too_long'),
+    .min(2, 'messages.errors.authority_too_short')
+    .max(100, 'messages.errors.authority_too_long'),
 })
   // Validation croisée des dates
   .refine(
@@ -170,7 +170,7 @@ export const BasicInfoSchema = z.object({
       return true;
     },
     {
-      message: 'errors.validation.passport.invalid_validity_period',
+      message: 'messages.errors.invalid_validity_period',
       path: ['passportExpiryDate'], // Le message s'affichera sous ce champ
     }
   );
@@ -217,45 +217,45 @@ export const VALIDATION_RULES = {
 export const ContactInfoSchema = z.object({
   email: z
     .string()
-    .email('errors.validation.contact.invalid_email')
-    .max(VALIDATION_RULES.EMAIL_MAX_LENGTH, 'errors.validation.contact.email_too_long')
+    .email('messages.errors.invalid_email')
+    .max(VALIDATION_RULES.EMAIL_MAX_LENGTH, 'messages.errors.email_too_long')
     .optional(),
 
   phone: z
     .string()
-    .regex(VALIDATION_RULES.PHONE_REGEX, 'errors.validation.contact.invalid_phone')
+    .regex(VALIDATION_RULES.PHONE_REGEX, 'messages.errors.invalid_phone')
     .optional(),
 
   address: z.object({
     firstLine: z
       .string()
-      .min(1, 'errors.validation.address.street_required')
+      .min(1, 'messages.errors.street_required')
       .max(VALIDATION_RULES.ADDRESS_MAX_LENGTH),
 
     secondLine: z.string().max(VALIDATION_RULES.ADDRESS_MAX_LENGTH).optional(),
 
     city: z
       .string()
-      .min(1, 'errors.validation.address.city_required'),
+      .min(1, 'messages.errors.city_required'),
 
     zipCode: z
       .string()
-      .min(1, 'errors.validation.address.zipcode_required'),
+      .min(1, 'messages.errors.zipcode_required'),
 
     country: z
       .string()
-      .min(1, 'errors.validation.address.country_required'),
+      .min(1, 'messages.errors.country_required'),
   }),
 
   addressInGabon: z.object({
     address: z
       .string()
-      .min(1, 'errors.validation.address.street_required')
+      .min(1, 'messages.errors.street_required')
       .max(VALIDATION_RULES.ADDRESS_MAX_LENGTH),
-    district: z.string().min(1, 'errors.validation.district.required'),
+    district: z.string().min(1, 'messages.errors.district.required'),
     city: z
       .string()
-      .min(1, 'errors.validation.address.city_required'),
+      .min(1, 'messages.errors.city_required'),
   }).optional(),
 })
 
@@ -265,33 +265,33 @@ export const FamilyInfoSchema = z.object({
 
   fatherFullName: z
     .string()
-    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.family.father_name_too_short')
-    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.family.father_name_too_long'),
+    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'messages.errors.father_name_too_short')
+    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'messages.errors.father_name_too_long'),
 
   motherFullName: z
     .string()
-    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.family.mother_name_too_short')
-    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.family.mother_name_too_long'),
+    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'messages.errors.mother_name_too_short')
+    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'messages.errors.mother_name_too_long'),
 
   spouseFullName: z
     .string()
-    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.family.spouse_name_too_short')
-    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.family.spouse_name_too_long')
+    .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'messages.errors.spouse_name_too_short')
+    .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'messages.errors.spouse_name_too_long')
     .optional(),
 
   emergencyContact: z.object({
     fullName: z
       .string()
-      .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'errors.validation.emergency.name_too_short')
-      .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'errors.validation.emergency.name_too_long'),
+      .min(VALIDATION_RULES.NAME_MIN_LENGTH, 'messages.errors.name_too_short')
+      .max(VALIDATION_RULES.NAME_MAX_LENGTH, 'messages.errors.name_too_long'),
 
     relationship: z
       .string()
-      .min(1, 'errors.validation.emergency.relationship_required'),
+      .min(1, 'messages.errors.relationship_required'),
 
     phone: z
       .string()
-      .regex(VALIDATION_RULES.PHONE_REGEX, 'errors.validation.emergency.invalid_phone'),
+      .regex(VALIDATION_RULES.PHONE_REGEX, 'messages.errors.invalid_phone'),
   }).optional(),
 }).refine(
   (data) => {
@@ -302,7 +302,7 @@ export const FamilyInfoSchema = z.object({
     return true;
   },
   {
-    message: 'errors.validation.family.spouse_name_required_if_married',
+    message: 'messages.errors.spouse_name_required_if_married',
     path: ['spouseFullName'],
   }
 );
@@ -313,24 +313,24 @@ export const ProfessionalInfoSchema = z.object({
 
   profession: z
     .string()
-    .min(2, 'errors.validation.professional.profession_too_short')
-    .max(100, 'errors.validation.professional.profession_too_long')
+    .min(2, 'messages.errors.profession_too_short')
+    .max(100, 'messages.errors.profession_too_long')
     .optional(),
 
   employer: z
     .string()
-    .min(2, 'errors.validation.professional.employer_too_short')
-    .max(100, 'errors.validation.professional.employer_too_long')
+    .min(2, 'messages.errors.employer_too_short')
+    .max(100, 'messages.errors.employer_too_long')
     .optional(),
 
   employerAddress: z
     .string()
-    .max(200, 'errors.validation.professional.address_too_long')
+    .max(200, 'messages.errors.address_too_long')
     .optional(),
 
   lastActivityGabon: z
     .string()
-    .max(200, 'errors.validation.professional.activity_too_long')
+    .max(200, 'messages.errors.activity_too_long')
     .optional(),
 }).refine(
   (data) => {
@@ -341,7 +341,7 @@ export const ProfessionalInfoSchema = z.object({
     return true;
   },
   {
-    message: 'errors.validation.professional.employer_required_if_employee',
+    message: 'messages.errors.employer_required_if_employee',
     path: ['employer'],
   }
 );

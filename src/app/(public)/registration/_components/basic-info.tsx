@@ -6,8 +6,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage, TradFormMessage,
+  FormLabel, TradFormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -23,7 +22,7 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
+  CommandItem, CommandList,
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -61,6 +60,7 @@ export function BasicInfoForm({
   })
 
   const handleSubmit = async (data: BasicInfoFormData) => {
+    console.log(data)
     try {
       await onSubmit(data)
       return true
@@ -128,7 +128,7 @@ export function BasicInfoForm({
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />
@@ -147,7 +147,7 @@ export function BasicInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -165,7 +165,7 @@ export function BasicInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -184,7 +184,7 @@ export function BasicInfoForm({
                       max={new Date().toISOString().split('T')[0]}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -202,7 +202,7 @@ export function BasicInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -237,33 +237,35 @@ export function BasicInfoForm({
                         placeholder={t('form.search_nationality')}
                         className="h-9"
                       />
-                      <CommandEmpty>{t('form.no_nationality_found')}</CommandEmpty>
-                      <CommandGroup>
-                        {countryKeys.map((country) => (
-                          <CommandItem
-                            key={country}
-                            value={country}
-                            onSelect={() => {
-                              form.setValue('birthCountry', country)
-                              setOpenNationalitySelect(false)
-                            }}
-                          >
-                            {t_countries(country)}
-                            <CheckIcon
-                              className={cn(
-                                'ml-auto h-4 w-4',
-                                field.value === country
-                                  ? 'opacity-100'
-                                  : 'opacity-0',
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      <CommandList>
+                        <CommandEmpty>{t('form.no_nationality_found')}</CommandEmpty>
+                        <CommandGroup>
+                          {countryKeys.map((country) => (
+                            <CommandItem
+                              key={country}
+                              value={country}
+                              onSelect={() => {
+                                form.setValue('birthCountry', country)
+                                setOpenNationalitySelect(false)
+                              }}
+                            >
+                              {t_countries(country)}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  field.value === country
+                                    ? 'opacity-100'
+                                    : 'opacity-0',
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />
@@ -274,7 +276,7 @@ export function BasicInfoForm({
             render={({ field }) => (
               <FormItem className="space-y-3">
                 <FormLabel className="text-base">
-                  {t('nationaly_acquisition.label')}
+                  {t('nationality_acquisition.label')}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -289,13 +291,13 @@ export function BasicInfoForm({
                           <RadioGroupItem value={acquisition} />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          {t(`nationaly_acquisition.modes.${acquisition.toLowerCase()}`)}
+                          {t(`nationality_acquisition.modes.${acquisition.toLowerCase()}`)}
                         </FormLabel>
                       </FormItem>
                     ))}
                   </RadioGroup>
                 </FormControl>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />

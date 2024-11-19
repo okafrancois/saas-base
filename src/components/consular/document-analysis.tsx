@@ -55,35 +55,36 @@ export function DocumentAnalysis({
 
   return (
     <div className={cn("space-y-6 rounded-lg border p-4", className)}>
+      {/* En-tête avec bouton d'analyse */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">
           {t('title')}
         </h3>
-
         <Button
           size="sm"
           onClick={() => setIsAnalyzing(true)}
           disabled={isAnalyzing}
+          className="gap-2"
         >
           {isAnalyzing ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
               {t('analyzing')}
             </>
           ) : (
             <>
-              <ScanLine className="mr-2 h-4 w-4" />
+              <ScanLine className="h-4 w-4" />
               {t('start_analysis')}
             </>
           )}
         </Button>
       </div>
 
+      {/* Étapes d'analyse avec animations */}
       <div className="space-y-4">
         <AnimatePresence mode="wait">
           {steps.map((step) => {
             const Icon = statusIcons[step.status]
-
             return (
               <motion.div
                 key={step.id}
@@ -92,21 +93,19 @@ export function DocumentAnalysis({
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-2"
               >
+                {/* En-tête de l'étape */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Icon
-                      className={cn(
-                        "h-5 w-5",
-                        step.status === 'processing' && "animate-spin",
-                        step.status === 'success' && "text-success",
-                        step.status === 'error' && "text-destructive"
-                      )}
-                    />
+                    <Icon className={cn(
+                      "h-5 w-5",
+                      step.status === 'processing' && "animate-spin",
+                      step.status === 'success' && "text-success",
+                      step.status === 'error' && "text-destructive"
+                    )} />
                     <span className="font-medium">
                       {getStepLabel(step)}
                     </span>
                   </div>
-
                   {step.status === 'processing' && step.progress && (
                     <span className="text-sm text-muted-foreground">
                       {step.progress}%
@@ -114,10 +113,12 @@ export function DocumentAnalysis({
                   )}
                 </div>
 
+                {/* Barre de progression */}
                 {step.status === 'processing' && step.progress && (
                   <Progress value={step.progress} className="h-1" />
                 )}
 
+                {/* Résultat de l'étape */}
                 {step.result && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
@@ -145,6 +146,11 @@ export function DocumentAnalysis({
           })}
         </AnimatePresence>
       </div>
+
+      {/* Message d'aide */}
+      <p className="text-sm text-muted-foreground">
+        {t('help_text')}
+      </p>
     </div>
   )
 }
