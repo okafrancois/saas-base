@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useTranslations } from 'next-intl'
 import { cn, DocumentField } from '@/lib/utils'
 import { Icons } from '@/components/ui/icons'
-import { FormError } from '@/components/form-error'
+import { FormError } from '@/components/ui/form-error'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { StepIndicator } from './step-indicator'
@@ -16,18 +16,22 @@ import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { useToast } from '@/hooks/use-toast'
 import {
   BasicInfoFormData, BasicInfoSchema,
-  ContactInfoFormData,
+  ContactInfoFormData, ContactInfoSchema,
   DocumentsFormData, DocumentsSchema,
-  FamilyInfoFormData,
-  ProfessionalInfoFormData,
+  FamilyInfoFormData, FamilyInfoSchema,
+  ProfessionalInfoFormData, ProfessionalInfoSchema,
 } from '@/schemas/registration'
-import { AnalysisData } from '@/types'
 import { MobileProgress } from '@/app/(public)/registration/_components/mobile-progress'
 import { StepGuide } from '@/app/(public)/registration/_components/step-guide'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getFieldsForDocument } from '@/lib/document-fields'
 import { analyzeDocuments } from '@/actions/documents'
+import { FamilyInfoForm } from '@/app/(public)/registration/_components/family-info'
+import { ContactInfoForm } from '@/app/(public)/registration/_components/contact-form'
+import { ProfessionalInfoForm } from '@/app/(public)/registration/_components/professional-info'
+import { ReviewForm } from '@/app/(public)/registration/_components/review'
+import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
 
 type StepKey = 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
 
@@ -61,6 +65,7 @@ export function RegistrationForm() {
     return saved ? JSON.parse(saved) : {}
   })
   const [currentStep, setCurrentStep] = useState<number>(0)
+  const currentFormRef = useRef<HTMLFormElement>(null)
 
   const documentsForm = useForm<DocumentsFormData>({
     resolver: zodResolver(DocumentsSchema),
@@ -69,15 +74,71 @@ export function RegistrationForm() {
       birthCertificateFile: null,
       residencePermitFile: null,
       addressProofFile: null,
-    }
+    },
+    reValidateMode: 'onChange'
   })
 
   const basicInfoForm = useForm<BasicInfoFormData>({
     resolver: zodResolver(BasicInfoSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      gender: Gender.MALE,
+      birthDate: '',
+      birthPlace: '',
+      birthCountry: '',
+      nationality: '',
+      acquisitionMode: NationalityAcquisition.BIRTH,
+      identityPictureFile: null,
+    }
   })
 
-  // Référence pour le formulaire actuel
-  const currentFormRef = useRef<HTMLFormElement>(null)
+  const familyInfoForm = useForm<FamilyInfoFormData>({
+    resolver: zodResolver(FamilyInfoSchema),
+    defaultValues: {
+      maritalStatus: MaritalStatus.SINGLE,
+      fatherFullName: '',
+      motherFullName: '',
+      spouseFullName: '',
+      emergencyContact: {
+        fullName: '',
+        relationship: '',
+        phone: '',
+      }
+    }
+  })
+
+  const contactInfoForm = useForm<ContactInfoFormData>({
+    resolver: zodResolver(ContactInfoSchema),
+    defaultValues: {
+      email: '',
+      phone: '',
+      address: {
+        firstLine: '',
+        secondLine: '',
+        city: '',
+        zipCode: '',
+        country: '',
+      },
+      addressInGabon: {
+        address: '',
+        district: '',
+        city: '',
+      }
+    }
+  })
+
+  const professionalInfoForm = useForm<ProfessionalInfoFormData>({
+    resolver: zodResolver(ProfessionalInfoSchema),
+    defaultValues: {
+      workStatus: WorkStatus.UNEMPLOYED,
+      profession: '',
+      employer: '',
+      employerAddress: '',
+      lastActivityGabon: '',
+    }
+  })
+
 
   // Configuration des étapes
   const steps: Step[] = [
@@ -125,14 +186,7 @@ export function RegistrationForm() {
     sessionStorage.setItem('consularFormData', JSON.stringify(formData))
   }, [formData])
 
-  // Gestion de l'analyse des documents
-  const handleAnalysisComplete = (data: AnalysisData) => {
-    console.log('Analysis complete', data)
-  }
-
   const handleDocumentsAnalysis = async () => {
-    console.log('Analyzing documents...', documentsForm.getValues())
-
     const analysisFormData = new FormData()
     const analysisFields: {key: keyof DocumentsFormData, fields: DocumentField[]}[] = []
 
@@ -140,12 +194,10 @@ export function RegistrationForm() {
     Object.entries(documentsForm.getValues()).forEach(([key, fileList]) => {
       if (fileList) {
         const documentFields = getFieldsForDocument(key as keyof DocumentsFormData)
-
         analysisFields.push({
           key: key as keyof DocumentsFormData,
           fields: documentFields
         })
-
         analysisFormData.append(key, fileList)
       }
     })
@@ -166,14 +218,81 @@ export function RegistrationForm() {
     try {
       const results = await analyzeDocuments(analysisFormData, analysisFields, 'gpt')
 
-      handleAnalysisComplete(results.mergedData)
-
       if (results.success && results.mergedData) {
-        toast({
-          title: t('documents.analysis.success.title'),
-          description: t('documents.analysis.success.description'),
-          variant: "success"
-        })
+        // Pré-remplir les formulaires avec les données extraites
+        const { mergedData } = results
+
+        // Informations de base
+        if (mergedData) {
+          basicInfoForm.reset({
+            ...basicInfoForm.getValues(),
+            firstName: mergedData.firstName,
+            lastName: mergedData.lastName,
+            gender: mergedData.gender,
+            birthDate: mergedData.birthDate,
+            birthPlace: mergedData.birthPlace,
+            birthCountry: mergedData.birthCountry,
+            nationality: mergedData.nationality,
+            acquisitionMode: mergedData.acquisitionMode,
+            passportNumber: mergedData.passportNumber,
+            passportIssueDate: mergedData.passportIssueDate,
+            passportExpiryDate: mergedData.passportExpiryDate,
+            passportIssueAuthority: mergedData.passportIssueAuthority,
+          })
+
+          // Informations de contact
+          if (mergedData.address) {
+            contactInfoForm.reset({
+              ...contactInfoForm.getValues(),
+              address: {
+                firstLine: mergedData.address.firstLine,
+                secondLine: mergedData.address.secondLine || '',
+                city: mergedData.address.city,
+                zipCode: mergedData.address.zipCode || '',
+                country: mergedData.address.country,
+              }
+            })
+          }
+
+          // Informations familiales
+          familyInfoForm.reset({
+            ...familyInfoForm.getValues(),
+            maritalStatus: mergedData.maritalStatus,
+            fatherFullName: mergedData.fatherFullName,
+            motherFullName: mergedData.motherFullName,
+          })
+
+          // Informations professionnelles
+          if (mergedData.workStatus || mergedData.profession || mergedData.employer) {
+            professionalInfoForm.reset({
+              ...professionalInfoForm.getValues(),
+              workStatus: mergedData.workStatus,
+              profession: mergedData.profession,
+              employer: mergedData.employer,
+              employerAddress: mergedData.employerAddress,
+            })
+          }
+
+          // Mettre à jour le state global
+          setFormData(prev => ({
+            ...prev,
+            basicInfo: basicInfoForm.getValues(),
+            contactInfo: contactInfoForm.getValues(),
+            familyInfo: familyInfoForm.getValues(),
+            professionalInfo: professionalInfoForm.getValues(),
+          }))
+
+          toast({
+            title: t('documents.analysis.success.title'),
+            description: t('documents.analysis.success.description'),
+            variant: "success",
+            action: (
+              <Button onClick={() => setCurrentStep(prev => prev + 1)} size="sm">
+                {t('documents.analysis.success.action')}
+              </Button>
+            )
+          })
+        }
       } else {
         throw new Error(results.error || t('documents.analysis.error.unknown'))
       }
@@ -189,6 +308,70 @@ export function RegistrationForm() {
     }
   }
 
+
+  // Fonction pour vérifier la validité du formulaire actuel
+  const validateCurrentStep = async () => {
+    try {
+      let isValid = false
+
+      switch (currentStep) {
+        case 0:
+          isValid = await documentsForm.trigger()
+          if (isValid) {
+            const data = documentsForm.getValues()
+            setFormData(prev => ({ ...prev, documents: data }))
+          }
+          break
+
+        case 1:
+          isValid = await basicInfoForm.trigger()
+          if (isValid) {
+            const data = basicInfoForm.getValues()
+            setFormData(prev => ({ ...prev, basicInfo: data }))
+          }
+          break
+
+        case 2:
+          isValid = await familyInfoForm.trigger()
+          if (isValid) {
+            const data = familyInfoForm.getValues()
+            setFormData(prev => ({ ...prev, familyInfo: data }))
+          }
+          break
+
+        case 3:
+          isValid = await contactInfoForm.trigger()
+          if (isValid) {
+            const data = contactInfoForm.getValues()
+            setFormData(prev => ({ ...prev, contactInfo: data }))
+          }
+          break
+
+        case 4:
+          // Étape optionnelle
+          isValid = steps[currentStep].isOptional || await professionalInfoForm.trigger()
+          if (isValid) {
+            const data = professionalInfoForm.getValues()
+            setFormData(prev => ({ ...prev, professionalInfo: data }))
+          }
+          break
+
+        case 5:
+          // Étape de révision
+          isValid = true
+          break
+
+        default:
+          isValid = false
+      }
+
+      return isValid
+    } catch (error) {
+      console.error('Validation error:', error)
+      return false
+    }
+  }
+
   // Navigation entre les étapes
   const goToNextStep = async () => {
     if (isLoading) return
@@ -197,15 +380,21 @@ export function RegistrationForm() {
       setIsLoading(true)
       setError(undefined)
 
-      if (currentStep === steps.length - 1) {
-        await handleFinalSubmit()
+      // Valider l'étape actuelle
+      const isValid = await validateCurrentStep()
+
+      if (!isValid) {
+        toast({
+          title: t('validation.error.title'),
+          description: t('validation.error.description'),
+          variant: "destructive"
+        })
         return
       }
 
-      // Déclencher la soumission du formulaire actuel
-      const form = currentFormRef.current
-      if (form) {
-        await form.requestSubmit()
+      if (currentStep === steps.length - 1) {
+        await handleFinalSubmit()
+        return
       }
 
       setCurrentStep(prev => prev + 1)
@@ -241,16 +430,6 @@ export function RegistrationForm() {
     }
   }
 
-  const handleDocumentSubmit = (data: DocumentsFormData) => {
-    console.log('Documents submitted', data)
-    setFormData(prev => ({
-      ...prev,
-      documents: data
-    }))
-    setCurrentStep(prev => prev + 1)
-  }
-
-  // Rendu du contenu de l'étape actuelle
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 0:
@@ -258,11 +437,71 @@ export function RegistrationForm() {
           <DocumentUploadSection
             form={documentsForm}
             handleAnalysis={handleDocumentsAnalysis}
-            handleSubmit={handleDocumentSubmit}
+            handleSubmit={() => {
+              goToNextStep()
+            }}
+            isLoading={isLoading}
+            formRef={currentFormRef}
+          />
+        )
+
+      case 1:
+        return (
+          <BasicInfoForm
+            form={basicInfoForm}
+            onSubmit={() => {
+              console.log('Basic info form submitted')
+              goToNextStep()
+            }}
+            formRef={currentFormRef}
             isLoading={isLoading}
           />
         )
-      // ... autres étapes
+
+      case 2:
+        return (
+          <FamilyInfoForm
+            form={familyInfoForm}
+            onSubmit={() => {
+              goToNextStep()
+            }}
+            formRef={currentFormRef}
+            isLoading={isLoading}
+          />
+        )
+
+      case 3:
+        return (
+          <ContactInfoForm
+            form={contactInfoForm}
+            onSubmit={() => {
+              goToNextStep()
+            }}
+            formRef={currentFormRef}
+            isLoading={isLoading}
+          />
+        )
+
+      case 4:
+        return (
+          <ProfessionalInfoForm
+            form={professionalInfoForm}
+            onSubmit={() => {
+              goToNextStep()
+            }}
+            formRef={currentFormRef}
+            isLoading={isLoading}
+          />
+        )
+
+      case 5:
+        return (
+          <ReviewForm
+            data={formData}
+            onSubmit={handleFinalSubmit}
+          />
+        )
+
       default:
         return null
     }
@@ -333,8 +572,8 @@ export function RegistrationForm() {
 
       {/* Guide de l'étape */}
       <StepGuide
-        stepKey={steps[currentStep].key}
-        isOptional={steps[currentStep].isOptional}
+        stepKey={steps[currentStep]?.key}
+        isOptional={steps[currentStep]?.isOptional}
       />
 
       {/* Progression mobile */}

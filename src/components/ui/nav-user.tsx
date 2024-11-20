@@ -27,10 +27,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { LogoutButton } from '@/components/logout-button'
+import { LogoutButton } from '@/components/ui/logout-button'
 import { useTranslations } from 'next-intl'
 import DarkModeToggle from '@/components/ui/darkmode-toggle'
-import LangSwitcher from '@/components/LangSwitcher'
+import LangSwitcher from '@/components/ui/LangSwitcher'
 
 export function NavUser({
   user,

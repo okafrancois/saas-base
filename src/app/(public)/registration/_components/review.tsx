@@ -14,7 +14,8 @@ import {
   BasicInfoFormData,
   ContactInfoFormData,
   DocumentsFormData,
-  FamilyInfoFormData, ProfessionalInfoFormData,
+  FamilyInfoFormData,
+  ProfessionalInfoFormData,
 } from '@/schemas/registration'
 
 interface ReviewFormProps {
@@ -50,7 +51,11 @@ const InfoField = ({
         )}
       </div>
       <p className="font-medium">
-        {value || <span className="italic text-muted-foreground">{t('review.not_provided')}</span>}
+        {value || (
+          <span className="italic text-muted-foreground">
+            {t('review.not_provided')}
+          </span>
+        )}
       </p>
     </div>
   )
@@ -73,8 +78,14 @@ const DocumentBadge = ({
     <div className={cn('flex items-center gap-2', className)}>
       <FileTextIcon className="size-4" />
       <span>{label}</span>
-      <Badge variant={isUploaded ? 'outline' : 'destructive'}>
-        {isUploaded ? t('review.document_uploaded') : isRequired ? t('review.document_missing') : t('review.not_provided')}
+      <Badge
+        variant={isUploaded ? 'outline' : 'destructive'}
+      >
+        {isUploaded
+          ? t('review.document_uploaded')
+          : isRequired
+            ? t('review.document_missing')
+            : t('review.not_provided')}
       </Badge>
     </div>
   )
@@ -87,7 +98,6 @@ export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
 
   return (
     <div className="space-y-6">
-
       {/* Informations personnelles */}
       <Card>
         <CardHeader>
@@ -111,26 +121,19 @@ export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
               isRequired
             />
           </div>
-
           <Separator />
-
           <div className="grid grid-cols-2 gap-4">
             <InfoField
               label={t('form.gender')}
-              value={data.basicInfo?.gender
-                ? t_assets(`gender.${data.basicInfo.gender.toLowerCase()}`)
-                : undefined}
+              value={data.basicInfo?.gender ? t_assets(`gender.${data.basicInfo.gender.toLowerCase()}`) : undefined}
               isRequired
             />
             <InfoField
               label={t('form.birth_date')}
-              value={data.basicInfo?.birthDate
-                ? new Date(data.basicInfo.birthDate).toLocaleDateString()
-                : undefined}
+              value={data.basicInfo?.birthDate ? new Date(data.basicInfo.birthDate).toLocaleDateString() : undefined}
               isRequired
             />
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             <InfoField
               label={t('form.birth_place')}
@@ -139,16 +142,12 @@ export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
             />
             <InfoField
               label={t('form.birth_country')}
-              value={data.basicInfo?.birthCountry
-                ? t_countries(data.basicInfo.birthCountry)
-                : undefined}
+              value={data.basicInfo?.birthCountry ? t_countries(data.basicInfo.birthCountry) : undefined}
               isRequired
             />
             <InfoField
               label={t('nationality_acquisition.label')}
-              value={data.basicInfo?.acquisitionMode
-                ? t(`nationality_acquisition.options.${data.basicInfo.acquisitionMode.toLowerCase()}`)
-                : undefined}
+              value={data.basicInfo?.acquisitionMode ? t(`nationality_acquisition.options.${data.basicInfo.acquisitionMode.toLowerCase()}`) : undefined}
               isRequired
             />
           </div>
@@ -176,20 +175,22 @@ export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
               value={data.contactInfo?.phone}
             />
           </div>
-
           <Separator />
-
           {data.contactInfo?.address ? (
             <div>
               <span className="text-sm text-muted-foreground">{t('form.address')}</span>
               <p className="font-medium">
                 {data.contactInfo.address.firstLine}
-                {data.contactInfo.address.secondLine && <>, {data.contactInfo.address.secondLine}</>}
+                {data.contactInfo.address.secondLine && (
+                  <>, {data.contactInfo.address.secondLine}</>
+                )}
               </p>
               <p className="font-medium">
                 {data.contactInfo.address.zipCode} {data.contactInfo.address.city}
               </p>
-              <p className="font-medium">{t_countries(data.contactInfo.address.country)}</p>
+              <p className="font-medium">
+                {t_countries(data.contactInfo.address.country)}
+              </p>
             </div>
           ) : (
             <InfoField
@@ -232,13 +233,9 @@ export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
         <CardContent className="space-y-4 p-4">
           <InfoField
             label={t('form.marital_status')}
-            value={data.familyInfo?.maritalStatus
-              ? t_assets(`marital_status.${data.familyInfo.maritalStatus.toLowerCase()}`)
-              : undefined}
+            value={data.familyInfo?.maritalStatus ? t_assets(`marital_status.${data.familyInfo.maritalStatus.toLowerCase()}`) : undefined}
           />
-
           <Separator />
-
           <div className="grid grid-cols-2 gap-4">
             <InfoField
               label={t('form.father_name')}
@@ -291,25 +288,21 @@ export function ReviewForm({ data }: Readonly<ReviewFormProps>) {
             label={t('form.passport')}
             isRequired
           />
-
           <DocumentBadge
             isUploaded={!!data.basicInfo?.identityPictureFile}
             label={t('form.identity_picture')}
             isRequired
           />
-
           <DocumentBadge
             isUploaded={!!data.documents?.birthCertificateFile}
             label={t('form.birth_certificate')}
             isRequired
           />
-
           <DocumentBadge
             isUploaded={!!data.documents?.residencePermitFile}
             label={t('form.residence_permit')}
             isRequired
           />
-
           <DocumentBadge
             isUploaded={!!data.documents?.addressProofFile}
             label={t('form.address_proof')}

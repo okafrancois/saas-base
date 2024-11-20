@@ -1,4 +1,4 @@
-import { LoadingSuspense } from '@/components/loading-suspense'
+import { LoadingSuspense } from '@/components/ui/loading-suspense'
 import { LoginForm } from '@/components/auth/login-form'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'

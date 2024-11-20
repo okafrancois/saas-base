@@ -155,7 +155,7 @@
     "errors": {
       "identifier_required": "Identifiant requis",
       "invalid_email": "Email invalide",
-      "invalid_phone": "Numéro de téléphone invalide",
+      "invalid_phone": "Format invalide, veuillez utiliser le format +33XXXXXXXXX",
       "doc_required": "Ce document est requis",
       "doc_one_max": "Un seul document est autorisé",
       "doc_invalid": "Document invalide",
@@ -204,7 +204,11 @@
       "submission_failed": "Échec de l'envoi du formulaire",
       "invalid_data": "Données invalides",
       "required_field": "Ce champ est requis",
-      "try_again": "Veuillez réessayer"
+      "try_again": "Veuillez réessayer",
+      "street_required": "La rue est requise",
+      "zipcode_required": "Le code postal est requis",
+      "city_required": "La ville est requise",
+      "country_required": "Le pays est requis"
     }
   },
   "countries": {
@@ -935,9 +939,9 @@
           "2": "Si employé(e), fournissez les coordonnées de votre employeur",
           "3": "Ces informations nous aident à mieux vous accompagner"
         }
-      }
+      },
+      "optional_step": "Cette étape est optionnelle"
     },
-    "optional_step": "Cette étape est optionnelle",
     "messages": {
       "step_under_construction": "Cette étape est en cours de construction"
     },
@@ -968,7 +972,8 @@
         "help": "L'analyse automatique des documents permet de pré-remplir vos informations",
         "success": {
           "title": "Documents analysés",
-          "description": "Les informations ont été extraites avec succès"
+          "description": "Les informations ont été extraites avec succès",
+          "action": "Continuer"
         },
         "error": {
           "title": "Erreur d'analyse",
@@ -1057,7 +1062,32 @@
       "employer_placeholder": "Nom de votre employeur",
       "work_address": "Adresse professionnelle",
       "work_address_placeholder": "Adresse de votre lieu de travail",
-      "passport": "Passeport",
+      "passport": {
+        "label": "Passeport",
+        "description": "Page principale de votre passeport en cours de validité",
+        "section_title": "Informations du passeport",
+        "section_description": "Renseignez les informations de votre passeport gabonais en cours de validité",
+        "number": {
+          "label": "Numéro de passeport",
+          "placeholder": "Ex: GA123456",
+          "help": "Le numéro se trouve en haut à droite de votre passeport"
+        },
+        "issue_date": {
+          "label": "Date d'émission",
+          "placeholder": "Sélectionnez la date d'émission",
+          "help": "Date à laquelle votre passeport a été émis"
+        },
+        "expiry_date": {
+          "label": "Date d'expiration",
+          "placeholder": "Sélectionnez la date d'expiration",
+          "help": "Date à laquelle votre passeport expire"
+        },
+        "authority": {
+          "label": "Autorité émettrice",
+          "placeholder": "Ex: Ministère de l'Intérieur",
+          "help": "L'organisme qui a délivré votre passeport"
+        }
+      },
       "identity_picture": "Photo d'identité",
       "birth_certificate": "Acte de naissance",
       "residence_permit": "Titre de séjour",

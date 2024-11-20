@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 import { Upload, X, FileInput } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { FieldValues, UseFormReturn } from 'react-hook-form'
+import { ControllerRenderProps, FieldValues, UseFormReturn } from 'react-hook-form'
 import {
   Dialog,
   DialogContent,
@@ -24,7 +24,7 @@ interface DocumentUploadFieldProps<T extends FieldValues> {
   id: string
   label?: string
   description?: string
-  field: T,
+  field: any
   form: UseFormReturn<T>
   disabled?: boolean
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,20 +32,22 @@ interface DocumentUploadFieldProps<T extends FieldValues> {
   aspectRatio?: "square" | "portrait",
   accept?: string
   maxSize?: number
+  required?: boolean
 }
 
-export function DocumentUploadField({
+export function DocumentUploadField<T extends FieldValues>({
                                       id,
                                       label,
                                       description,
                                       field,
                                       form,
                                       disabled,
+  required = false,
                                       existingFile,
   maxSize = 1,
   accept = "image/*,application/pdf",
                                       aspectRatio = "square"
-                                    }: DocumentUploadFieldProps<FieldValues>) {
+                                    }: DocumentUploadFieldProps<T>) {
   const t = useTranslations('common.upload')
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [preview, setPreview] = React.useState<string | null>(null)
@@ -95,13 +97,6 @@ export function DocumentUploadField({
     [disabled, field]
   )
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0]
-    if (selectedFile) {
-      field.onChange(selectedFile)
-    }
-  }
-
   const removeFile = () => {
     field.onChange(null)
     if (inputRef.current) {
@@ -115,7 +110,10 @@ export function DocumentUploadField({
       name={field.name}
       render={() => (
         <FormItem>
-          {label && <FormLabel>{label}</FormLabel>}
+          {label && <FormLabel>
+            {label}
+            {required && <span className="text-destructive ml-1">*</span>}
+          </FormLabel>}
           <FormControl>
             <div
               onDragOver={(e) => {
@@ -135,7 +133,7 @@ export function DocumentUploadField({
                 ref={inputRef}
                 type="file"
                 accept={accept}
-                onChange={handleChange}
+                onChange={(e) => field.onChange(e.target.files?.[0])}
                 disabled={disabled}
                 className="hidden"
                 max={maxSize * 1024 * 1024}

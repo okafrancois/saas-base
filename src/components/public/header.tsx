@@ -2,7 +2,7 @@ import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { PAGE_ROUTES } from "@/schemas/app-routes"
 import { buttonVariants } from '@/components/ui/button'
-import LangSwitcher from "@/components/LangSwitcher"
+import LangSwitcher from "@/components/ui/LangSwitcher"
 import { auth } from "@/auth"
 
 export async function PublicHeader() {

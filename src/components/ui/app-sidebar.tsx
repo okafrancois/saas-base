@@ -4,9 +4,9 @@ import {
   Send,Home, FileText, User, Folder, LayoutDashboard, Users, Settings,
 } from 'lucide-react'
 
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/ui/nav-main"
+import { NavSecondary } from "@/components/ui/nav-secondary"
+import { NavUser } from "@/components/ui/nav-user"
 import {
   Sidebar,
   SidebarContent,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
@@ -7,7 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  TradFormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -30,73 +30,31 @@ import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { cn } from '@/lib/utils'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { Separator } from '@/components/ui/separator'
-import { ContactInfoSchema } from '@/schemas/registration'
-
-// Type for contact info
-type ContactInfo = {
-  email?: string
-  phone?: string
-  address: {
-    firstLine: string
-    secondLine?: string
-    city: string
-    zipCode: string
-    country: string
-  }
-  addressGabon?: {
-    address: string
-    district: string
-    city: string
-  }
-}
+import { ContactInfoFormData } from '@/schemas/registration'
 
 interface ContactInfoFormProps {
-  onSubmit: (data: ContactInfo) => void
-  defaultValues?: Partial<ContactInfo>
-  isLoading?: boolean
+  form: UseFormReturn<ContactInfoFormData>
+  onSubmit: (data: ContactInfoFormData) => void
   formRef?: React.RefObject<HTMLFormElement>
+  isLoading?: boolean
 }
 
 export function ContactInfoForm({
+                                  form,
                                   onSubmit,
-                                  defaultValues,
-                                  isLoading = false,
                                   formRef,
+                                  isLoading = false,
                                 }: Readonly<ContactInfoFormProps>) {
   const t = useTranslations('registration')
   const t_countries = useTranslations('countries')
   const [openCountrySelect, setOpenCountrySelect] = React.useState(false)
-
-  const form = useForm<ContactInfo>({
-    resolver: zodResolver(ContactInfoSchema),
-    defaultValues: defaultValues || {
-      email: '',
-      phone: '',
-      address: {
-        firstLine: '',
-        secondLine: '',
-        city: '',
-        zipCode: '',
-        country: '',
-      },
-      addressGabon: {
-        address: '',
-        district: '',
-        city: '',
-      },
-    },
-  })
-
-  const handleSubmit = (data: ContactInfo) => {
-    onSubmit(data)
-  }
 
   const country = form.watch('address.country')
   const showGabonAddress = country && country !== 'gabon'
 
   return (
     <Form {...form}>
-      <form ref={formRef} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Contact Information */}
         <div className="grid grid-cols-2 gap-4">
           {/* Email */}
@@ -115,7 +73,7 @@ export function ContactInfoForm({
                     disabled={isLoading}
                   />
                 </FormControl>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />
@@ -134,7 +92,7 @@ export function ContactInfoForm({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <TradFormMessage />
               </FormItem>
             )}
           />
@@ -159,7 +117,7 @@ export function ContactInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -179,7 +137,7 @@ export function ContactInfoForm({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -199,7 +157,7 @@ export function ContactInfoForm({
                         disabled={isLoading}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <TradFormMessage />
                   </FormItem>
                 )}
               />
@@ -217,7 +175,7 @@ export function ContactInfoForm({
                         disabled={isLoading}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <TradFormMessage />
                   </FormItem>
                 )}
               />
@@ -241,9 +199,7 @@ export function ContactInfoForm({
                         aria-expanded={openCountrySelect}
                         className="w-full justify-between"
                       >
-                        {field.value
-                          ? t_countries(field.value)
-                          : t('form.select_country')}
+                        {field.value ? t_countries(field.value) : t('form.select_country')}
                         <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
@@ -269,9 +225,7 @@ export function ContactInfoForm({
                                 <CheckIcon
                                   className={cn(
                                     'ml-auto h-4 w-4',
-                                    field.value === countryKey
-                                      ? 'opacity-100'
-                                      : 'opacity-0',
+                                    field.value === countryKey ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
@@ -281,7 +235,7 @@ export function ContactInfoForm({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -297,7 +251,7 @@ export function ContactInfoForm({
               {/* Gabon Address */}
               <FormField
                 control={form.control}
-                name="addressGabon.address"
+                name="addressInGabon.address"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('form.street_address')}</FormLabel>
@@ -308,7 +262,7 @@ export function ContactInfoForm({
                         disabled={isLoading}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <TradFormMessage />
                   </FormItem>
                 )}
               />
@@ -316,7 +270,7 @@ export function ContactInfoForm({
               {/* District */}
               <FormField
                 control={form.control}
-                name="addressGabon.district"
+                name="addressInGabon.district"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('form.district')}</FormLabel>
@@ -327,7 +281,7 @@ export function ContactInfoForm({
                         disabled={isLoading}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <TradFormMessage />
                   </FormItem>
                 )}
               />
@@ -335,7 +289,7 @@ export function ContactInfoForm({
               {/* City */}
               <FormField
                 control={form.control}
-                name="addressGabon.city"
+                name="addressInGabon.city"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('form.city')}</FormLabel>
@@ -346,7 +300,7 @@ export function ContactInfoForm({
                         disabled={isLoading}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <TradFormMessage />
                   </FormItem>
                 )}
               />

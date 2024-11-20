@@ -3,60 +3,81 @@ import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@pris
 
 const FileListSchema = z.any().refine(
   (files) => {
+    // Si on est côté serveur, on skip la validation
     if (typeof window === 'undefined') return true
-    return !files || files instanceof FileList
+    // Si pas de fichier, on retourne false pour déclencher la validation required
+    if (!files) return false
+    // Si c'est une FileList, c'est valide
+    if (files instanceof FileList) return true
+    // Si c'est déjà un File, c'est valide
+    if (files instanceof File) return true
+    // Sinon invalide
+    return false
   },
   'messages.errors.doc_invalid',
 )
 
-const DocumentFileSchemaOptional = FileListSchema
+const DocumentFileSchema = z.union([
+  // Soit null/undefined
+  z.null(),
+  // Soit un fichier valide
+  FileListSchema
+    .refine(
+      (files) => {
+        if (typeof window === 'undefined') return true
+        if (!files) return false
+        const file = files instanceof FileList ? files[0] : files
+        if (!file) return false
+        return file.size <= 10 * 1024 * 1024 // 10MB
+      },
+      { message: 'messages.errors.doc_size_10' }
+    )
+    .refine(
+      (files) => {
+        if (typeof window === 'undefined') return true
+        if (!files) return false
+        const file = files instanceof FileList ? files[0] : files
+        if (!file) return false
+        const acceptedTypes = ['image/jpeg', 'image/png', 'application/pdf']
+        return acceptedTypes.includes(file.type)
+      },
+      { message: 'messages.errors.doc_type_image_pdf' }
+    )
+])
   .refine(
     (files) => {
+      // Cette validation vérifie si le fichier est requis
       if (typeof window === 'undefined') return true
-      if (!files || files.length === 0) return true
-      const file = files[0]
-      return file?.size <= 10 * 1024 * 1024 // 10MB
+      return files !== null && files !== undefined
     },
-    { message: 'messages.errors.doc_size_10', path: [] }
-  )
-  .refine(
-    (files) => {
-      if (typeof window === 'undefined') return true
-      if (!files || files.length === 0) return true
-      const file = files[0]
-      const acceptedTypes = ['image/jpeg', 'image/png', 'application/pdf']
-      return acceptedTypes.includes(file.type)
-    },
-    { message: 'messages.errors.doc_type_image_pdf', path: [] }
+    { message: 'messages.errors.doc_required' }
   )
 
-const DocumentFileSchema = FileListSchema
-  .refine(
-    (files) => {
-      if (typeof window === 'undefined') return true
-      return files && files.length > 0
-    },
-    { message: 'messages.errors.doc_required', path: [] }
-  )
-  .refine(
-    (files) => {
-      if (typeof window === 'undefined') return true
-      if (!files || files.length === 0) return true
-      const file = files[0]
-      return file?.size <= 10 * 1024 * 1024 // 10MB
-    },
-    { message: 'messages.errors.doc_size_10', path: [] }
-  )
-  .refine(
-    (files) => {
-      if (typeof window === 'undefined') return true
-      if (!files || files.length === 0) return true
-      const file = files[0]
-      const acceptedTypes = ['image/jpeg', 'image/png', 'application/pdf']
-      return acceptedTypes.includes(file.type)
-    },
-    { message: 'messages.errors.doc_type_image_pdf', path: [] }
-  )
+const DocumentFileSchemaOptional = z.union([
+  z.null(),
+  FileListSchema
+    .refine(
+      (files) => {
+        if (typeof window === 'undefined') return true
+        if (!files) return true // Optionnel donc null/undefined est valide
+        const file = files instanceof FileList ? files[0] : files
+        if (!file) return true
+        return file.size <= 10 * 1024 * 1024
+      },
+      { message: 'messages.errors.doc_size_10' }
+    )
+    .refine(
+      (files) => {
+        if (typeof window === 'undefined') return true
+        if (!files) return true
+        const file = files instanceof FileList ? files[0] : files
+        if (!file) return true
+        const acceptedTypes = ['image/jpeg', 'image/png', 'application/pdf']
+        return acceptedTypes.includes(file.type)
+      },
+      { message: 'messages.errors.doc_type_image_pdf' }
+    )
+])
 
 const PASSPORT_MIN_VALIDITY_MONTHS = 6;
 const PASSPORT_MAX_VALIDITY_YEARS = 10;
@@ -120,33 +141,15 @@ export const BasicInfoSchema = z.object({
     ),
 
   passportIssueDate: z
-    .date({
+    .string({
       required_error: 'messages.errors.issue_date_required',
       invalid_type_error: 'messages.errors.issue_date_invalid',
-    })
-    .refine(
-      (date) => date <= new Date(),
-      'messages.errors.issue_date_future'
-    )
-    .refine(
-      (date) => date >= addYears(new Date(), -10),
-      'messages.errors.issue_date_too_old'
-    ),
-
+    }),
   passportExpiryDate: z
-    .date({
+    .string({
       required_error: 'messages.errors.expiry_date_required',
       invalid_type_error: 'messages.errors.expiry_date_invalid',
-    })
-    .refine(
-      (date) => date > new Date(),
-      'messages.errors.already_expired'
-    )
-    .refine(
-      (date) => date > addMonths(new Date(), PASSPORT_MIN_VALIDITY_MONTHS),
-      'messages.errors.expires_soon'
-    ),
-
+    }),
   passportIssueAuthority: z
     .string({
       required_error: 'messages.errors.authority_required',
@@ -154,26 +157,6 @@ export const BasicInfoSchema = z.object({
     .min(2, 'messages.errors.authority_too_short')
     .max(100, 'messages.errors.authority_too_long'),
 })
-  // Validation croisée des dates
-  .refine(
-    (data) => {
-      if (data.passportIssueDate && data.passportExpiryDate) {
-        // Vérifier que la date d'expiration est après la date d'émission
-        if (data.passportExpiryDate <= data.passportIssueDate) {
-          return false;
-        }
-
-        // Vérifier que la durée de validité ne dépasse pas 10 ans
-        const validityYears = (data.passportExpiryDate.getTime() - data.passportIssueDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-        return validityYears <= PASSPORT_MAX_VALIDITY_YEARS;
-      }
-      return true;
-    },
-    {
-      message: 'messages.errors.invalid_validity_period',
-      path: ['passportExpiryDate'], // Le message s'affichera sous ce champ
-    }
-  );
 
 export const BasicInfoPostSchema = z.object({
   gender: z.nativeEnum(Gender, {
@@ -199,8 +182,8 @@ export const BasicInfoPostSchema = z.object({
   }),
 
   passportNumber: z.string().optional(),
-  passportIssueDate: z.date().optional(),
-  passportExpiryDate: z.date().optional(),
+  passportIssueDate: z.string().optional(),
+  passportExpiryDate: z.string().optional(),
   passportIssueAuthority: z.string().optional(),
 })
 

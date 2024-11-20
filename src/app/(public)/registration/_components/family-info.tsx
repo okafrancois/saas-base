@@ -1,13 +1,12 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { UseFormReturn } from 'react-hook-form'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  TradFormMessage,
   FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -22,43 +21,30 @@ import {
 import { useTranslations } from 'next-intl'
 import { MaritalStatus } from '@prisma/client'
 import { PhoneInput } from '@/components/ui/phone-input'
-import { FamilyInfoFormData, FamilyInfoSchema } from '@/schemas/registration'
+import { FamilyInfoFormData } from '@/schemas/registration'
 
 interface FamilyInfoFormProps {
+  form: UseFormReturn<FamilyInfoFormData>
   onSubmit: (data: FamilyInfoFormData) => void
-  defaultValues?: Partial<FamilyInfoFormData>
   formRef?: React.RefObject<HTMLFormElement>
   isLoading?: boolean
 }
 
-export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: Readonly<FamilyInfoFormProps>) {
+export function FamilyInfoForm({
+                                 form,
+                                 onSubmit,
+                                 formRef,
+                                 isLoading = false,
+                               }: Readonly<FamilyInfoFormProps>) {
   const t = useTranslations('registration')
   const tAssets = useTranslations('assets')
-
-  const form = useForm<FamilyInfoFormData>({
-    resolver: zodResolver(FamilyInfoSchema),
-    defaultValues: defaultValues || {
-      maritalStatus: undefined,
-      fatherFullName: '',
-      motherFullName: '',
-      emergencyContact: {
-        fullName: '',
-        relationship: '',
-        phone: '',
-      },
-    },
-  })
-
-  const handleSubmit = (data: FamilyInfoFormData) => {
-    onSubmit(data)
-  }
 
   const maritalStatus = form.watch('maritalStatus')
   const showSpouseFields = maritalStatus === MaritalStatus.MARRIED
 
   return (
     <Form {...form}>
-      <form ref={formRef} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* État civil */}
         <Card>
           <CardContent className="pt-6">
@@ -68,7 +54,10 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('form.marital_status')}</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={t('form.select_marital_status')} />
@@ -82,7 +71,7 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -97,9 +86,12 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                     <FormItem>
                       <FormLabel>{t('form.spouse_name')}</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder={t('form.spouse_name_placeholder')} />
+                        <Input
+                          {...field}
+                          placeholder={t('form.spouse_name_placeholder')}
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <TradFormMessage />
                     </FormItem>
                   )}
                 />
@@ -118,9 +110,12 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                 <FormItem>
                   <FormLabel>{t('form.father_name')}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={t('form.father_name_placeholder')} />
+                    <Input
+                      {...field}
+                      placeholder={t('form.father_name_placeholder')}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -132,9 +127,12 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                 <FormItem>
                   <FormLabel>{t('form.mother_name')}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={t('form.mother_name_placeholder')} />
+                    <Input
+                      {...field}
+                      placeholder={t('form.mother_name_placeholder')}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -145,7 +143,9 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
         <Card>
           <CardContent className="grid gap-4 pt-6">
             <h3 className="text-lg font-semibold">{t('form.emergency_contact')}</h3>
-            <FormDescription>{t('form.emergency_contact_description')}</FormDescription>
+            <FormDescription>
+              {t('form.emergency_contact_description')}
+            </FormDescription>
 
             <FormField
               control={form.control}
@@ -154,9 +154,12 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                 <FormItem>
                   <FormLabel>{t('form.emergency_contact_name')}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={t('form.emergency_contact_name_placeholder')} />
+                    <Input
+                      {...field}
+                      placeholder={t('form.emergency_contact_name_placeholder')}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -168,9 +171,12 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                 <FormItem>
                   <FormLabel>{t('form.emergency_contact_relationship')}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={t('form.emergency_contact_relationship_placeholder')} />
+                    <Input
+                      {...field}
+                      placeholder={t('form.emergency_contact_relationship_placeholder')}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />
@@ -187,7 +193,7 @@ export function FamilyInfoForm({ onSubmit, defaultValues, formRef, isLoading }: 
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <TradFormMessage />
                 </FormItem>
               )}
             />

@@ -16,7 +16,7 @@ import { useCurrentUser } from "@/hooks/use-current-user"
 import { useTranslations } from 'next-intl'
 import Link from "next/link"
 import { PAGE_ROUTES } from "@/schemas/app-routes"
-import { LogoutButton } from '@/components/logout-button'
+import { LogoutButton } from '@/components/ui/logout-button'
 
 export function UserNav() {
   const user = useCurrentUser()

@@ -6,7 +6,7 @@ import { logUserOut } from '@/actions/auth'
 import * as React from 'react'
 import { LogOutIcon } from 'lucide-react'
 import { useCurrentUser } from '@/hooks/use-current-user'
-import { Icons } from './ui/icons'
+import { Icons } from './icons'
 
 type LogoutButtonProps = {
   customClass?: string

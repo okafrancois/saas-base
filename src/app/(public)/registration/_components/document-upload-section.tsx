@@ -17,10 +17,11 @@ interface DocumentUploadSectionProps {
   handleSubmit: (data: DocumentsFormData) => void
   handleAnalysis?: () => void
   isLoading?: boolean
+  formRef?: React.RefObject<HTMLFormElement>
 }
 
 export function DocumentUploadSection({
-                                        form,handleSubmit, isLoading,handleAnalysis
+                                        form,handleSubmit, isLoading,handleAnalysis, formRef
                                       }: DocumentUploadSectionProps) {
   const t = useTranslations('registration')
 
@@ -61,7 +62,7 @@ export function DocumentUploadSection({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+      <form ref={formRef} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         {/* Section des documents */}
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 ">
           <AnimatePresence mode="sync">
@@ -80,6 +81,7 @@ export function DocumentUploadSection({
                         id={doc.id}
                         field={field}
                         label={doc.label}
+                        required={doc.required}
                         description={doc.description}
                         form={form}
                         accept="image/*,application/pdf"

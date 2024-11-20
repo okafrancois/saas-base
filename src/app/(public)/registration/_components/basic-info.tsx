@@ -1,12 +1,12 @@
-import React, { RefObject } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import React from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import {
   Form,
-  FormControl,
+  FormControl, FormDescription,
   FormField,
   FormItem,
-  FormLabel, TradFormMessage,
+  FormLabel,
+  TradFormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -22,78 +22,66 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem, CommandList,
+  CommandItem,
+  CommandList,
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { countryKeys } from '@/assets/autocomplete-datas'
-import { Gender, NationalityAcquisition } from '@prisma/client'
-import DocumentUploadField from '@/components/ui/document-upload'
-import { BasicInfoFormData, BasicInfoSchema } from '@/schemas/registration'
+import { NationalityAcquisition } from '@prisma/client'
+import { BasicInfoFormData } from '@/schemas/registration'
+import { DocumentUploadField } from '@/components/ui/document-upload'
+import { Separator } from '@/components/ui/separator'
 
 type BasicInfoFormProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSubmit: (data: any) => void
-  defaultValues?: Partial<BasicInfoFormData>
+  form: UseFormReturn<BasicInfoFormData>  // Ajouter cette prop
+  onSubmit: () => void
+  formRef?: React.RefObject<HTMLFormElement>
   isLoading?: boolean
-  formRef: RefObject<HTMLFormElement>
 }
 
 export function BasicInfoForm({
+                                form,  // Utiliser le form passé en prop
                                 onSubmit,
-                                defaultValues,
                                 formRef,
-                                isLoading,
+                                isLoading = false,
                               }: Readonly<BasicInfoFormProps>) {
   const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
   const t_countries = useTranslations('countries')
   const [openNationalitySelect, setOpenNationalitySelect] = React.useState(false)
 
-  const form = useForm<BasicInfoFormData>({
-    resolver: zodResolver(BasicInfoSchema),
-    defaultValues: defaultValues || {
-      gender: Gender.MALE,
-      nationality: 'gabon',
-      acquisitionMode: NationalityAcquisition.BIRTH,
-    },
-  })
-
-  const handleSubmit = async (data: BasicInfoFormData) => {
-    console.log(data)
-    try {
-      await onSubmit(data)
-      return true
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      return false
+  const formatDateForInput = (date: Date | string | undefined) => {
+    if (!date) return ''
+    if (typeof date === 'string') {
+      // Si c'est déjà une date ISO
+      if (date.includes('T')) return date.split('T')[0]
+      // Si c'est une date au format DD/MM/YYYY
+      const [day, month, year] = date.split('/')
+      if (day && month && year) {
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      }
+      return date
     }
+    return date.toISOString().split('T')[0]
   }
 
   return (
     <Form {...form}>
-      <form ref={formRef} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-6">
           <FormField
             control={form.control}
             name={"identityPictureFile"}
-            render={() => (
-              <FormItem className="w-full max-w-[200px]">
-                <FormLabel>
-                  {t('documents.identity_picture.label')}
-                </FormLabel>
-                <FormControl>
-                  <DocumentUploadField
-                    id={"identityPictureFile"}
-                    field={form.register("identityPictureFile")}
-                    form={form}
-                    disabled={isLoading}
-                    aspectRatio={'square'}
-                    existingFile={defaultValues?.identityPictureFile}
-                  />
-                </FormControl>
-                <TradFormMessage />
-              </FormItem>
+            render={({field}) => (
+              <DocumentUploadField<BasicInfoFormData>
+                id={field.name}
+                field={field}
+                form={form}
+                required={true}
+                disabled={isLoading}
+              />
             )}
           />
 
@@ -133,6 +121,7 @@ export function BasicInfoForm({
             )}
           />
 
+          {/* Nom et prénom */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField
               control={form.control}
@@ -151,7 +140,6 @@ export function BasicInfoForm({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="lastName"
@@ -169,7 +157,10 @@ export function BasicInfoForm({
                 </FormItem>
               )}
             />
+          </div>
 
+          {/* Date et lieu de naissance */}
+          <div className="grid gap-4 grid-cols-2">
             <FormField
               control={form.control}
               name="birthDate"
@@ -188,7 +179,6 @@ export function BasicInfoForm({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="birthPlace"
@@ -208,6 +198,7 @@ export function BasicInfoForm({
             />
           </div>
 
+          {/* Pays de naissance */}
           <FormField
             control={form.control}
             name="birthCountry"
@@ -255,7 +246,7 @@ export function BasicInfoForm({
                                   'ml-auto h-4 w-4',
                                   field.value === country
                                     ? 'opacity-100'
-                                    : 'opacity-0',
+                                    : 'opacity-0'
                                 )}
                               />
                             </CommandItem>
@@ -270,6 +261,7 @@ export function BasicInfoForm({
             )}
           />
 
+          {/* Mode d'acquisition de la nationalité */}
           <FormField
             control={form.control}
             name="acquisitionMode"
@@ -282,21 +274,119 @@ export function BasicInfoForm({
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="flex flex-col space-y-3"
+                    className="flex flex-wrap items-center gap-4"
                   >
-
                     {Object.values(NationalityAcquisition).map((acquisition) => (
-                      <FormItem key={acquisition} className="flex items-center space-x-3 space-y-0">
+                      <FormItem
+                        key={acquisition}
+                        className="flex items-center gap-2"
+                      >
                         <FormControl>
                           <RadioGroupItem value={acquisition} />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          {t(`nationality_acquisition.modes.${acquisition.toLowerCase()}`)}
+                        <FormLabel className="font-normal !mt-0">
+                          {t(
+                            `nationality_acquisition.modes.${acquisition.toLowerCase()}`
+                          )}
                         </FormLabel>
                       </FormItem>
                     ))}
                   </RadioGroup>
                 </FormControl>
+                <TradFormMessage />
+              </FormItem>
+            )}
+          />
+          <Separator className="w-full" />
+
+          <FormField
+            control={form.control}
+            name="passportNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('form.passport.number.label')}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder={t('form.passport.number.placeholder')}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {t('form.passport.number.help')}
+                </FormDescription>
+                <TradFormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Dates d'émission et d'expiration */}
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="passportIssueDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('form.passport.issue_date.label')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="date"
+                      value={formatDateForInput(field.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      placeholder={t('form.passport.issue_date.placeholder')}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {t('form.passport.issue_date.help')}
+                  </FormDescription>
+                  <TradFormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="passportExpiryDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('form.passport.expiry_date.label')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={formatDateForInput(field.value)}
+                      type="date"
+                      placeholder={t('form.passport.expiry_date.placeholder')}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {t('form.passport.expiry_date.help')}
+                  </FormDescription>
+                  <TradFormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Autorité émettrice */}
+          <FormField
+            control={form.control}
+            name="passportIssueAuthority"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('form.passport.authority.label')}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder={t('form.passport.authority.placeholder')}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {t('form.passport.authority.help')}
+                </FormDescription>
                 <TradFormMessage />
               </FormItem>
             )}

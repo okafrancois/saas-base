@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
@@ -11,7 +11,12 @@ import {
   FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -21,46 +26,32 @@ import {
 } from '@/components/ui/select'
 import { useTranslations } from 'next-intl'
 import { WorkStatus } from '@prisma/client'
-import { ProfessionalInfoFormData, ProfessionalInfoSchema } from '@/schemas/registration'
+import { ProfessionalInfoFormData } from '@/schemas/registration'
+
 
 interface ProfessionalInfoFormProps {
+  form: UseFormReturn<ProfessionalInfoFormData>
   onSubmit: (data: ProfessionalInfoFormData) => void
-  defaultValues?: Partial<ProfessionalInfoFormData>
   formRef?: React.RefObject<HTMLFormElement>
   isLoading?: boolean
 }
 
 export function ProfessionalInfoForm({
+                                       form,
                                        onSubmit,
-                                       defaultValues,
                                        formRef,
                                        isLoading = false,
                                      }: Readonly<ProfessionalInfoFormProps>) {
   const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
 
-  const form = useForm<ProfessionalInfoFormData>({
-    resolver: zodResolver(ProfessionalInfoSchema),
-    defaultValues: defaultValues || {
-      workStatus: WorkStatus.UNEMPLOYED,
-    },
-  })
-
   const workStatus = form.watch('workStatus')
-
-  const handleSubmit = form.handleSubmit((data) => {
-    onSubmit(data)
-  })
-
-  // Vérifie si les champs employeur doivent être affichés
   const showEmployerFields = workStatus === WorkStatus.EMPLOYEE
-
-  // Vérifie si le champ profession doit être affiché
   const showProfessionField = workStatus === WorkStatus.EMPLOYEE || workStatus === WorkStatus.ENTREPRENEUR
 
   return (
     <Form {...form}>
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Statut professionnel */}
         <Card>
           <CardHeader>
@@ -73,7 +64,10 @@ export function ProfessionalInfoForm({
               name="workStatus"
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={t('form.select_work_status')} />
