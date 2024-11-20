@@ -1,3 +1,5 @@
+import { AppointmentStatus, AppointmentType } from '@prisma/client'
+
 export interface DashboardStats {
   profile: {
     completionRate: number

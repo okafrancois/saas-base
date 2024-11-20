@@ -1,53 +1,53 @@
 'use client'
 
 import { useCurrentUser } from '@/hooks/use-current-user'
-import {
-  Menubar,
-  MenubarMenu,
-} from '@/components/ui/menubar'
 import { useTranslations } from 'next-intl'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import {
-  FileText,
-  Folder,
-  Home,
+  Calendar,
+  FileText, FolderOpen,
   LayoutDashboard,
   Settings,
   User,
   Users,
 } from 'lucide-react'
 import { UserRole } from '@prisma/client'
-import { SidebarTrigger } from '@/components/ui/sidebar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NavItem } from '@/components/layouts/types'
+import { cn } from '@/lib/utils'
 
 export function MenuBarMobile() {
   const path = usePathname()
   const user = useCurrentUser()
-  const t_user = useTranslations('user')
+  const t = useTranslations("common")
   const t_admin= useTranslations('admin')
 
   const userMenu: NavItem[] = [
     {
-      title: t_user('nav.dashboard'),
-      href: PAGE_ROUTES.dashboard,
-      icon: <Home />,
-    },
-    {
-      title: t_user('nav.requests'),
-      href: PAGE_ROUTES.requests,
-      icon: <FileText/>,
-    },
-    {
-      title: t_user('nav.profile'),
+      title: t('nav.profile'),
       href: PAGE_ROUTES.profile,
-      icon: <User />,
+      icon: <User className={"size-5"}/>,
     },
     {
-      title: t_user('nav.documents'),
-      href: PAGE_ROUTES.documents,
-      icon: <Folder/>,
+      title: t('nav.requests'),
+      icon: <FileText className={"size-5"}/>,
+      href: PAGE_ROUTES.requests
+    },
+    {
+      title: t('nav.appointments'),
+      icon: <Calendar className={"size-5"} />,
+      href: PAGE_ROUTES.appointments
+    },
+    {
+      title: t('nav.documents'),
+      icon: <FolderOpen className={"size-5"} />,
+      href: PAGE_ROUTES.documents
+    },
+    {
+      title: t('nav.settings'),
+      icon: <Settings className={"size-5"} />,
+      href: PAGE_ROUTES.settings
     }
   ]
 
@@ -90,21 +90,29 @@ export function MenuBarMobile() {
   }
 
   return (
-    <Menubar className={'fixed inset-x-4 bottom-6 flex min-h-max justify-between rounded-full py-2 px-6 md:hidden'}>
-      {getCurrentUserMenu().map(menu => (
-        <MenubarMenu key={menu.title + menu.href}>
-          <Link href={menu.href}
-                className={`min-w-max flex flex-col gap-y-2 items-center justify-between text-gray-500 hover:text-gray-900 ${path.startsWith(menu.href) ? '!text-primary' : ''}`}>
-            {menu.icon}
-            <span className={"text-[9px]"}>
-              {menu.title}
-            </span>
-          </Link>
-        </MenubarMenu>
-      ))}
-      <MenubarMenu>
-        <SidebarTrigger />
-      </MenubarMenu>
-    </Menubar>
+    <div className="fixed bottom-0 left-0 right-0 z-50 block md:hidden">
+      <nav className="bg-background border-t px-2 py-3">
+        <div className="flex items-center justify-around">
+          {getCurrentUserMenu().map((item) => {
+            const isActive = path === item.href
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center gap-1 rounded-lg px-3 py-2 text-sm transition-colors",
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {item.icon}
+                <span className="text-xs">{item.title}</span>
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
+    </div>
   )
 }

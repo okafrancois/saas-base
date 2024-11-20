@@ -10,10 +10,13 @@
         "es_short": "ES"
     },
     "nav": {
+      "appointments": "RDV",
       "home": "Accueil",
       "profile": "Profil",
       "settings": "Paramètres",
-      "logout": "Déconnexion"
+      "logout": "Déconnexion",
+      "requests": "Demandes",
+      "documents": "Documents"
     },
     "form": {
       "required_field": "Champ requis",
@@ -1606,6 +1609,24 @@
       "errors": {
         "canvas_not_supported": "Votre navigateur ne supporte pas le recadrage d'image",
         "dimensions_too_small": "Les dimensions sont trop petites"
+      }
+    }
+  },
+  "dashboard": {
+    "sections": {
+      "profile": {
+        "title": "Mon profil",
+        "status": {
+          "pending": "En attente"
+        },
+        "completion": "Complétude du profil",
+        "missing_fields": "Champs manquants :",
+        "fields": {
+          "all": "Tous les champs sont requis"
+        },
+        "actions": {
+          "complete": "Compléter mon profil"
+        }
       }
     }
   }

@@ -14,15 +14,15 @@ interface ProfileSectionProps {
 }
 
 export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
-  const t = useTranslations('profile.dashboard.sections.profile')
 
-  if (!stats) return null
+
+  const t = useTranslations('dashboard.sections.profile')
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <UserCircle className="h-5 w-5" />
             {t('title')}
           </CardTitle>
@@ -41,30 +41,38 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
           <Progress value={stats.completionRate} />
         </div>
 
-        {/* Champs manquants */}
+        {/* Champs manquants - masqués sur mobile si plus de 2 */}
         {stats.missingFields.length > 0 && (
           <div className="space-y-2">
             <p className="text-sm font-medium">{t('missing_fields')}:</p>
             <ul className="space-y-1">
-              {stats.missingFields.map((field) => (
+              {stats.missingFields.slice(0, 2).map((field) => (
                 <li key={field} className="flex items-center gap-2 text-sm text-muted-foreground">
                   <AlertCircle className="h-4 w-4 text-warning" />
                   {t(`fields.${field}`)}
                 </li>
               ))}
+              {stats.missingFields.length > 2 && (
+                <li className="text-sm text-muted-foreground">
+                  {t('and_more', { count: stats.missingFields.length - 2 })}
+                </li>
+              )}
             </ul>
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2 pt-2">
           <Button
             variant="outline"
+            size="sm"
+            className="hidden md:inline-flex"
             onClick={() => onAction('view_profile')}
           >
             {t('actions.view')}
           </Button>
           <Button
+            size="sm"
             onClick={() => onAction('complete_profile')}
           >
             {t('actions.complete')}

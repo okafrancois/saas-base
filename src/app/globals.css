@@ -268,3 +268,25 @@ html {
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+@layer utilities {
+  /* Ajuster le padding du container sur mobile */
+  .container {
+    @apply px-4 md:px-6;
+  }
+
+  /* Ajuster la taille des cartes sur mobile */
+  .card {
+    @apply rounded-lg md:rounded-xl;
+  }
+
+  /* Ajuster l'espacement des éléments sur mobile */
+  .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    @apply my-4 md:my-8;
+  }
+
+  /* Assurer que le contenu ne passe pas sous la navigation mobile */
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 4rem);
+  }
+}
