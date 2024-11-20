@@ -724,6 +724,15 @@
     "close": "Fermer"
   },
   "profile": {
+    "title": "Mon profil",
+    "completion": "Complétude du profil",
+    "last_update": "Dernière mise à jour",
+    "missing_fields": "Champs manquants",
+    "status": {
+      "active": "Actif",
+      "pending": "En attente",
+      "expired": "Expiré"
+    },
     "update_success": "Profil mis à jour avec succès",
     "update_error": "Erreur lors de la mise à jour du profil",
     "stats": {
@@ -740,7 +749,9 @@
         "low": "Faible priorité",
         "medium": "Priorité moyenne",
         "high": "Haute priorité"
-      }
+      },
+      "edit": "Modifier",
+      "view": "Voir"
     },
     "documents": {
       "title": "Mes documents",
@@ -765,7 +776,228 @@
         "add": "Ajouter un document",
         "add_first": "Ajouter votre premier document",
         "view": "Voir",
-        "download": "Télécharger"
+        "download": "Télécharger",
+        "upload": "Téléverser",
+        "view_all": "Voir tout"
+      },
+      "total": "Total",
+      "valid": "Valides",
+      "expiring_soon": "Expirant bientôt",
+      "expired": "Expirés",
+      "latest": {
+        "title": "Dernier document",
+        "no_documents": "Aucun document"
+      }
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "welcome": "Bienvenue, {name}",
+      "stats": {
+        "profile": {
+          "title": "Profil consulaire",
+          "completion": "Complétude du profil",
+          "last_update": "Dernière mise à jour",
+          "missing_documents": "Documents manquants"
+        },
+        "requests": {
+          "title": "Demandes",
+          "pending": "En attente",
+          "in_progress": "En cours",
+          "completed": "Terminées",
+          "latest": "Dernière demande"
+        },
+        "appointments": {
+          "title": "Rendez-vous",
+          "upcoming": "Prochain rendez-vous",
+          "no_upcoming": "Aucun rendez-vous prévu",
+          "schedule": "Prendre rendez-vous"
+        },
+        "documents": {
+          "title": "Documents",
+          "total": "Total",
+          "expiring_soon": "Expirant bientôt",
+          "expired": "Expirés",
+          "manage": "Gérer mes documents"
+        }
+      },
+      "actions": {
+        "complete_profile": "Compléter mon profil",
+        "submit_request": "Nouvelle demande",
+        "track_requests": "Suivre mes demandes",
+        "schedule_appointment": "Prendre rendez-vous",
+        "manage_documents": "Gérer mes documents",
+        "see_all": "Voir tout",
+        "view_details": "Voir les détails",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "sections": {
+        "profile": {
+          "title": "Profil consulaire",
+          "description": "Gérez vos informations personnelles",
+          "completion": "Complétion du profil",
+          "missing_fields": "Informations manquantes",
+          "fields": {
+            "identity_photo": "Photo d'identité",
+            "passport": "Passeport",
+            "birth_certificate": "Acte de naissance",
+            "proof_of_residence": "Justificatif de domicile",
+            "contact_details": "Coordonnées",
+            "emergency_contact": "Contact d'urgence"
+          },
+          "status": {
+            "active": "Actif",
+            "pending": "En attente",
+            "expired": "Expiré"
+          },
+          "actions": {
+            "view": "Voir le profil",
+            "complete": "Compléter",
+            "update": "Mettre à jour"
+          }
+        },
+        "requests": {
+          "title": "Demandes consulaires",
+          "description": "Gérez vos demandes en cours",
+          "latest_request": "Dernière demande",
+          "status": {
+            "pending": "En attente",
+            "in_progress": "En cours",
+            "completed": "Terminées"
+          },
+          "request_types": {
+            "passport_renewal": "Renouvellement de passeport",
+            "consular_card": "Carte consulaire",
+            "birth_registration": "Enregistrement de naissance",
+            "certificate_request": "Demande de certificat"
+          },
+          "actions": {
+            "new": "Nouvelle demande",
+            "view": "Voir les détails",
+            "track": "Suivre",
+            "cancel": "Annuler"
+          }
+        },
+        "procedures": {
+          "title": "Procédures en cours",
+          "description": "Suivez vos démarches administratives",
+          "next_step": "Prochaine étape",
+          "deadline": "Échéance",
+          "status": {
+            "active": "En cours",
+            "completed": "Terminées"
+          },
+          "actions": {
+            "view": "Voir les détails",
+            "continue": "Continuer",
+            "start": "Commencer"
+          }
+        },
+        "appointments": {
+          "title": "Rendez-vous",
+          "description": "Gérez vos rendez-vous consulaires",
+          "next_appointment": "Prochain rendez-vous",
+          "no_upcoming": "Aucun rendez-vous prévu",
+          "type": {
+            "document_submission": "Dépôt de documents",
+            "document_collection": "Retrait de documents",
+            "consultation": "Consultation",
+            "other": "Autre"
+          },
+          "status": {
+            "confirmed": "Confirmé",
+            "pending": "En attente",
+            "cancelled": "Annulé"
+          },
+          "stats": {
+            "past": "Passés",
+            "cancelled": "Annulés"
+          },
+          "actions": {
+            "schedule": "Prendre RDV",
+            "reschedule": "Reporter",
+            "cancel": "Annuler",
+            "view": "Voir détails"
+          }
+        },
+        "documents": {
+          "title": "Documents officiels",
+          "description": "Gérez vos documents consulaires",
+          "validity_status": "État de validité",
+          "valid": "valides",
+          "latest_document": "Dernier document",
+          "expires_on": "Expire le",
+          "status": {
+            "valid": "Valides",
+            "expiring_soon": "À renouveler",
+            "expired": "Expirés"
+          },
+          "document_types": {
+            "passport": "Passeport",
+            "consular_card": "Carte consulaire",
+            "birth_certificate": "Acte de naissance",
+            "marriage_certificate": "Acte de mariage",
+            "nationality_certificate": "Certificat de nationalité",
+            "residence_permit": "Titre de séjour"
+          },
+          "actions": {
+            "upload": "Ajouter",
+            "view": "Voir",
+            "download": "Télécharger",
+            "renew": "Renouveler"
+          }
+        }
+      },
+      "notifications": {
+        "document_expiring": "Document expirant bientôt",
+        "appointment_reminder": "Rappel de rendez-vous",
+        "request_update": "Mise à jour de demande"
+      },
+      "errors": {
+        "load_failed": "Échec du chargement des données",
+        "action_failed": "L'action a échoué",
+        "try_again": "Veuillez réessayer"
+      }
+      },
+    "requests": {
+      "title": "Mes demandes",
+      "total": "Total",
+      "pending": "En attente",
+      "in_progress": "En cours",
+      "completed": "Terminées",
+      "latest": {
+        "title": "Dernière demande",
+        "no_requests": "Aucune demande"
+      },
+      "actions": {
+        "new": "Nouvelle demande",
+        "view_all": "Voir tout"
+      }
+    },
+    "procedures": {
+      "title": "Mes démarches",
+      "active": "En cours",
+      "completed": "Terminées",
+      "next_step": {
+        "title": "Prochaine étape",
+        "no_steps": "Aucune étape en cours"
+      },
+      "actions": {
+        "view_details": "Voir les détails"
+      }
+    },
+    "appointments": {
+      "title": "Mes rendez-vous",
+      "upcoming": {
+        "title": "Prochain rendez-vous",
+        "no_appointments": "Aucun rendez-vous prévu"
+      },
+      "past": "Passés",
+      "cancelled": "Annulés",
+      "actions": {
+        "schedule": "Prendre rendez-vous",
+        "reschedule": "Reprogrammer",
+        "cancel": "Annuler"
       }
     }
   },

@@ -33,6 +33,7 @@ export const PAGE_ROUTES = {
   dashboard: '/dashboard' as Route<string>,
   help: '/help' as Route<string>,
   feedback: '/feedback' as Route<string>,
+  appointments: '/appointments' as Route<string>,
 
   // Pages publiques
   registration: '/registration' as Route<string>,

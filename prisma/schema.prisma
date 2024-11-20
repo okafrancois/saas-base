@@ -57,6 +57,8 @@ enum RequestStatus {
   APPROVED
   REJECTED
   INCOMPLETE
+  IN_PROGRESS
+  COMPLETED
 }
 
 // Modèles principaux
@@ -85,6 +87,7 @@ model User {
   sessions      Session[]
   lastLogin     DateTime?
   documents     Document[]
+  appointments  Appointment[]
 }
 
 model Profile {
@@ -185,11 +188,12 @@ model Consulate {
   isGeneral Boolean  @default(false)
 
   // Relations
-  users     User[]
-  countries Country[]
-  requests  Request[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  users        User[]
+  countries    Country[]
+  requests     Request[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
 }
 
 model Country {
@@ -284,16 +288,65 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+enum DocumentType {
+  PASSPORT
+  IDENTITY_CARD
+  BIRTH_CERTIFICATE
+  RESIDENCE_PERMIT
+  PROOF_OF_ADDRESS
+  MARRIAGE_CERTIFICATE
+  DEATH_CERTIFICATE
+  DIVORCE_DECREE
+  NATIONALITY_CERTIFICATE
+  OTHER
+}
+
+enum AppointmentType {
+  DOCUMENT_SUBMISSION
+  DOCUMENT_COLLECTION
+  CONSULTATION
+  OTHER
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  MISSED
+}
+
+// Mettre à jour le modèle Document
 model Document {
-  id        String    @id @default(cuid())
-  type      String // Type de document (passeport, carte d'identité, etc.)
-  status    String // Status du document (en cours, validé, expiré, etc.)
+  id        String       @id @default(cuid())
+  type      DocumentType
+  status    String // "PENDING", "VALIDATED", "REJECTED", "EXPIRED"
   fileUrl   String // URL du fichier stocké
   issuedAt  DateTime // Date d'émission
   expiresAt DateTime? // Date d'expiration si applicable
   metadata  Json? // Métadonnées additionnelles
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Ajouter le modèle Appointment
+model Appointment {
+  id          String            @id @default(cuid())
+  type        AppointmentType
+  status      AppointmentStatus @default(SCHEDULED)
+  date        DateTime
+  description String? // Au lieu de 'reason', utilisons 'description'
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  consulateId String
+  consulate   Consulate @relation(fields: [consulateId], references: [id])
 }
