@@ -277,7 +277,7 @@ html {
 
   /* Ajuster la taille des cartes sur mobile */
   .card {
-    @apply rounded-lg md:rounded-xl;
+    @apply rounded-lg md:rounded-xl overflow-hidden;
   }
 
   /* Ajuster l'espacement des éléments sur mobile */
@@ -288,5 +288,19 @@ html {
   /* Assurer que le contenu ne passe pas sous la navigation mobile */
   .pb-safe {
     padding-bottom: calc(env(safe-area-inset-bottom) + 4rem);
+  }
+
+  .btn-mobile {
+    @apply h-8 w-8 p-0 md:h-9 md:w-auto md:px-3;
+  }
+
+  /* Grilles adaptatives */
+  .grid-adaptive {
+    @apply grid-cols-2 md:grid-cols-4;
+  }
+
+  /* Textes responsifs */
+  .text-adaptive {
+    @apply text-sm md:text-base;
   }
 }

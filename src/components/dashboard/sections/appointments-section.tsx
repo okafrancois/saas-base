@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslations } from 'next-intl'
-import { Calendar, Clock, MapPin } from 'lucide-react'
+import { Calendar, Clock, MapPin, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DashboardSectionStats } from '@/types/dashboard'
@@ -21,9 +21,9 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <Calendar className="h-5 w-5" />
             {t('title')}
           </CardTitle>
@@ -32,42 +32,40 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
             size="sm"
             onClick={() => onAction('schedule_appointment')}
           >
-            {t('actions.schedule')}
+            <Plus className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:inline">{t('actions.schedule')}</span>
           </Button>
         </div>
       </CardHeader>
+
       <CardContent className="space-y-4">
         {/* Prochain rendez-vous */}
         {stats.upcoming ? (
-          <div className="rounded-lg border p-4">
+          <div className="rounded-lg border p-3">
             <div className="flex items-center justify-between">
               <h4 className="font-medium">{t('next_appointment')}</h4>
               <Badge variant={stats.upcoming.status.toLowerCase()}>
                 {t(`status.${stats.upcoming.status.toLowerCase()}`)}
               </Badge>
             </div>
-
             <div className="mt-3 space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span>
-                  {format(new Date(stats.upcoming.date), "PPP 'à' HH'h'mm", {
-                    locale: fr
-                  })}
+                  {format(new Date(stats.upcoming.date), "PPP 'à' HH'h'mm", { locale: fr })}
                 </span>
               </div>
-
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
                 <span>{t(`type.${stats.upcoming.type.toLowerCase()}`)}</span>
               </div>
             </div>
-
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => onAction('reschedule_appointment')}
+                className="flex-1 md:flex-none"
               >
                 {t('actions.reschedule')}
               </Button>
@@ -75,6 +73,7 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
                 variant="ghost"
                 size="sm"
                 onClick={() => onAction('cancel_appointment')}
+                className="flex-1 md:flex-none"
               >
                 {t('actions.cancel')}
               </Button>

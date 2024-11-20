@@ -103,6 +103,6 @@ export interface ProfileStats {
   documentsPending: number
   documentsExpired: number
   requestsCount: number
-  lastLogin?: Date | null
+  lastLogin?: Date
   profileCompletion: number
 }

@@ -863,6 +863,7 @@
           "title": "Demandes consulaires",
           "description": "Gérez vos demandes en cours",
           "latest_request": "Dernière demande",
+          "no_requests": "Aucune demande",
           "status": {
             "pending": "En attente",
             "in_progress": "En cours",
@@ -879,21 +880,6 @@
             "view": "Voir les détails",
             "track": "Suivre",
             "cancel": "Annuler"
-          }
-        },
-        "procedures": {
-          "title": "Procédures en cours",
-          "description": "Suivez vos démarches administratives",
-          "next_step": "Prochaine étape",
-          "deadline": "Échéance",
-          "status": {
-            "active": "En cours",
-            "completed": "Terminées"
-          },
-          "actions": {
-            "view": "Voir les détails",
-            "continue": "Continuer",
-            "start": "Commencer"
           }
         },
         "appointments": {
