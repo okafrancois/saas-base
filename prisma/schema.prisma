@@ -83,7 +83,8 @@ model User {
   phoneVerified DateTime?
   accounts      Account[]
   sessions      Session[]
-  Document      Document[]
+  lastLogin     DateTime?
+  documents     Document[]
 }
 
 model Profile {
@@ -215,7 +216,6 @@ model Request {
   // Relations
   messages Message[]
   notes    Note[]
-  Document Document[]
 }
 
 model Message {
@@ -284,89 +284,16 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// prisma/schema.prisma
-
-enum DocumentType {
-  PASSPORT
-  IDENTITY_PICTURE
-  BIRTH_CERTIFICATE
-  RESIDENCE_PERMIT
-  ADDRESS_PROOF
-  MARRIAGE_CERTIFICATE
-  DIVORCE_DECREE
-  DEATH_CERTIFICATE
-  OTHER
-}
-
-enum DocumentStatus {
-  PENDING // En attente de validation
-  VALIDATED // Validé
-  REJECTED // Rejeté
-  EXPIRED // Expiré
-  INCOMPLETE // Incomplet
-}
-
-enum DocumentValidityPeriod {
-  THREE_MONTHS
-  SIX_MONTHS
-  ONE_YEAR
-  FIVE_YEARS
-  TEN_YEARS
-  UNLIMITED
-}
-
 model Document {
-  id     String         @id @default(cuid())
-  type   DocumentType
-  status DocumentStatus @default(PENDING)
-
-  // Métadonnées du document
-  fileUrl  String // URL du fichier stocké
-  fileName String // Nom original du fichier
-  fileSize Int // Taille en bytes
-  mimeType String // Type MIME du fichier
-
-  // Dates importantes
-  uploadedAt  DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  validUntil  DateTime? // Date d'expiration si applicable
-  validatedAt DateTime? // Date de validation
-
-  // Validation et vérification
-  isVerified Boolean   @default(false)
-  verifiedBy String? // ID de l'admin qui a vérifié
-  verifiedAt DateTime? // Date de vérification
-
-  // Notes et commentaires
-  notes           String? // Notes internes
-  rejectionReason String? // Raison du rejet si applicable
-
-  // Relations
-  userId String // Propriétaire du document
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  requestId String? // Demande associée (optionnel)
-  request   Request? @relation(fields: [requestId], references: [id])
-
-  // Métadonnées de validation
-  validityPeriod DocumentValidityPeriod?
-  isOriginal     Boolean                 @default(false)
-  needsRenewal   Boolean                 @default(false)
-
-  // Champs pour l'analyse IA
-  aiAnalysisResults Json? // Résultats de l'analyse IA
-  aiConfidenceScore Float? // Score de confiance de l'analyse
-  extractedData     Json? // Données extraites par l'IA
-
-  // Audit
-  createdBy String? // ID de l'utilisateur qui a créé le document
-  updatedBy String? // ID du dernier utilisateur qui a modifié le document
-
-  // Contraintes
-  @@unique([userId, type, requestId])
-  // Indexes pour les recherches fréquentes
-  @@index([userId])
-  @@index([type])
-  @@index([status])
-  @@index([validUntil])
+  id        String    @id @default(cuid())
+  type      String // Type de document (passeport, carte d'identité, etc.)
+  status    String // Status du document (en cours, validé, expiré, etc.)
+  fileUrl   String // URL du fichier stocké
+  issuedAt  DateTime // Date d'émission
+  expiresAt DateTime? // Date d'expiration si applicable
+  metadata  Json? // Métadonnées additionnelles
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

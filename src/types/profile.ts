@@ -1,4 +1,4 @@
-import { Prisma, Gender, MaritalStatus, WorkStatus, Address } from '@prisma/client'
+import { Prisma, Gender, MaritalStatus, WorkStatus, Address, User, Profile } from '@prisma/client'
 import { BasicInfoSchema, ContactInfoSchema, FamilyInfoSchema, ProfessionalInfoSchema } from '@/schemas/registration'
 import { z } from 'zod'
 
@@ -70,4 +70,39 @@ export type ConsularFormData = {
   contactInfo: z.infer<typeof ContactInfoSchema>
   familyInfo: z.infer<typeof FamilyInfoSchema>
   professionalInfo: z.infer<typeof ProfessionalInfoSchema>
+}
+
+
+export interface UserProfileData {
+  user: User & {
+    profile: Profile & {
+      address: Address
+    }
+  }
+}
+
+export interface ProfileStats {
+  documentsCount: number
+  requestsCount: number
+  lastLogin?: Date
+  profileCompletion: number
+}
+
+export interface ProfileAction {
+  id: string
+  label: string
+  description: string
+  status: 'pending' | 'completed' | 'expired'
+  dueDate?: Date
+  priority: 'low' | 'medium' | 'high'
+}
+
+export interface ProfileStats {
+  documentsCount: number
+  documentsValidated: number
+  documentsPending: number
+  documentsExpired: number
+  requestsCount: number
+  lastLogin?: Date | null
+  profileCompletion: number
 }

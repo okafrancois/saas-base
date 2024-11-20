@@ -16,6 +16,8 @@ import {
   FamilyInfoFormData,
   ProfessionalInfoFormData,
 } from '@/schemas/registration'
+import { ProfileAction, ProfileStats } from '@/types'
+import { getDocumentStats } from '@/lib/db/document'
 
 const UpdateProfileSchema = z.object({
   firstName: z.string().min(2),
@@ -230,4 +232,97 @@ export async function postProfile(
         : 'messages.errors.unknown_error'
     }
   }
+}
+
+export async function getProfileActions(): Promise<ProfileAction[]> {
+  try {
+    const user = await getCurrentUser()
+    if (!user) return []
+
+    const profile = await db.profile.findUnique({
+      where: { userId: user.id }
+    })
+
+    const actions: ProfileAction[] = []
+
+    // Logique pour déterminer les actions nécessaires
+    if (!profile) {
+      actions.push({
+        id: 'complete-profile',
+        label: 'complete_profile',
+        description: 'complete_profile_description',
+        status: 'pending',
+        priority: 'high'
+      })
+    }
+
+    // Ajouter d'autres vérifications selon les besoins
+
+    return actions
+  } catch (error) {
+    console.error('Error fetching profile actions:', error)
+    return []
+  }
+}
+
+export async function getProfileStats(): Promise<ProfileStats | null> {
+  try {
+    const user = await getCurrentUser()
+    if (!user) return null
+
+    const [documentStats, requestsCount] = await Promise.all([
+      getDocumentStats(user.id),
+      db.request.count({
+        where: {
+          userId: user.id,
+          status: { in: ['PENDING', 'INCOMPLETE'] }
+        }
+      })
+    ])
+
+    const profile = await db.profile.findUnique({
+      where: { userId: user.id },
+      include: { address: true }
+    })
+
+    return {
+      documentsCount: documentStats.total,
+      documentsValidated: documentStats.validated,
+      documentsPending: documentStats.pending,
+      documentsExpired: documentStats.expired,
+      requestsCount,
+      lastLogin: user.lastLogin ?? undefined,
+      profileCompletion: calculateProfileCompletion(profile)
+    }
+  } catch (error) {
+    console.error('Error fetching profile stats:', error)
+    return null
+  }
+}
+
+function calculateProfileCompletion(profile: any): number {
+  if (!profile) return 0
+
+  const fields = {
+    required: [
+      'firstName',
+      'lastName',
+      'birthDate',
+      'nationality',
+      'gender'
+    ],
+    optional: [
+      'phone',
+      'profession',
+      'address'
+    ]
+  }
+
+  const requiredScore = fields.required.filter(f => !!profile[f]).length * 2
+  const optionalScore = fields.optional.filter(f => !!profile[f]).length
+
+  const maxScore = (fields.required.length * 2) + fields.optional.length
+  const currentScore = requiredScore + optionalScore
+
+  return Math.round((currentScore / maxScore) * 100)
 }

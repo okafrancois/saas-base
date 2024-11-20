@@ -5,6 +5,9 @@ import sharp from 'sharp'
 import { DocumentField } from '@/lib/utils'
 import Anthropic from '@anthropic-ai/sdk'
 import { pdfToImages } from '@/actions/convert'
+import { DocumentWithMetadata } from '@/types/document'
+import { getCurrentUser } from '@/actions/user'
+import { getUserDocuments } from '@/lib/db/document'
 
 // Types
 interface DocumentAnalysisResult {
@@ -338,5 +341,18 @@ function createVisionAnalyzer(model: AIModel): VisionAnalyzer {
       return new OpenAIVisionAnalyzer();
     default:
       throw new Error(`Unsupported model: ${model}`);
+  }
+}
+
+export async function getUserDocumentsList(): Promise<DocumentWithMetadata[]> {
+  try {
+    const user = await getCurrentUser()
+    if (!user) return []
+
+    const documents = await getUserDocuments(user.id)
+    return documents as DocumentWithMetadata[]
+  } catch (error) {
+    console.error('Error fetching user documents:', error)
+    return []
   }
 }

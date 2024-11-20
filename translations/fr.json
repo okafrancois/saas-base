@@ -725,7 +725,49 @@
   },
   "profile": {
     "update_success": "Profil mis à jour avec succès",
-    "update_error": "Erreur lors de la mise à jour du profil"
+    "update_error": "Erreur lors de la mise à jour du profil",
+    "stats": {
+      "title": "Aperçu du profil",
+      "completion": "Complétude du profil",
+      "documents": "Documents",
+      "requests": "Demandes en cours",
+      "last_login": "Dernière connexion"
+    },
+    "actions": {
+      "title": "Actions requises",
+      "no_actions": "Aucune action requise",
+      "priority": {
+        "low": "Faible priorité",
+        "medium": "Priorité moyenne",
+        "high": "Haute priorité"
+      }
+    },
+    "documents": {
+      "title": "Mes documents",
+      "empty": "Aucun document téléchargé",
+      "number": "Numéro",
+      "issued_at": "Émis le",
+      "expires_at": "Expire le",
+      "types": {
+        "passport": "Passeport",
+        "id_card": "Carte d'identité",
+        "birth_certificate": "Acte de naissance",
+        "proof_of_address": "Justificatif de domicile",
+        "residence_permit": "Titre de séjour"
+      },
+      "status": {
+        "validated": "Validé",
+        "pending": "En attente",
+        "rejected": "Rejeté",
+        "expired": "Expiré"
+      },
+      "actions": {
+        "add": "Ajouter un document",
+        "add_first": "Ajouter votre premier document",
+        "view": "Voir",
+        "download": "Télécharger"
+      }
+    }
   },
   "consular_registration": {
     "form": {
@@ -1332,29 +1374,6 @@
       "errors": {
         "canvas_not_supported": "Votre navigateur ne supporte pas le recadrage d'image",
         "dimensions_too_small": "Les dimensions sont trop petites"
-      }
-    }
-  },
-  "dashboard": {
-    "title": "Tableau de bord",
-    "welcome": "Bienvenue, {name}",
-    "cards": {
-      "profile": {
-        "title": "Mon Profil",
-        "completion": "Profil complété à {percent}%",
-        "complete_profile": "Compléter mon profil"
-      },
-      "documents": {
-        "title": "Mes Documents",
-        "valid": "Documents valides",
-        "expired": "Documents expirés",
-        "pending": "En attente de validation"
-      },
-      "requests": {
-        "title": "Mes Demandes",
-        "active": "Demandes en cours",
-        "completed": "Demandes terminées",
-        "view_all": "Voir toutes les demandes"
       }
     }
   }
