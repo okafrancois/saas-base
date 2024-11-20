@@ -91,16 +91,20 @@ model Profile {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Informations personnelles
-  firstName       String
-  lastName        String
-  gender          Gender
-  birthDate       String
-  birthPlace      String
-  birthCountry    String
-  nationality     String
-  maritalStatus   MaritalStatus?
-  workStatus      WorkStatus?
-  acquisitionMode NationalityAcquisition? @default(BIRTH)
+  firstName              String
+  lastName               String
+  gender                 Gender
+  birthDate              String
+  birthPlace             String
+  birthCountry           String
+  nationality            String
+  maritalStatus          MaritalStatus?
+  workStatus             WorkStatus?
+  acquisitionMode        NationalityAcquisition? @default(BIRTH)
+  passportNumber         String
+  passportIssueDate      DateTime
+  passportExpiryDate     DateTime
+  passportIssueAuthority String
 
   // Documents
   identityPicture  String? // URL
@@ -110,10 +114,10 @@ model Profile {
   addressProof     String? // URL
 
   // Contact
-  address           Address?          @relation(fields: [addressId], references: [id])
-  addressId         String?           @unique
-  phone             String?
-  emergencyContacts EmergencyContact?
+  address          Address?          @relation(fields: [addressId], references: [id])
+  addressId        String?           @unique
+  phone            String?
+  emergencyContact EmergencyContact?
 
   // Gabonese specific
   addressInGabon  AddressGabon?

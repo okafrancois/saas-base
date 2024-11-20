@@ -32,6 +32,7 @@ import { ContactInfoForm } from '@/app/(public)/registration/_components/contact
 import { ProfessionalInfoForm } from '@/app/(public)/registration/_components/professional-info'
 import { ReviewForm } from '@/app/(public)/registration/_components/review'
 import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
+import { postProfile } from '@/actions/profile'
 
 type StepKey = 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
 
@@ -308,7 +309,6 @@ export function RegistrationForm() {
     }
   }
 
-
   // Fonction pour vérifier la validité du formulaire actuel
   const validateCurrentStep = async () => {
     try {
@@ -414,7 +414,32 @@ export function RegistrationForm() {
   const handleFinalSubmit = async () => {
     try {
       setIsLoading(true)
-      // Appel API pour soumettre le formulaire
+
+      const formDataToSend = new FormData()
+
+      // Ajouter les fichiers
+      if (formData.documents) {
+        Object.entries(formData.documents).forEach(([key, file]) => {
+          if (file) formDataToSend.append(key, file)
+        })
+      }
+
+      // Ajouter les données JSON
+      formDataToSend.append('basicInfo', JSON.stringify(formData.basicInfo))
+      formDataToSend.append('contactInfo', JSON.stringify(formData.contactInfo))
+      formDataToSend.append('familyInfo', JSON.stringify(formData.familyInfo))
+      formDataToSend.append('professionalInfo', JSON.stringify(formData.professionalInfo))
+
+      const result = await postProfile(formDataToSend)
+
+      if (result.error) {
+        toast({
+          title: t('submission.error.title'),
+          description: result.error,
+          variant: "destructive"
+        })
+        return
+      }
 
       toast({
         title: t('submission.success.title'),
@@ -423,12 +448,18 @@ export function RegistrationForm() {
 
       // Redirection vers le dashboard
       router.push(PAGE_ROUTES.dashboard)
+
     } catch (error) {
-      setError(t('submission.error.unknown'))
+      toast({
+        title: t('submission.error.title'),
+        description: t('errors.unknown'),
+        variant: "destructive"
+      })
     } finally {
       setIsLoading(false)
     }
   }
+
 
   const renderCurrentStep = () => {
     switch (currentStep) {
