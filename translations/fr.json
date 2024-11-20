@@ -1334,5 +1334,28 @@
         "dimensions_too_small": "Les dimensions sont trop petites"
       }
     }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue, {name}",
+    "cards": {
+      "profile": {
+        "title": "Mon Profil",
+        "completion": "Profil complété à {percent}%",
+        "complete_profile": "Compléter mon profil"
+      },
+      "documents": {
+        "title": "Mes Documents",
+        "valid": "Documents valides",
+        "expired": "Documents expirés",
+        "pending": "En attente de validation"
+      },
+      "requests": {
+        "title": "Mes Demandes",
+        "active": "Demandes en cours",
+        "completed": "Demandes terminées",
+        "view_all": "Voir toutes les demandes"
+      }
+    }
   }
 }
