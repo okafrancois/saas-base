@@ -42,6 +42,7 @@ export function DocumentUploadField({
                                       form,
                                       disabled,
                                       existingFile,
+  maxSize = 1,
   accept = "image/*,application/pdf",
                                       aspectRatio = "square"
                                     }: DocumentUploadFieldProps<FieldValues>) {
@@ -137,15 +138,16 @@ export function DocumentUploadField({
                 onChange={handleChange}
                 disabled={disabled}
                 className="hidden"
+                max={maxSize * 1024 * 1024}
               />
 
               {!field.value && !existingFile ? (
                 // État vide
-                <div className="flex flex-col items-center justify-center p-6 text-center">
+                <div className="flex relative flex-col items-center justify-center p-6 text-center">
                   <Upload className="mb-4 h-8 w-8 text-muted-foreground" />
                   <Button
                     type="button"
-                    variant="ghost"
+                    variant="outline"
                     disabled={disabled}
                     onClick={() => inputRef.current?.click()}
                   >

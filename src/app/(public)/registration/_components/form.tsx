@@ -127,23 +127,7 @@ export function RegistrationForm() {
 
   // Gestion de l'analyse des documents
   const handleAnalysisComplete = (data: AnalysisData) => {
-    // Mise à jour des données pré-remplies
-    setFormData(prev => ({
-      ...prev,
-      basicInfo: {
-        ...prev.basicInfo,
-        firstName: data.firstName ?? prev.basicInfo?.firstName,
-        lastName: data.lastName ?? prev.basicInfo?.lastName,
-        // ... autres champs
-      },
-      // ... autres sections
-    }))
-
-    toast({
-      title: t('analysis.success'),
-      description: t('analysis.data_prefilled'),
-      variant: "success"
-    })
+    console.log('Analysis complete', data)
   }
 
   const handleDocumentsAnalysis = async () => {
@@ -180,8 +164,9 @@ export function RegistrationForm() {
     setError(undefined)
 
     try {
-      console.log('analysisFormData', analysisFormData)
       const results = await analyzeDocuments(analysisFormData, analysisFields, 'gpt')
+
+      handleAnalysisComplete(results.mergedData)
 
       if (results.success && results.mergedData) {
         toast({
