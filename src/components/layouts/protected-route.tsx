@@ -3,7 +3,7 @@
 import { useCurrentUser } from "@/hooks/use-current-user"
 import { UserRole } from "@prisma/client"
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect } from "react"
+import { useLayoutEffect } from 'react'
 import { PAGE_ROUTES } from "@/schemas/app-routes"
 
 interface ProtectedRouteProps {
@@ -16,7 +16,7 @@ export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
   const router = useRouter()
   const path = usePathname()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!user) {
       router.push(`${PAGE_ROUTES.login}?callbackUrl=${encodeURIComponent(path)}`)
       return
@@ -25,7 +25,7 @@ export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
     if (roles && !roles.includes(user.role)) {
       router.push(PAGE_ROUTES.unauthorized)
     }
-  }, [user, roles, router])
+  }, [user, roles, router, path])
 
   if (!user) {
     return null

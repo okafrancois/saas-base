@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
+import { Badge, BadgeVariant } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 
 interface ProfileHeaderProps {
@@ -33,7 +33,7 @@ export function ProfileHeader({
     <Card className="mb-6">
       <CardContent className="pt-6">
         <div className="flex flex-col items-center gap-4 md:flex-row md:gap-6">
-          <Avatar className="h-24 w-24 md:h-32 md:w-32">
+          <Avatar className="size-24 md:size-32">
             {user.profile?.identityPicture ? (
               <AvatarImage
                 src={user.profile.identityPicture}
@@ -52,7 +52,7 @@ export function ProfileHeader({
                 {user.name ?? `${user.profile?.firstName} ${user.profile?.lastName}`}
               </h1>
               <Badge
-                variant={user.profile?.status.toLowerCase()}
+                variant={user.profile?.status.toLowerCase() as BadgeVariant}
                 className="h-6"
               >
                 {t(`status.${user.profile?.status.toLowerCase()}`)}
@@ -62,7 +62,7 @@ export function ProfileHeader({
             <p className="mt-1 text-sm text-muted-foreground">
               {user.profile?.nationality && (
                 <span className="flex items-center justify-center gap-1 md:justify-start">
-                  <Shield className="h-4 w-4" />
+                  <Shield className="size-4" />
                   {t('fields.nationality')}: {t_countries(user.profile.nationality)}
                 </span>
               )}
@@ -74,7 +74,7 @@ export function ProfileHeader({
                 size="sm"
                 onClick={onEdit}
               >
-                <Edit2 className="mr-2 h-4 w-4" />
+                <Edit2 className="mr-2 size-4" />
                 {t('actions.edit')}
               </Button>
 
@@ -83,7 +83,7 @@ export function ProfileHeader({
                 size="sm"
                 onClick={onShare}
               >
-                <Share2 className="mr-2 h-4 w-4" />
+                <Share2 className="mr-2 size-4" />
                 {t('actions.share')}
               </Button>
 
@@ -92,7 +92,7 @@ export function ProfileHeader({
                 size="sm"
                 onClick={onDownload}
               >
-                <Download className="mr-2 h-4 w-4" />
+                <Download className="mr-2 size-4" />
                 {t('actions.download')}
               </Button>
             </div>

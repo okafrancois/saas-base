@@ -9,7 +9,7 @@ import { Route } from 'next'
 
 interface ProfileHeaderClientProps {
   user: User & {
-    profile: Profile | null
+    profile: Profile
   }
 }
 

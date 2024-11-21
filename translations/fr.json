@@ -1624,7 +1624,8 @@
           "all": "Tous les champs sont requis"
         },
         "actions": {
-          "complete": "Compléter mon profil"
+          "complete": "Compléter mon profil",
+          "view": "Voir le profil"
         }
       }
     }

@@ -1,4 +1,3 @@
-// src/types/security.mjs
 export interface SecurityHeader {
   key: string
   value: string
@@ -10,4 +9,5 @@ export interface CSPDirectives {
   'style-src': string[]
   'img-src': string[]
   'connect-src': string[]
+  'object-src': string[]
 }
