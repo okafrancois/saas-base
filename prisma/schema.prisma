@@ -59,6 +59,7 @@ enum RequestStatus {
   INCOMPLETE
   IN_PROGRESS
   COMPLETED
+  VALID
 }
 
 // Modèles principaux
@@ -139,9 +140,9 @@ model Profile {
   employerAddress String?
 
   // Métadonnées
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status    RequestStatus @default(INCOMPLETE)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
 
 model EmergencyContact {
@@ -156,7 +157,7 @@ model EmergencyContact {
 model AddressGabon {
   id        String  @id @default(cuid())
   address   String
-  district  String // Quartier
+  district  String
   city      String
   profile   Profile @relation(fields: [profileId], references: [id])
   profileId String  @unique

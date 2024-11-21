@@ -1,40 +1,48 @@
+import { Suspense } from 'react'
+import { getUserByIdWithProfile } from '@/lib/user/getters'
 import { getProfileStats } from '@/actions/profile'
 import { getUserDocumentsList } from '@/actions/documents'
+import { getCurrentUser } from '@/actions/user'
+import { redirect } from 'next/navigation'
+import { PAGE_ROUTES } from '@/schemas/app-routes'
+
+import { ProfileHeaderClient } from '@/components/profile/profile-header-client'
+import { ProfileInfoSection } from '@/components/profile/profile-info-section'
 import { ProfileStats } from '@/components/profile/profile-stats'
-import { DocumentsSection } from '@/components/profile/documents-section'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertTriangle } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { DocumentsSectionClient } from '@/components/profile/documents-section-client'
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton'
 
 export default async function ProfilePage() {
-  const t = await getTranslations('profile')
+  const user = await getCurrentUser()
 
-  const [stats, documents] = await Promise.all([
+  if (!user) {
+    redirect(PAGE_ROUTES.login)
+  }
+
+  const [userWithProfile, stats, documents] = await Promise.all([
+    getUserByIdWithProfile(user.id),
     getProfileStats(),
     getUserDocumentsList()
   ])
 
-  if (!stats) {
-    return (
-      <Alert variant="destructive">
-        <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>{t('error.title')}</AlertTitle>
-        <AlertDescription>{t('error.loading_failed')}</AlertDescription>
-      </Alert>
-    )
+  if (!userWithProfile) {
+    redirect(PAGE_ROUTES.dashboard)
   }
 
   return (
-    <div className="container space-y-8 py-8">
-      <h1 className="text-3xl font-bold">{t('title')}</h1>
+    <div className="container space-y-6 py-6 md:py-8">
+      <Suspense fallback={<LoadingSkeleton />}>
+        <ProfileHeaderClient user={userWithProfile} />
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <ProfileStats stats={stats} />
-      </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          {userWithProfile.profile && (
+            <ProfileInfoSection profile={userWithProfile.profile} />
+          )}
+          {stats && <ProfileStats stats={stats} />}
+        </div>
 
-      <DocumentsSection
-        documents={documents}
-      />
+        <DocumentsSectionClient documents={documents} />
+      </Suspense>
     </div>
   )
 }
