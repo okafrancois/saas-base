@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { getUserByIdWithProfile } from '@/lib/user/getters'
 import { getProfileStats } from '@/actions/profile'
-import { getUserDocumentsList } from '@/actions/documents'
+import { getUseProfileDocuments, getUserDocumentsList } from '@/actions/documents'
 import { getCurrentUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
@@ -28,7 +28,7 @@ export default async function ProfilePage() {
   const [userWithProfile, stats, documents] = await Promise.all([
     getUserByIdWithProfile(user.id),
     getProfileStats(),
-    getUserDocumentsList()
+    getUseProfileDocuments()
   ])
 
   if (!userWithProfile) {

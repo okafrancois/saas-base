@@ -45,7 +45,7 @@ export function DocumentCard({
       </CardHeader>
 
       <CardContent className="space-y-2 text-sm">
-        {document.metadata.documentNumber && (
+        {document.metadata?.documentNumber && (
           <p>
             <span className="text-muted-foreground">{t('number')}: </span>
             {document.metadata.documentNumber}

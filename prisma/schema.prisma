@@ -115,6 +115,7 @@ model Profile {
   passportIssueDate      DateTime
   passportExpiryDate     DateTime
   passportIssueAuthority String
+  identityPicture        String?
 
   // Documents
   documents          Document[] @relation("profileDocuments")

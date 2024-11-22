@@ -7,6 +7,9 @@ import Anthropic from '@anthropic-ai/sdk'
 import { pdfToImages } from '@/actions/convert'
 import { DocumentWithMetadata } from '@/types/document'
 import { getCurrentUser } from '@/actions/user'
+import { getUserByIdWithProfile, getUserProfile } from '@/lib/user/getters'
+import { getProfileDocuments } from '@/lib/db/document'
+import { db } from '@/lib/prisma'
 
 // Types
 interface DocumentAnalysisResult {
@@ -348,10 +351,43 @@ export async function getUserDocumentsList(): Promise<DocumentWithMetadata[]> {
     const user = await getCurrentUser()
     if (!user) return []
 
-    const documents = await getUserDocuments(user.id)
+    const profile = await getUserProfile(user.id)
+
+    if (!profile) return []
+
+    const documents = await getProfileDocuments(profile.id)
+
+    console.log('User documents:', documents)
+
     return documents as DocumentWithMetadata[]
   } catch (error) {
     console.error('Error fetching user documents:', error)
     return []
   }
+}
+
+export async function getUseProfileDocuments() {
+  const user = await getCurrentUser()
+  if (!user) return []
+
+  const profileWithDocument = await db.profile.findUnique({
+    where: { userId: user.id },
+    include: {
+      passport: true,
+      birthCertificate: true,
+      residencePermit: true,
+      addressProof: true,
+    }
+  })
+
+  if (!profileWithDocument) return []
+
+  const documents = [
+    profileWithDocument.passport,
+    profileWithDocument.birthCertificate,
+    profileWithDocument.residencePermit,
+    profileWithDocument.addressProof
+  ]
+
+  return documents.filter(Boolean) as DocumentWithMetadata[]
 }

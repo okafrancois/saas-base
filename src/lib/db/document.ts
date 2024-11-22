@@ -1,7 +1,8 @@
 import { db } from '@/lib/prisma'
 import {  DocumentType, DocumentStatus } from '@prisma/client'
+import { DocumentWithMetadata } from '@/types/document'
 
-export async function getProfileDocuments(profileId: string) {
+export async function getProfileDocuments(profileId: string): Promise<DocumentWithMetadata[]> {
   return db.document.findMany({
     where: { profileId },
     orderBy: { createdAt: 'desc' }
