@@ -22,7 +22,7 @@ export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-            <FileText className="h-5 w-5" />
+            <FileText className="size-5" />
             {t('title')}
           </CardTitle>
           <Button
@@ -30,7 +30,7 @@ export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
             size="sm"
             onClick={() => onAction('upload_document')}
           >
-            <Upload className="h-4 w-4 md:mr-2" />
+            <Upload className="size-4 md:mr-2" />
             <span className="hidden md:inline">{t('actions.upload')}</span>
           </Button>
         </div>
@@ -49,17 +49,17 @@ export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
         {/* Statistiques */}
         <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
           <div className="rounded-lg border p-2 text-center">
-            <CheckCircle className="mx-auto h-4 w-4 text-success" />
+            <CheckCircle className="text-success mx-auto size-4" />
             <div className="mt-1 text-xl font-bold">{stats.valid}</div>
             <div className="text-xs text-muted-foreground">{t('status.valid')}</div>
           </div>
           <div className="rounded-lg border p-2 text-center">
-            <Clock className="mx-auto h-4 w-4 text-warning" />
+            <Clock className="text-warning mx-auto size-4" />
             <div className="mt-1 text-xl font-bold">{stats.expiringSoon}</div>
             <div className="text-xs text-muted-foreground">{t('status.expiring_soon')}</div>
           </div>
           <div className="rounded-lg border p-2 text-center md:col-span-2">
-            <AlertTriangle className="mx-auto h-4 w-4 text-destructive" />
+            <AlertTriangle className="mx-auto size-4 text-destructive" />
             <div className="mt-1 text-xl font-bold">{stats.expired}</div>
             <div className="text-xs text-muted-foreground">{t('status.expired')}</div>
           </div>
@@ -74,15 +74,15 @@ export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => onAction('view_document')}
-                className="h-8 w-8 p-0 md:h-9 md:w-auto md:px-3"
+                className="size-8 p-0 md:h-9 md:w-auto md:px-3"
               >
-                <ArrowRight className="h-4 w-4 md:mr-2" />
+                <ArrowRight className="size-4 md:mr-2" />
                 <span className="hidden md:inline">{t('actions.view')}</span>
               </Button>
             </div>
             <div className="mt-2 space-y-1">
               <p className="text-sm">
-                {t(`document_types.${stats.latestDocument.type}`)}
+                {t(`document_types.${stats.latestDocument.type.toLowerCase()}`)}
               </p>
               <p className="text-xs text-muted-foreground">
                 {t('expires_on')}: {new Date(stats.latestDocument.expiryDate).toLocaleDateString()}

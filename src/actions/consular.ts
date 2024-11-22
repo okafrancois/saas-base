@@ -1,7 +1,12 @@
-import { ConsularFormData } from '@/types'
 import { ActionResult } from '@/lib/auth/action'
 import { getTranslations } from 'next-intl/server'
-import { BasicInfoSchema, ContactInfoSchema, FamilyInfoSchema, ProfessionalInfoSchema } from '@/schemas/registration'
+import {
+  BasicInfoSchema,
+  ConsularFormData,
+  ContactInfoSchema,
+  FamilyInfoSchema,
+  ProfessionalInfoSchema,
+} from '@/schemas/registration'
 import { db } from '@/lib/prisma'
 import { z } from 'zod'
 

@@ -1,12 +1,14 @@
 "use client"
 
 import { useTranslations } from 'next-intl'
-import { UserCircle, AlertCircle, CheckCircle } from 'lucide-react'
+import { UserCircle, AlertCircle } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Badge, BadgeVariant } from '@/components/ui/badge'
 import { DashboardSectionStats } from '@/types/dashboard'
+import Link from 'next/link'
+import { PAGE_ROUTES } from '@/schemas/app-routes'
 
 interface ProfileSectionProps {
   stats: DashboardSectionStats['profile']
@@ -18,6 +20,8 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
 
   const t = useTranslations('dashboard.sections.profile')
 
+
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -26,8 +30,8 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
             <UserCircle className="h-5 w-5" />
             {t('title')}
           </CardTitle>
-          <Badge variant={stats.status === 'ACTIVE' ? 'success' : 'warning'}>
-            {t(`status.${stats.status.toLowerCase()}`)}
+          <Badge variant={stats?.status as BadgeVariant}>
+            {t(`status.${stats?.status.toLowerCase()}`)}
           </Badge>
         </div>
       </CardHeader>
@@ -42,9 +46,9 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
         </div>
 
         {/* Champs manquants - masqués sur mobile si plus de 2 */}
-        {stats.missingFields.length > 0 && (
+        {stats && stats.missingFields.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium">{t('missing_fields')}:</p>
+            <p className="text-sm font-medium">{t('missing_fields')}</p>
             <ul className="space-y-1">
               {stats.missingFields.slice(0, 2).map((field) => (
                 <li key={field} className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -71,12 +75,13 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
           >
             {t('actions.view')}
           </Button>
-          <Button
-            size="sm"
+          <Link
             onClick={() => onAction('complete_profile')}
+            className={buttonVariants({ variant: 'default', size: 'sm' })}
+            href={PAGE_ROUTES.profile}
           >
             {t('actions.complete')}
-          </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>

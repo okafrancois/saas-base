@@ -6,14 +6,13 @@ import {
   getProfileStatus,
 } from '@/lib/services/dashboard/utils'
 import { db } from '@/lib/prisma'
+import { AppointmentStatus } from '@prisma/client'
 
 export async function getDashboardStats(userId: string) {
   try {
     const [
       profile,
-      documents,
-      requests,
-      appointments
+      requests
     ] = await Promise.all([
       // Récupérer le profil
       db.profile.findUnique({
@@ -21,14 +20,18 @@ export async function getDashboardStats(userId: string) {
         include: {
           address: true,
           emergencyContact: true,
-          addressInGabon: true
+          addressInGabon: true,
+          documents: {
+            orderBy: { updatedAt: 'desc' }
+          },
+          appointments: {
+            where: {
+              date: { gte: new Date() }
+            },
+            orderBy: { date: 'asc' },
+            take: 1
+          },
         }
-      }),
-
-      // Récupérer les documents
-      db.document.findMany({
-        where: { userId },
-        orderBy: { updatedAt: 'desc' }
       }),
 
       // Récupérer les demandes
@@ -37,57 +40,24 @@ export async function getDashboardStats(userId: string) {
         orderBy: { updatedAt: 'desc' },
         take: 5
       }),
-
-      // Récupérer les rendez-vous - Mise à jour de la requête
-      db.appointment.findMany({
-        where: {
-          userId,
-          date: { gte: new Date() }
-        },
-        select: {
-          id: true,
-          type: true,
-          status: true,
-          date: true,
-          description: true,
-          createdAt: true
-        },
-        orderBy: { date: 'asc' },
-        take: 1
-      })
     ])
 
     // Calculer les statistiques des rendez-vous
     const appointmentStats = {
-      upcoming: appointments[0] ? {
-        id: appointments[0].id,
-        date: appointments[0].date,
-        type: appointments[0].type,
-        status: appointments[0].status
+      upcoming: profile?.appointments[0] ? {
+        id: profile?.appointments[0].id,
+        date: profile?.appointments[0].date,
+        type: profile?.appointments[0].type,
+        status: profile?.appointments[0].status
       } : undefined,
       past: 0, // Nous devrons faire une requête séparée pour cela
       cancelled: 0 // Nous devrons faire une requête séparée pour cela
     }
 
     // Si nous voulons les statistiques complètes des rendez-vous
-    if (appointments.length > 0) {
-      const [pastCount, cancelledCount] = await Promise.all([
-        db.appointment.count({
-          where: {
-            userId,
-            date: { lt: new Date() }
-          }
-        }),
-        db.appointment.count({
-          where: {
-            userId,
-            status: 'CANCELLED'
-          }
-        })
-      ])
-
-      appointmentStats.past = pastCount
-      appointmentStats.cancelled = cancelledCount
+    if (profile?.appointments && profile.appointments.length > 0) {
+      appointmentStats.past = profile.appointments.filter(a => a.date < new Date()).length
+      appointmentStats.cancelled = profile.appointments.filter(a => a.status === AppointmentStatus.CANCELLED).length
     }
 
     return {
@@ -111,7 +81,7 @@ export async function getDashboardStats(userId: string) {
       },
       procedures: calculateProceduresStats(requests),
       appointments: appointmentStats,
-      documents: calculateDocumentsStats(documents)
+      documents: calculateDocumentsStats(profile?.documents ?? [])
     }
 
   } catch (error) {

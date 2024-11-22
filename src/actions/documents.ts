@@ -7,7 +7,6 @@ import Anthropic from '@anthropic-ai/sdk'
 import { pdfToImages } from '@/actions/convert'
 import { DocumentWithMetadata } from '@/types/document'
 import { getCurrentUser } from '@/actions/user'
-import { getUserDocuments } from '@/lib/db/document'
 
 // Types
 interface DocumentAnalysisResult {

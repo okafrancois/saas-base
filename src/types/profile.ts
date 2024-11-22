@@ -1,6 +1,4 @@
-import { Prisma, Gender, MaritalStatus, WorkStatus, Address, User, Profile } from '@prisma/client'
-import { BasicInfoSchema, ContactInfoSchema, FamilyInfoSchema, ProfessionalInfoSchema } from '@/schemas/registration'
-import { z } from 'zod'
+import { Prisma, Gender, MaritalStatus, WorkStatus, Address, User, Profile, DocumentStatus } from '@prisma/client'
 
 export type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
@@ -59,21 +57,7 @@ export type AnalysisData = {
   employerAddress?: string
 }
 
-export enum RequestType {
-  REGISTRATION = 'REGISTRATION',
-  RENEWAL = 'RENEWAL',
-  REPLACEMENT = 'REPLACEMENT',
-}
-
-export type ConsularFormData = {
-  basicInfo: z.infer<typeof BasicInfoSchema>
-  contactInfo: z.infer<typeof ContactInfoSchema>
-  familyInfo: z.infer<typeof FamilyInfoSchema>
-  professionalInfo: z.infer<typeof ProfessionalInfoSchema>
-}
-
-
-export interface UserProfileData {
+export interface UserProfileData extends User{
   user: User & {
     profile: Profile & {
       address: Address
@@ -95,6 +79,37 @@ export interface ProfileAction {
   status: 'pending' | 'completed' | 'expired'
   dueDate?: Date
   priority: 'low' | 'medium' | 'high'
+}
+
+export interface ProfileStats {
+  documentsCount: number
+  documentsValidated: number
+  documentsPending: number
+  documentsExpired: number
+  requestsCount: number
+  lastLogin?: Date
+  profileCompletion: number
+}
+
+export interface ProfileWithDocuments extends Profile {
+  documents: Document[]
+  address: Address | null
+}
+
+export interface ProfileDocument {
+  id: string
+  type: DocumentType
+  status: DocumentStatus
+  fileUrl: string
+  issuedAt: Date
+  expiresAt?: Date
+  metadata: DocumentMetadata
+}
+
+export interface DocumentMetadata {
+  documentNumber?: string
+  issuingAuthority?: string
+  validationNotes?: string[]
 }
 
 export interface ProfileStats {

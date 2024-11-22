@@ -16,7 +16,5 @@ export const checkUserExist = async (userId: string) => {
     }
   })
 
-  console.log('user', user)
-
   return !!user
 }

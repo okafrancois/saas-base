@@ -2,13 +2,13 @@ import { useTranslations } from 'next-intl'
 import { DocumentCard } from './document-card'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-import type { DocumentWithMetadata } from '@/types/document'
+import type { ProfileDocument } from '@/types/profile'
 
 interface DocumentsSectionProps {
-  documents: DocumentWithMetadata[]
+  documents: ProfileDocument[]
   onAddDocument?: () => void
-  onViewDocument?: (doc: DocumentWithMetadata) => void
-  onDownloadDocument?: (doc: DocumentWithMetadata) => void
+  onViewDocument?: (doc: ProfileDocument) => void
+  onDownloadDocument?: (doc: ProfileDocument) => void
 }
 
 export function DocumentsSection({
@@ -47,8 +47,8 @@ export function DocumentsSection({
             <DocumentCard
               key={doc.id}
               document={doc}
-              onView={onViewDocument}
-              onDownload={onDownloadDocument}
+              onView={() => onViewDocument?.(doc)}
+              onDownload={() => onDownloadDocument?.(doc)}
             />
           ))}
         </div>

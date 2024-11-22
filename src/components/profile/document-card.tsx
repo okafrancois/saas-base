@@ -5,31 +5,20 @@ import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Eye, Download, AlertTriangle } from 'lucide-react'
-import type { DocumentWithMetadata } from '@/types/document'
+import type { ProfileDocument } from '@/types/profile'
 
 interface DocumentCardProps {
-  document: DocumentWithMetadata
-  onView?: (doc: DocumentWithMetadata) => void
-  onDownload?: (doc: DocumentWithMetadata) => void
+  document: ProfileDocument
+  onView?: (doc: ProfileDocument) => void
+  onDownload?: (doc: ProfileDocument) => void
 }
 
-export function DocumentCard({ document, onView, onDownload }: DocumentCardProps) {
+export function DocumentCard({
+                               document,
+                               onView,
+                               onDownload
+                             }: DocumentCardProps) {
   const t = useTranslations('profile.documents')
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'VALIDATED':
-        return 'success'
-      case 'PENDING':
-        return 'warning'
-      case 'REJECTED':
-        return 'destructive'
-      case 'EXPIRED':
-        return 'secondary'
-      default:
-        return 'default'
-    }
-  }
 
   const isExpired = document.expiresAt && new Date(document.expiresAt) < new Date()
 
@@ -49,7 +38,7 @@ export function DocumentCard({ document, onView, onDownload }: DocumentCardProps
           <h3 className="font-semibold">
             {t(`types.${document.type.toLowerCase()}`)}
           </h3>
-          <Badge variant={getStatusColor(document.status)}>
+          <Badge variant={document.status.toLowerCase()}>
             {t(`status.${document.status.toLowerCase()}`)}
           </Badge>
         </div>

@@ -735,7 +735,11 @@
       "active": "Actif",
       "validated": "Validé",
       "pending": "En attente",
-      "expired": "Expiré"
+      "expired": "Expiré",
+      "incomplete": "Incomplet",
+      "rejected": "Rejeté",
+      "valid": "Valide",
+      "complete": "Complet"
     },
     "sections": {
       "personal_info": "Informations personnelles"
@@ -756,6 +760,8 @@
       "requests": "Demandes en cours",
       "last_login": "Dernière connexion"
     },
+    "no_profile": "Aucun profil trouvé",
+    "no_profile_help": "Créez votre profil pour profiter de toutes les fonctionnalités du service consulaire en ligne",
     "actions": {
       "title": "Actions requises",
       "no_actions": "Aucune action requise",
@@ -767,7 +773,8 @@
       "edit": "Modifier",
       "view": "Voir",
       "share": "Partager",
-      "download": "Télécharger"
+      "download": "Télécharger",
+      "create": "Créer mon profil"
     },
     "documents": {
       "title": "Mes documents",
@@ -1621,12 +1628,15 @@
         "completion": "Complétude du profil",
         "missing_fields": "Champs manquants :",
         "fields": {
-          "all": "Tous les champs sont requis"
+          "all": "Tous les champs sont requis",
+          "identity_photo": "Photo d'identité",
+          "passport": "Passeport"
         },
         "actions": {
           "complete": "Compléter mon profil",
           "view": "Voir le profil"
-        }
+        },
+        "and_more": "et {count} autres"
       }
     }
   }
