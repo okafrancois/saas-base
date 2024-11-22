@@ -1,21 +1,24 @@
 import React, { Suspense } from 'react'
-import { getUserByIdWithProfile } from '@/lib/user/getters'
-import { getProfileStats } from '@/actions/profile'
-import { getUseProfileDocuments, getUserDocumentsList } from '@/actions/documents'
+import { getUserFullProfile } from '@/lib/user/getters'
 import { getCurrentUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 
 import { ProfileHeaderClient } from '@/components/profile/profile-header-client'
-import { ProfileInfoSection } from '@/components/profile/profile-info-section'
-import { ProfileStats } from '@/components/profile/profile-stats'
-import { DocumentsSectionClient } from '@/components/profile/documents-section-client'
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton'
 import { InfoIcon, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { buttonVariants } from '@/components/ui/button'
+import { calculateProfileCompletion } from '@/lib/services/dashboard/utils'
+import { ProfileCompletion } from '@/components/profile/profile-completion'
+import { getProfileFieldsStatus } from '@/lib/utils'
+import { BasicInfoSection } from '@/components/profile/sections/basic-info-section'
+import { ContactInfoSection } from '@/components/profile/sections/contact-info-section'
+import { FamilyInfoSection } from '@/components/profile/sections/family-info-section'
+import { ProfessionalInfoSection } from '@/components/profile/sections/professional-info-section'
+import { DocumentsSection } from '@/components/profile/sections/documents-section'
 
 export default async function ProfilePage() {
   const user = await getCurrentUser()
@@ -25,17 +28,12 @@ export default async function ProfilePage() {
     redirect(PAGE_ROUTES.login)
   }
 
-  const [userWithProfile, stats, documents] = await Promise.all([
-    getUserByIdWithProfile(user.id),
-    getProfileStats(),
-    getUseProfileDocuments()
-  ])
+  const profile = await getUserFullProfile(user.id)
 
-  if (!userWithProfile) {
-    redirect(PAGE_ROUTES.dashboard)
-  }
+  const completionRate = calculateProfileCompletion(profile)
+  const fieldStatus = getProfileFieldsStatus(profile)
 
-  if (!userWithProfile.profile) {
+  if (!profile) {
     return (
       <div className={"container flex flex-col gap-4"}>
         <Card>
@@ -72,14 +70,31 @@ export default async function ProfilePage() {
   return (
     <div className="container space-y-6 py-6 md:py-8">
       <Suspense fallback={<LoadingSkeleton />}>
-        <ProfileHeaderClient user={userWithProfile} />
+        <ProfileHeaderClient profile={profile} />
+        <ProfileCompletion
+          completionRate={completionRate}
+          fieldStatus={fieldStatus}
+        />
 
         <div className="grid gap-6 md:grid-cols-2">
-          <ProfileInfoSection profile={userWithProfile.profile} />
-          {stats && <ProfileStats stats={stats} />}
+          {profile && (
+            <>
+              <BasicInfoSection profile={profile} />
+              <ContactInfoSection
+                profile={profile}
+              />
+              <FamilyInfoSection profile={profile} />
+              <ProfessionalInfoSection profile={profile} />
+            </>
+          )}
         </div>
 
-        <DocumentsSectionClient documents={documents} />
+        <DocumentsSection documents={{
+          passport: profile.passport,
+          birthCertificate: profile.birthCertificate,
+          residencePermit: profile.residencePermit,
+          addressProof: profile.addressProof,
+        }} />
       </Suspense>
     </div>
   )

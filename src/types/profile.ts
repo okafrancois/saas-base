@@ -121,3 +121,15 @@ export interface ProfileStats {
   lastLogin?: Date
   profileCompletion: number
 }
+
+interface FullProfileOthers {
+  address: Address
+  documents?: Document[]
+  passport?: Document
+  birthCertificate?: Document
+  residencePermit?: Document
+  addressProof?: Document
+  addressInGabon?: Document
+}
+
+export type FullProfile = Profile & FullProfileOthers

@@ -18,6 +18,7 @@ export const PAGE_ROUTES = {
 
   // Pages utilisateur
   profile: '/profile' as Route<string>,
+  profile_edit: '/profile/edit' as Route<string>,
   settings: '/settings' as Route<string>,
   requests: '/requests' as Route<string>,
   documents: '/documents' as Route<string>,

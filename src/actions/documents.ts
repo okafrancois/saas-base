@@ -366,12 +366,9 @@ export async function getUserDocumentsList(): Promise<DocumentWithMetadata[]> {
   }
 }
 
-export async function getUseProfileDocuments() {
-  const user = await getCurrentUser()
-  if (!user) return []
-
+export async function getUserProfileDocuments(userId: string) {
   const profileWithDocument = await db.profile.findUnique({
-    where: { userId: user.id },
+    where: { userId },
     include: {
       passport: true,
       birthCertificate: true,

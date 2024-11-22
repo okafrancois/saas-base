@@ -1,5 +1,6 @@
 import { Profile, User } from '@prisma/client'
 import { db } from '@/lib/prisma'
+import { FullProfile } from '@/types'
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   try {
@@ -50,6 +51,28 @@ export async function getUserProfile(id: string) {
       },
     })
   } catch {
+    return null
+  }
+}
+
+export async function getUserFullProfile(id: string): Promise<FullProfile | null> {
+  try {
+    return await db.profile.findFirst({
+      where: {
+        userId: id,
+      },
+      include: {
+        passport: true,
+        birthCertificate: true,
+        residencePermit: true,
+        address: true,
+        addressProof: true,
+        addressInGabon: true,
+        emergencyContact: true,
+      },
+    })
+  } catch(e) {
+    console.error(e)
     return null
   }
 }

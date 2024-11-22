@@ -21,16 +21,16 @@ import {
   FamilyInfoFormData, FamilyInfoSchema,
   ProfessionalInfoFormData, ProfessionalInfoSchema,
 } from '@/schemas/registration'
-import { MobileProgress } from '@/app/(public)/registration/_components/mobile-progress'
-import { StepGuide } from '@/app/(public)/registration/_components/step-guide'
+import { MobileProgress } from '@/components/registration/mobile-progress'
+import { StepGuide } from '@/components/registration/step-guide'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getFieldsForDocument } from '@/lib/document-fields'
 import { analyzeDocuments } from '@/actions/documents'
-import { FamilyInfoForm } from '@/app/(public)/registration/_components/family-info'
-import { ContactInfoForm } from '@/app/(public)/registration/_components/contact-form'
-import { ProfessionalInfoForm } from '@/app/(public)/registration/_components/professional-info'
-import { ReviewForm } from '@/app/(public)/registration/_components/review'
+import { FamilyInfoForm } from '@/components/registration/family-info'
+import { ContactInfoForm } from '@/components/registration/contact-form'
+import { ProfessionalInfoForm } from '@/components/registration/professional-info'
+import { ReviewForm } from '@/components/registration/review'
 import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
 import { postProfile } from '@/actions/profile'
 

@@ -1,34 +1,23 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { ProfileHeader } from './profile-header'
-import { User, Profile } from '@prisma/client'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { generateVCardString } from '@/lib/utils'
-import { Route } from 'next'
+import { FullProfile } from '@/types'
 
 interface ProfileHeaderClientProps {
-  user: User & {
-    profile: Profile
-  }
+  profile: FullProfile
 }
 
-export function ProfileHeaderClient({ user }: ProfileHeaderClientProps) {
-  const router = useRouter()
-
-  const handleEdit = () => {
-    router.push(`${PAGE_ROUTES.profile}/edit` as Route<string>)
-  }
-
+export function ProfileHeaderClient({ profile }: ProfileHeaderClientProps) {
   const handleShare = async () => {
-    if (!user.profile) return
+    if (!profile) return
 
     const vCardData = {
-      firstName: user.profile.firstName,
-      lastName: user.profile.lastName,
-      emails: user.email ? [{ value: user.email }] : [],
-      phones: user.profile.phone ? [{ value: user.profile.phone }] : [],
-      photoUrl: user.profile.identityPicture || undefined
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      emails: profile.email ? [{ value: profile.email }] : [],
+      phones: profile.phone ? [{ value: profile.phone }] : [],
+      photoUrl: profile.identityPicture || undefined
     }
 
     const vCard = generateVCardString(vCardData)
@@ -38,7 +27,7 @@ export function ProfileHeaderClient({ user }: ProfileHeaderClientProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: user.name || 'Contact',
+          title: profile?.firstName || 'Contact',
           text: 'Carte de contact consulaire',
           url: window.location.href
         })
@@ -48,21 +37,37 @@ export function ProfileHeaderClient({ user }: ProfileHeaderClientProps) {
     } else {
       const a = document.createElement('a')
       a.href = url
-      a.download = `${user.name || 'contact'}.vcf`
+      a.download = `${profile?.firstName || 'contact'}.vcf`
       a.click()
       URL.revokeObjectURL(url)
     }
   }
 
   const handleDownload = () => {
-    // Implémentation du téléchargement de la carte consulaire
-    // À implémenter plus tard
+    if (!profile) return
+
+    const vCardData = {
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      emails: profile.email ? [{ value: profile.email }] : [],
+      phones: profile.phone ? [{ value: profile.phone }] : [],
+      photoUrl: profile.identityPicture || undefined
+    }
+
+    const vCard = generateVCardString(vCardData)
+    const blob = new Blob([vCard], { type: 'text/vcard' })
+    const url = URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${profile.firstName + " " + profile.lastName || 'contact'}.vcf`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
     <ProfileHeader
-      user={user}
-      onEdit={handleEdit}
+      profile={profile}
       onShare={handleShare}
       onDownload={handleDownload}
     />

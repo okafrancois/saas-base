@@ -119,7 +119,9 @@
         "uploaded": "En attente de vérification",
         "verified": "Vérifié",
         "rejected": "Rejeté",
-        "expired": "Expiré"
+        "expired": "Expiré",
+        "incomplete": "Incomplet",
+        "pending": "En attente"
       },
       "expired_on": "Expiré le {date}",
       "types": {
@@ -131,7 +133,15 @@
         "marriage_certificate": "Acte de mariage",
         "death_certificate": "Acte de décès",
         "divorce_decree": "Jugement de divorce"
-      }
+      },
+      "actions": {
+        "upload": "Télécharger",
+        "reupload": "Re-télécharger",
+        "view": "Voir",
+        "delete": "Supprimer",
+        "download": "Télécharger"
+      },
+      "expires_on": "Expire le "
     }
   },
   "feedback": {
@@ -728,7 +738,20 @@
   },
   "profile": {
     "title": "Mon profil",
-    "completion": "Complétude du profil",
+    "completion": {
+      "missing_fields": "Informations manquantes",
+      "profile_complete": "Votre profil est complet !",
+      "required_field": "Ce champ est requis",
+      "title": "État du profil",
+      "progress": "Progression globale",
+      "required_information": "Informations requises",
+      "optional_information": "Informations optionnelles",
+      "complete_profile": "Compléter mon profil",
+      "required": "Requis",
+      "optional": "Optionnel",
+      "show_more": "Voir {count} de plus",
+      "show_less": "Voir moins"
+    },
     "last_update": "Dernière mise à jour",
     "missing_fields": "Champs manquants",
     "status": {
@@ -742,14 +765,60 @@
       "complete": "Complet"
     },
     "sections": {
-      "personal_info": "Informations personnelles"
+      "basic_info": "Informations personnelles",
+      "personal_info": "Informations personnelles",
+      "contact_info": "Coordonnées",
+      "family_info": "Informations familiales",
+      "professional_info": "Informations professionnelles",
+      "documents": "Documents"
     },
     "fields": {
       "gender": "Genre",
+      "gender_type": {
+        "male": "Masculin",
+        "female": "Féminin"
+      },
       "birth_date": "Date de naissance",
       "birth_place": "Lieu de naissance",
       "nationality": "Nationalité",
-      "marital_status": "Situation matrimoniale"
+      "marital_status": "Situation matrimoniale",
+      "acquiring_mode": "Mode d'acquisition",
+      "residence_permit": "Titre de séjour",
+      "identity_photo": "Photo d'identité",
+      "passport": "Passeport",
+      "birth_certificate": "Acte de naissance",
+      "contact_details": "Coordonnées",
+      "proof_of_residence": "Justificatif de domicile",
+      "emergency_contact": "Contact d'urgence",
+      "all": "Toutes les informations",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "full_name": "Nom complet",
+      "phone": "Téléphone",
+      "profession": "Profession",
+      "employer": "Employeur",
+      "gabon_address": "Adresse au Gabon",
+      "spouse_name": "Nom du conjoint",
+      "gabon_activity": "Activité au Gabon"
+    },
+    "family": {
+      "parents": "Parents",
+      "father": "Père",
+      "mother": "Mère",
+      "marital_status": "Situation matrimoniale",
+      "spouse": "Conjoint(e)",
+      "emergency_contact": "Contact d'urgence"
+    },
+    "contact": {
+      "primary": "Coordonnées principales",
+      "main_address": "Adresse principale",
+      "gabon_address": "Adresse au Gabon"
+    },
+    "professional": {
+      "status": "Statut professionnel",
+      "employer": "Employeur",
+      "work_address": "Adresse professionnelle",
+      "last_activity_gabon": "Dernière activité au Gabon"
     },
     "update_success": "Profil mis à jour avec succès",
     "update_error": "Erreur lors de la mise à jour du profil",
@@ -758,7 +827,12 @@
       "completion": "Complétude du profil",
       "documents": "Documents",
       "requests": "Demandes en cours",
-      "last_login": "Dernière connexion"
+      "last_login": "Dernière connexion",
+      "validated": "Validé",
+      "pending": "En attente",
+      "expired": "Expiré",
+      "rejected": "Rejeté",
+      "incomplete": "Incomplet"
     },
     "no_profile": "Aucun profil trouvé",
     "no_profile_help": "Créez votre profil pour profiter de toutes les fonctionnalités du service consulaire en ligne",
@@ -774,7 +848,18 @@
       "view": "Voir",
       "share": "Partager",
       "download": "Télécharger",
-      "create": "Créer mon profil"
+      "create": "Créer mon profil",
+      "delete": "Supprimer",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
+    "success": {
+      "update_title": "Mise à jour réussie",
+      "update_description": "Vos informations ont été mises à jour avec succès"
+    },
+    "errors": {
+      "update_failed": "Échec de la mise à jour",
+      "unknown": "Une erreur inattendue est survenue"
     },
     "documents": {
       "title": "Mes documents",
@@ -1007,6 +1092,58 @@
         "schedule": "Prendre rendez-vous",
         "reschedule": "Reprogrammer",
         "cancel": "Annuler"
+      }
+    },
+    "assets": {
+      "marital_status": {
+        "single": "Célibataire",
+        "married": "Marié(e)",
+        "divorced": "Divorcé(e)",
+        "widowed": "Veuf(ve)",
+        "cohabiting": "En concubinage"
+      },
+      "work_status": {
+        "employee": "Salarié(e)",
+        "entrepreneur": "Entrepreneur(e)",
+        "unemployed": "Sans emploi",
+        "retired": "Retraité(e)",
+        "student": "Étudiant(e)",
+        "other": "Autre"
+      },
+      "gender": {
+        "male": "Homme",
+        "female": "Femme"
+      }
+    },
+    "edit": {
+      "title": "Modifier mon profil",
+      "subtitle": "Mettez à jour vos informations personnelles",
+      "steps": {
+        "documents": "Documents",
+        "documents_description": "Gérez vos documents officiels",
+        "basic": "Identité",
+        "basic_description": "Informations personnelles",
+        "contact": "Contact",
+        "contact_description": "Coordonnées",
+        "family": "Famille",
+        "family_description": "Situation familiale",
+        "professional": "Professionnel",
+        "professional_description": "Situation professionnelle",
+        "review": "Révision",
+        "review_description": "Vérifiez vos modifications"
+      },
+      "navigation": {
+        "previous": "Précédent",
+        "next": "Suivant",
+        "submit": "Enregistrer les modifications"
+      },
+      "success": {
+        "title": "Profil mis à jour",
+        "description": "Vos informations ont été mises à jour avec succès"
+      },
+      "errors": {
+        "update_failed": "Échec de la mise à jour",
+        "unknown": "Une erreur inattendue est survenue"
       }
     }
   },
@@ -1279,6 +1416,11 @@
       "title": "Formulaire d'inscription consulaire",
       "subtitle": "Suivez les étapes pour créer votre carte consulaire",
       "gender": "Genre",
+      "current_address": "Adresse actuelle",
+      "required": "Requis",
+      "optional": "Optionnel",
+      "not_provided": "Non fourni",
+      "basic_info": "Informations personnelles",
       "first_name": "Prénom(s)",
       "last_name": "Nom(s)",
       "first_name_placeholder": "Entrez votre/vos prénom(s)",
@@ -1630,7 +1772,9 @@
         "fields": {
           "all": "Tous les champs sont requis",
           "identity_photo": "Photo d'identité",
-          "passport": "Passeport"
+          "passport": "Passeport",
+          "birth_certificate": "Acte de naissance",
+          "residence_permit": "Titre de séjour"
         },
         "actions": {
           "complete": "Compléter mon profil",
