@@ -1186,7 +1186,8 @@
         "complete": "Compléter",
         "update": "Mettre à jour",
         "add": "Ajouter"
-      }
+      },
+      "analyzing": "Analyse en cours..."
     }
   },
   "consular_registration": {

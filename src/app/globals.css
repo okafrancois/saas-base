@@ -304,3 +304,42 @@ html {
     @apply text-sm md:text-base;
   }
 }
+
+.perspective {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Animation pour la carte */
+.card-flip-enter {
+  opacity: 0;
+  transform: rotateY(-180deg);
+}
+
+.card-flip-enter-active {
+  opacity: 1;
+  transform: rotateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.card-flip-exit {
+  opacity: 1;
+  transform: rotateY(0);
+}
+
+.card-flip-exit-active {
+  opacity: 0;
+  transform: rotateY(180deg);
+  transition: opacity 300ms, transform 300ms;
+}

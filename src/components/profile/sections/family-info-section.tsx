@@ -162,7 +162,7 @@ export function FamilyInfoSection({ profile }: FamilyInfoSectionProps) {
           </div>
 
           {/* Parents */}
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4">
             <InfoField
               label={t('form.father_name')}
               value={profile.fatherFullName}
