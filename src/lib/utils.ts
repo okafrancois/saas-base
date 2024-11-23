@@ -249,7 +249,9 @@ export function getProfileFieldsStatus(profile: Profile | null): ProfileFieldSta
     { key: 'identityPicture', name: 'identity_photo' },
     { key: 'passport', name: 'passport' },
     { key: 'birthCertificate', name: 'birth_certificate' },
-    { key: 'phone', name: 'phone' }
+    { key: 'phone', name: 'phone' },
+    { key: 'address', name: 'address' },
+    {key: "addressProof", name: "address_proof"}
   ]
 
   const optionalFields = [
@@ -257,7 +259,9 @@ export function getProfileFieldsStatus(profile: Profile | null): ProfileFieldSta
     { key: 'employer', name: 'employer' },
     { key: 'addressInGabon', name: 'gabon_address' },
     { key: 'spouseFullName', name: 'spouse_name' },
-    { key: 'activityInGabon', name: 'gabon_activity' }
+    { key: 'activityInGabon', name: 'gabon_activity' },
+    { key: 'maritalStatus', name: 'marital_status' },
+    {key: "residencePermit", name: "residence_permit"}
   ]
 
   const requiredStatus = requiredFields.map(field => ({

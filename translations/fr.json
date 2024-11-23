@@ -778,6 +778,8 @@
         "male": "Masculin",
         "female": "Féminin"
       },
+      "address": "Adresse",
+      "address_proof": "Justificatif de domicile",
       "birth_date": "Date de naissance",
       "birth_place": "Lieu de naissance",
       "nationality": "Nationalité",

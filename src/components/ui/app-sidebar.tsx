@@ -22,6 +22,7 @@ import { NavItem } from '@/components/layouts/types'
 import { getCurrentUser } from '@/actions/user'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = await getCurrentUser()
@@ -111,8 +112,15 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href={PAGE_ROUTES.base}>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+                <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <Image
+                    src="/images/logo_consulat_ga_512.jpeg"
+                    alt="Consulat Logo"
+                    width={128}
+                    height={128}
+                    priority
+                    className={"rounded"}
+                  />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Consulat</span>

@@ -1,4 +1,4 @@
-import { Prisma, Gender, MaritalStatus, WorkStatus, Address, User, Profile, DocumentStatus } from '@prisma/client'
+import { Prisma, Gender, AddressGabon, MaritalStatus, WorkStatus, Address, User, Profile, DocumentStatus } from '@prisma/client'
 
 export type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
@@ -129,7 +129,7 @@ interface FullProfileOthers {
   birthCertificate?: Document
   residencePermit?: Document
   addressProof?: Document
-  addressInGabon?: Document
+  addressInGabon?: AddressGabon
 }
 
 export type FullProfile = Profile & FullProfileOthers

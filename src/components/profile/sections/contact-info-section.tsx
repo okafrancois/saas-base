@@ -71,7 +71,7 @@ function AddressDisplay({
     <div className="space-y-1">
       <div className="font-medium">{title}</div>
       <div className="text-sm">
-        {address.address || address.firstLine}
+        {address?.address || address?.firstLine}
         {('secondLine' in address && address.secondLine) && (
           <>, {address.secondLine}</>
         )}
@@ -80,7 +80,7 @@ function AddressDisplay({
         )}
       </div>
       <div className="text-sm">
-        {address.city}
+        {address?.city}
         {('zipCode' in address && address.zipCode) && (
           <>, {address.zipCode}</>
         )}
@@ -104,7 +104,7 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
   const form = useForm<ContactInfoFormData>({
     resolver: zodResolver(ContactInfoSchema),
     defaultValues: {
-      email: profile.email,
+      email: profile?.email,
       phone: profile.phone,
       address: profile.address || undefined,
       addressInGabon: profile.addressInGabon || undefined,
@@ -174,13 +174,13 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
           <div className="grid gap-4 md:grid-cols-2">
             <InfoField
               label={t('form.email')}
-              value={profile.email}
+              value={profile?.email}
               icon={<Mail className="h-4 w-4" />}
               required
             />
             <InfoField
               label={t('form.phone')}
-              value={profile.phone}
+              value={profile?.phone}
               icon={<Phone className="h-4 w-4" />}
               required
             />
@@ -216,7 +216,7 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
                   title={t('form.gabon_address')}
                 />
               ) : (
-                <Badge variant="secondary">
+                <Badge variant="outline">
                   {t('form.optional')}
                 </Badge>
               )}

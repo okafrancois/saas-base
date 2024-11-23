@@ -29,11 +29,12 @@ export default async function LoginPage() {
           <div className="flex flex-col space-y-2 text-center">
             <div className="mb-4 flex justify-center lg:hidden">
               <Image
-                src="https://utfs.io/f/yMD4lMLsSKvzstsElnhM3e5Vh6OWFoyKZdcGv7E4XJaRbIfT"
+                src="/images/logo_consulat_ga_512.jpeg"
                 alt="Consulat Logo"
-                width={120}
-                height={40}
+                width={128}
+                height={128}
                 priority
+                className={"rounded"}
               />
             </div>
           </div>
