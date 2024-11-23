@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge, BadgeVariant } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { FullProfile } from '@/types'
+import { ConsularCardPreview } from '@/components/profile/consular-card-preview'
 
 interface ProfileHeaderProps {
   profile: FullProfile
@@ -69,7 +70,7 @@ export function ProfileHeader({
                 size="sm"
                 onClick={onShare}
               >
-                <Share2 className="mr-2 size-4" />
+                <Share2 className="size-4" />
                 {t('actions.share')}
               </Button>
 
@@ -78,9 +79,11 @@ export function ProfileHeader({
                 size="sm"
                 onClick={onDownload}
               >
-                <Download className="mr-2 size-4" />
+                <Download className="size-4" />
                 {t('actions.download')}
               </Button>
+
+              <ConsularCardPreview profile={profile} />
             </div>
           </div>
         </div>

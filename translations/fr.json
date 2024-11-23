@@ -1147,6 +1147,46 @@
         "update_failed": "Échec de la mise à jour",
         "unknown": "Une erreur inattendue est survenue"
       }
+    },
+    "card": {
+      "title": "Carte consulaire",
+      "preview": "Voir ma carte",
+      "photo_alt": "Photo d'identité",
+      "birth": "Né(e) le",
+      "nationality": "Nationalité",
+      "passport": "Passeport N°",
+      "address": "Adresse",
+      "contact": "Contact",
+      "phone": "Tél",
+      "email": "Email",
+      "legal_notice": "Cette carte est la propriété de l'État gabonais. Elle doit être présentée sur demande des autorités compétentes.",
+      "click_to_flip": "Cliquez sur la carte pour la retourner",
+      "valid_until": "Valide jusqu'au"
+    },
+    "assistant": {
+      "title": "Assistant de profil",
+      "hide_suggestions": "Masquer les suggestions",
+      "show_suggestions": "Afficher les suggestions",
+      "no_suggestions": "Votre profil est complet ! Aucune suggestion d'amélioration.",
+      "suggestions": {
+        "missing_photo": "Ajoutez une photo d'identité pour compléter votre profil",
+        "missing_passport": "Le passeport est requis pour la carte consulaire",
+        "missing_contact": "Ajoutez vos coordonnées pour être contactable",
+        "missing_emergency_contact": "Ajoutez un contact d'urgence pour plus de sécurité",
+        "expiring_passport": "Votre passeport expire bientôt, pensez à le renouveler",
+        "incomplete_address": "Complétez votre adresse de résidence",
+        "missing_gabon_address": "Ajoutez votre adresse au Gabon si vous en avez une"
+      },
+      "priorities": {
+        "high": "Priorité haute",
+        "medium": "Priorité moyenne",
+        "low": "Priorité basse"
+      },
+      "actions": {
+        "complete": "Compléter",
+        "update": "Mettre à jour",
+        "add": "Ajouter"
+      }
     }
   },
   "consular_registration": {
