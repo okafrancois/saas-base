@@ -4,7 +4,7 @@ import { z } from "zod"
 import { validateForm } from "@/lib/form"
 import { getTranslations } from 'next-intl/server'
 import { ActionResult, checkAuth } from '@/lib/auth/action'
-import { Profile, User } from '@prisma/client'
+import { DocumentStatus, Profile, User } from '@prisma/client'
 import { db } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
@@ -332,6 +332,16 @@ type UpdateProfileSection = {
   contactInfo?: ContactInfoFormData
   familyInfo?: FamilyInfoFormData
   professionalInfo?: ProfessionalInfoFormData
+  documents?: any
+}
+
+type DocumentUpdate = {
+  fileUrl: string
+  type: DocumentType
+  status?: DocumentStatus
+  issuedAt?: Date
+  expiresAt?: Date
+  metadata?: any
 }
 
 export async function updateProfile(
@@ -463,6 +473,89 @@ export async function updateProfile(
 
       default:
         return { error: t('invalid_section') }
+    }
+
+    // Si c'est une mise à jour de documents
+    if (section === 'documents') {
+      const documentUpdates: DocumentUpdate[] = []
+
+      // Traiter chaque type de document possible
+      const documentTypes = [
+        'passportFile',
+        'birthCertificateFile',
+        'residencePermitFile',
+        'addressProofFile'
+      ]
+
+      for (const docType of documentTypes) {
+        const file = formData.get(docType) as File
+        if (file) {
+          const processedFile = await processFileData(file)
+          if (processedFile) {
+            documentUpdates.push({
+              fileUrl: processedFile.url,
+              type: docType.replace('File', '').toUpperCase() as DocumentType,
+              status: DocumentStatus.PENDING,
+              issuedAt: new Date(),
+              // Pour le passeport et le titre de séjour, on ajoute une date d'expiration
+              ...(docType === 'passportFile' || docType === 'residencePermitFile' ? {
+                expiresAt: new Date(formData.get(`${docType}ExpiryDate`) as string),
+                metadata: {
+                  documentNumber: formData.get(`${docType}Number`),
+                  issuingAuthority: formData.get(`${docType}Authority`),
+                }
+              } : {})
+            })
+          }
+        }
+      }
+
+      // Mise à jour ou création des documents
+      const updatePromises = documentUpdates.map(async (doc) => {
+        return db.document.upsert({
+          where: {
+            profileId_type: {
+              profileId: user.id,
+              type: doc.type
+            }
+          },
+          create: {
+            ...doc,
+            profileId: user.id
+          },
+          update: {
+            ...doc
+          }
+        })
+      })
+
+      await Promise.all(updatePromises)
+
+      // Récupérer le profil mis à jour avec les documents
+      const updatedProfile = await db.profile.findUnique({
+        where: { userId: user.id },
+        include: {
+          documents: true,
+          passport: true,
+          birthCertificate: true,
+          residencePermit: true,
+          addressProof: true,
+          address: true,
+          addressInGabon: true,
+          emergencyContact: true,
+        }
+      })
+
+      if (!updatedProfile) {
+        return { error: t('profile_not_found') }
+      }
+
+      // Revalider les pages
+      revalidatePath(PAGE_ROUTES.profile)
+      revalidatePath(PAGE_ROUTES.dashboard)
+      revalidatePath(PAGE_ROUTES.documents)
+
+      return { data: updatedProfile }
     }
 
     // Mettre à jour le profil

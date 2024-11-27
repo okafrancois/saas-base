@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { EditableSection } from '../editable-section'
 import { useToast } from '@/hooks/use-toast'
@@ -12,11 +12,11 @@ import { fr } from 'date-fns/locale'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { DocumentType, DocumentStatus, Document } from '@prisma/client'
-import { Form } from '@/components/ui/form'
+import { Form, FormField } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { DocumentsSchema, type DocumentsFormData } from '@/schemas/registration'
-import { postProfile } from '@/actions/profile'
+import { updateProfile } from '@/actions/profile'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 interface DocumentsSectionProps {
   documents: {
@@ -127,18 +127,26 @@ export function DocumentsSection({ documents }: DocumentsSectionProps) {
   const handleSave = async () => {
     try {
       setIsLoading(true)
-      const data = form.getValues()
-
       const formData = new FormData()
 
-      // Ajouter uniquement les fichiers qui ont été modifiés
-      Object.entries(data).forEach(([key, file]) => {
+      // Ajouter les fichiers au FormData
+      const files = form.getValues()
+      Object.entries(files).forEach(([key, file]) => {
         if (file) {
           formData.append(key, file)
         }
       })
 
-      const result = await postProfile(formData)
+      // Ajouter les métadonnées des documents si nécessaire
+      // Par exemple pour le passeport
+      const passportData = form.getValues('passportFile')
+      if (passportData) {
+        formData.append('passportFileExpiryDate', form.getValues('passportExpiryDate'))
+        formData.append('passportFileNumber', form.getValues('passportNumber'))
+        formData.append('passportFileAuthority', form.getValues('passportAuthority'))
+      }
+
+      const result = await updateProfile(formData, 'documents')
 
       if (result.error) {
         toast({
@@ -154,7 +162,6 @@ export function DocumentsSection({ documents }: DocumentsSectionProps) {
         description: t('messages.success.update_description'),
         variant: "success"
       })
-
       setIsEditing(false)
     } catch (error) {
       toast({
@@ -211,36 +218,67 @@ export function DocumentsSection({ documents }: DocumentsSectionProps) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSave)} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <DocumentUploadField
-                id="passportFile"
-                field={form.register('passportFile')}
-                form={form}
-                label={t('documents.passport.label')}
-                description={t('documents.passport.description')}
-                required
+              <FormField
+                control={form.control}
+                name={"passportFile"}
+                render={({ field }) => (
+                  <DocumentUploadField
+                    id="passportFile"
+                    field={field}
+                    form={form}
+                    label={t('documents.passport.label')}
+                    description={t('documents.passport.description')}
+                    accept="image/*,application/pdf"
+                    required
+                  />
+                )}
               />
-              <DocumentUploadField
-                id="birthCertificateFile"
-                field={form.register('birthCertificateFile')}
-                form={form}
-                label={t('documents.birth_certificate.label')}
-                description={t('documents.birth_certificate.description')}
-                required
+
+              <FormField
+                control={form.control}
+                name={"birthCertificateFile"}
+                render={({ field }) => (
+                  <DocumentUploadField
+                    id="birthCertificateFile"
+                    field={field}
+                    form={form}
+                    label={t('documents.birth_certificate.label')}
+                    description={t('documents.birth_certificate.description')}
+                    accept="image/*,application/pdf"
+                    required
+                  />
+                )}
               />
-              <DocumentUploadField
-                id="residencePermitFile"
-                field={form.register('residencePermitFile')}
-                form={form}
-                label={t('documents.residence_permit.label')}
-                description={t('documents.residence_permit.description')}
+
+              <FormField
+                control={form.control}
+                name={"residencePermitFile"}
+                render={({ field }) => (
+                  <DocumentUploadField
+                    id="residencePermitFile"
+                    field={field}
+                    form={form}
+                    label={t('documents.residence_permit.label')}
+                    description={t('documents.residence_permit.description')}
+                    accept="image/*,application/pdf"
+                  />
+                )}
               />
-              <DocumentUploadField
-                id="addressProofFile"
-                field={form.register('addressProofFile')}
-                form={form}
-                label={t('documents.address_proof.label')}
-                description={t('documents.address_proof.description')}
-                required
+
+              <FormField
+                control={form.control}
+                name={"addressProofFile"}
+                render={({ field }) => (
+                  <DocumentUploadField
+                    id="addressProofFile"
+                    field={field}
+                    form={form}
+                    label={t('documents.address_proof.label')}
+                    description={t('documents.address_proof.description')}
+                    accept="image/*,application/pdf"
+                    required
+                  />
+                )}
               />
             </div>
           </form>
