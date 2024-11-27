@@ -160,6 +160,13 @@ export function BasicInfoSection({ profile }: BasicInfoSectionProps) {
               value={t(`assets.gender.${profile.gender.toLowerCase()}`)}
               required
             />
+
+            <InfoField
+              label={t('form.birth_country')}
+              value={profile.birthCountry}
+              required
+            />
+
             <InfoField
               label={t('form.birth_date')}
               value={format(new Date(profile.birthDate), 'PPP', { locale: fr })}
@@ -168,11 +175,6 @@ export function BasicInfoSection({ profile }: BasicInfoSectionProps) {
             <InfoField
               label={t('form.birth_place')}
               value={profile.birthPlace}
-              required
-            />
-            <InfoField
-              label={t('form.birth_country')}
-              value={profile.birthCountry}
               required
             />
             <InfoField

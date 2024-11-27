@@ -15,7 +15,7 @@ import { Icons } from '@/components/ui/icons'
 
 export function ProfileCompletionAssistant({ profile }: { profile: FullProfile }) {
   const t = useTranslations('profile.assistant')
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const { suggestions, isLoading, error } = useProfileSuggestions(profile)
 
   return (

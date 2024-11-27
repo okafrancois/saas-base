@@ -169,9 +169,9 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
           isLoading={isLoading}
         />
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Coordonnées principales */}
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4">
             <InfoField
               label={t('form.email')}
               value={profile?.email}
@@ -187,8 +187,8 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
           </div>
 
           {/* Adresses */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-4">
+          <div className="grid gap-4">
+            <div className="space-y-6">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
                 <h4 className="font-medium">{t('form.address')}</h4>
@@ -205,7 +205,7 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
               )}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
                 <h4 className="font-medium">{t('form.address_gabon')}</h4>
