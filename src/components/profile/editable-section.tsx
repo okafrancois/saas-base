@@ -43,7 +43,7 @@ export function EditableSection({
             className="h-8 px-2"
           >
             <Pencil className="h-4 w-4" />
-            <span className="ml-2 hidden md:inline">
+            <span className="hidden md:inline">
               {t('actions.edit')}
             </span>
           </Button>
@@ -57,7 +57,7 @@ export function EditableSection({
               disabled={isLoading}
             >
               <X className="h-4 w-4" />
-              <span className="ml-2 hidden md:inline">
+              <span className="hidden md:inline">
                 {t('actions.cancel')}
               </span>
             </Button>
@@ -69,7 +69,7 @@ export function EditableSection({
               disabled={isLoading}
             >
               <Save className="h-4 w-4" />
-              <span className="ml-2 hidden md:inline">
+              <span className="hidden md:inline">
                 {t('actions.save')}
               </span>
             </Button>

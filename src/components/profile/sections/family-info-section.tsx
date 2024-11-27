@@ -8,7 +8,7 @@ import { MaritalStatus, Profile } from '@prisma/client'
 import { FamilyInfoSchema, type FamilyInfoFormData } from '@/schemas/registration'
 import { EditableSection } from '../editable-section'
 import { useToast } from '@/hooks/use-toast'
-import { postProfile } from '@/actions/profile'
+import { updateProfile } from '@/actions/profile'
 import { Badge } from '@/components/ui/badge'
 import { Users, User2, Phone } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
@@ -64,6 +64,7 @@ function InfoField({ label, value, required, isCompleted = !!value, icon }: Info
 
 export function FamilyInfoSection({ profile }: FamilyInfoSectionProps) {
   const t = useTranslations('registration')
+  const t_messages = useTranslations('messages.profile')
   const t_assets = useTranslations('assets')
   const t_sections = useTranslations('profile.sections')
   const { toast } = useToast()
@@ -89,11 +90,11 @@ export function FamilyInfoSection({ profile }: FamilyInfoSectionProps) {
       const formData = new FormData()
       formData.append('familyInfo', JSON.stringify(data))
 
-      const result = await postProfile(formData)
+      const result = await updateProfile(formData, 'familyInfo')
 
       if (result.error) {
         toast({
-          title: t('messages.errors.update_failed'),
+          title: t_messages('errors.update_failed'),
           description: result.error,
           variant: "destructive"
         })
@@ -101,16 +102,16 @@ export function FamilyInfoSection({ profile }: FamilyInfoSectionProps) {
       }
 
       toast({
-        title: t('messages.success.update_title'),
-        description: t('messages.success.update_description'),
+        title: t_messages('success.update_title'),
+        description: t_messages('success.update_description'),
         variant: "success"
       })
 
       setIsEditing(false)
     } catch (error) {
       toast({
-        title: t('messages.errors.update_failed'),
-        description: t('messages.errors.unknown'),
+        title: t_messages('errors.update_failed'),
+        description: t_messages('errors.unknown'),
         variant: "destructive"
       })
     } finally {

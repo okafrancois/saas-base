@@ -89,20 +89,20 @@ export default async function ProfilePage() {
             </>
           )}
 
-          <div className={"md:col-span-2"}>
-            <DocumentsSection documents={{
+          <DocumentsSection
+            documents={{
               passport: profile.passport,
               birthCertificate: profile.birthCertificate,
               residencePermit: profile.residencePermit,
-              addressProof: profile.addressProof,
-            }} />
-          </div>
+              addressProof: profile.addressProof
+            }}
+            className="md:col-span-2"
+          />
         </div>
 
         <div className="space-y-6">
           <ProfileCompletionAssistant
             profile={profile}
-            completionRate={completionRate}
           />
         </div>
       </Suspense>

@@ -1,2 +1,0 @@
--- CreateEnum
-CREATE TYPE "DocumentStatus" AS ENUM ('PENDING', 'VALIDATED', 'REJECTED', 'EXPIRED', 'EXPIRING');

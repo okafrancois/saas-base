@@ -38,7 +38,8 @@ type BasicInfoFormProps = {
   form: UseFormReturn<BasicInfoFormData>  // Ajouter cette prop
   onSubmit: () => void
   formRef?: React.RefObject<HTMLFormElement>
-  isLoading?: boolean
+  isLoading?: boolean,
+  displayIdentityPicture?: boolean
 }
 
 export function BasicInfoForm({
@@ -46,6 +47,7 @@ export function BasicInfoForm({
                                 onSubmit,
                                 formRef,
                                 isLoading = false,
+  displayIdentityPicture = true,
                               }: Readonly<BasicInfoFormProps>) {
   const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
@@ -71,19 +73,21 @@ export function BasicInfoForm({
     <Form {...form}>
       <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-6">
-          <FormField
-            control={form.control}
-            name={"identityPictureFile"}
-            render={({field}) => (
-              <DocumentUploadField<BasicInfoFormData>
-                id={field.name}
-                field={field}
-                form={form}
-                required={true}
-                disabled={isLoading}
-              />
-            )}
-          />
+          {displayIdentityPicture && (
+            <FormField
+              control={form.control}
+              name={"identityPictureFile"}
+              render={({field}) => (
+                <DocumentUploadField<BasicInfoFormData>
+                  id={field.name}
+                  field={field}
+                  form={form}
+                  required={true}
+                  disabled={isLoading}
+                />
+              )}
+            />
+          )}
 
           {/* Genre */}
           <FormField

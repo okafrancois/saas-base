@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import { ContactInfoSchema, type ContactInfoFormData } from '@/schemas/registration'
 import { EditableSection } from '../editable-section'
 import { useToast } from '@/hooks/use-toast'
-import { postProfile } from '@/actions/profile'
+import { updateProfile } from '@/actions/profile'
 import { Badge } from '@/components/ui/badge'
 import { MapPin, Mail, Phone } from 'lucide-react'
 import { ContactInfoForm } from '@/components/registration/contact-form'
@@ -62,7 +62,6 @@ function AddressDisplay({
   address: ContactInfoSectionProps['profile']['address'] | ContactInfoSectionProps['profile']['addressInGabon']
   title: string
 }) {
-  const t = useTranslations('registration')
   const t_countries = useTranslations('countries')
 
   if (!address) return null
@@ -96,6 +95,7 @@ function AddressDisplay({
 
 export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
   const t = useTranslations('registration')
+  const t_messages = useTranslations('messages.profile')
   const t_sections = useTranslations('profile.sections')
   const { toast } = useToast()
   const [isEditing, setIsEditing] = useState(false)
@@ -104,9 +104,9 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
   const form = useForm<ContactInfoFormData>({
     resolver: zodResolver(ContactInfoSchema),
     defaultValues: {
-      email: profile?.email,
-      phone: profile.phone,
-      address: profile.address || undefined,
+      email: profile?.email ?? undefined,
+      phone: profile.phone ?? undefined,
+      address: profile?.address ?? undefined,
       addressInGabon: profile.addressInGabon || undefined,
     }
   })
@@ -119,11 +119,11 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
       const formData = new FormData()
       formData.append('contactInfo', JSON.stringify(data))
 
-      const result = await postProfile(formData)
+      const result = await updateProfile(formData, 'contactInfo')
 
       if (result.error) {
         toast({
-          title: t('messages.errors.update_failed'),
+          title: t_messages('errors.update_failed'),
           description: result.error,
           variant: "destructive"
         })
@@ -131,16 +131,16 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
       }
 
       toast({
-        title: t('messages.success.update_title'),
-        description: t('messages.success.update_description'),
+        title: t_messages('success.update_title'),
+        description: t_messages('success.update_description'),
         variant: "success"
       })
 
       setIsEditing(false)
     } catch (error) {
       toast({
-        title: t('messages.errors.update_failed'),
-        description: t('messages.errors.unknown'),
+        title: t_messages('errors.update_failed'),
+        description: t_messages('errors.unknown'),
         variant: "destructive"
       })
     } finally {

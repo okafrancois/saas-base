@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
@@ -8,7 +8,7 @@ import { NationalityAcquisition, Profile } from '@prisma/client'
 import { BasicInfoSchema, type BasicInfoFormData } from '@/schemas/registration'
 import { EditableSection } from '../editable-section'
 import { useToast } from '@/hooks/use-toast'
-import { postProfile } from '@/actions/profile'
+import { updateProfile } from '@/actions/profile'
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -55,6 +55,7 @@ function InfoField({ label, value, className = '', required, isCompleted = !!val
 
 export function BasicInfoSection({ profile }: BasicInfoSectionProps) {
   const t = useTranslations('registration')
+  const t_messages = useTranslations('messages.profile')
   const t_sections = useTranslations('profile.sections')
   const { toast } = useToast()
   const [isEditing, setIsEditing] = useState(false)
@@ -90,11 +91,11 @@ export function BasicInfoSection({ profile }: BasicInfoSectionProps) {
       }
       formData.append('basicInfo', JSON.stringify(data))
 
-      const result = await postProfile(formData)
+      const result = await updateProfile(formData, 'basicInfo')
 
       if (result.error) {
         toast({
-          title: t('messages.errors.update_failed'),
+          title: t_messages('errors.update_failed'),
           description: result.error,
           variant: "destructive"
         })
@@ -102,16 +103,16 @@ export function BasicInfoSection({ profile }: BasicInfoSectionProps) {
       }
 
       toast({
-        title: t('messages.success.update_title'),
-        description: t('messages.success.update_description'),
+        title: t_messages('success.update_title'),
+        description: t_messages('success.update_description'),
         variant: "success"
       })
 
       setIsEditing(false)
     } catch (error) {
       toast({
-        title: t('messages.errors.update_failed'),
-        description: t('messages.errors.unknown'),
+        title: t_messages('errors.update_failed'),
+        description: t_messages('errors.unknown'),
         variant: "destructive"
       })
     } finally {
@@ -138,6 +139,7 @@ export function BasicInfoSection({ profile }: BasicInfoSectionProps) {
           form={form}
           onSubmit={handleSave}
           isLoading={isLoading}
+          displayIdentityPicture={false}
         />
       ) : (
         <div className="space-y-6">

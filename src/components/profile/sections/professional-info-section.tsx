@@ -8,7 +8,7 @@ import { Profile, WorkStatus } from '@prisma/client'
 import { ProfessionalInfoSchema, type ProfessionalInfoFormData } from '@/schemas/registration'
 import { EditableSection } from '../editable-section'
 import { useToast } from '@/hooks/use-toast'
-import { postProfile } from '@/actions/profile'
+import { updateProfile } from '@/actions/profile'
 import { Badge } from '@/components/ui/badge'
 import { Briefcase, Building2, MapPin } from 'lucide-react'
 import { ProfessionalInfoForm } from '@/components/registration/professional-info'
@@ -58,6 +58,7 @@ function InfoField({ label, value, required, isCompleted = !!value, icon }: Info
 export function ProfessionalInfoSection({ profile }: ProfessionalInfoSectionProps) {
   const t = useTranslations('registration')
   const t_assets = useTranslations('assets')
+  const t_messages = useTranslations('messages.profile')
   const t_sections = useTranslations('profile.sections')
   const { toast } = useToast()
   const [isEditing, setIsEditing] = useState(false)
@@ -82,11 +83,11 @@ export function ProfessionalInfoSection({ profile }: ProfessionalInfoSectionProp
       const formData = new FormData()
       formData.append('professionalInfo', JSON.stringify(data))
 
-      const result = await postProfile(formData)
+      const result = await updateProfile(formData, 'professionalInfo')
 
       if (result.error) {
         toast({
-          title: t('messages.errors.update_failed'),
+          title: t_messages('errors.update_failed'),
           description: result.error,
           variant: "destructive"
         })
@@ -94,16 +95,16 @@ export function ProfessionalInfoSection({ profile }: ProfessionalInfoSectionProp
       }
 
       toast({
-        title: t('messages.success.update_title'),
-        description: t('messages.success.update_description'),
+        title: t_messages('success.update_title'),
+        description: t_messages('success.update_description'),
         variant: "success"
       })
 
       setIsEditing(false)
     } catch (error) {
       toast({
-        title: t('messages.errors.update_failed'),
-        description: t('messages.errors.unknown'),
+        title: t_messages('errors.update_failed'),
+        description: t_messages('errors.unknown'),
         variant: "destructive"
       })
     } finally {

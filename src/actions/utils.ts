@@ -19,7 +19,6 @@ type ProcessFileData = (
 export const processFileData: ProcessFileData = async (
   formData,
   existingKey?,
-  db?,
   size?,
 ) => {
   if (formData) {
@@ -32,9 +31,9 @@ export const processFileData: ProcessFileData = async (
 
       const [file] = await uploadFiles(formData)
 
-      if (existingKey && db) {
+      if (existingKey) {
         try {
-          await deleteFiles([existingKey], db)
+          await deleteFiles([existingKey])
         } catch (deleteError) {
           console.error('Error deleting existing file:', deleteError)
           // Continue with upload even if delete fails

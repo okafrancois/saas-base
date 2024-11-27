@@ -4,7 +4,7 @@ import { z } from "zod"
 import { validateForm } from "@/lib/form"
 import { getTranslations } from 'next-intl/server'
 import { ActionResult, checkAuth } from '@/lib/auth/action'
-import { User } from '@prisma/client'
+import { Profile, User } from '@prisma/client'
 import { db } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
@@ -325,4 +325,166 @@ function calculateProfileCompletion(profile: any): number {
   const currentScore = requiredScore + optionalScore
 
   return Math.round((currentScore / maxScore) * 100)
+}
+
+type UpdateProfileSection = {
+  basicInfo?: BasicInfoFormData
+  contactInfo?: ContactInfoFormData
+  familyInfo?: FamilyInfoFormData
+  professionalInfo?: ProfessionalInfoFormData
+}
+
+export async function updateProfile(
+  formData: FormData,
+  section: keyof UpdateProfileSection
+): Promise<ActionResult<Profile>> {
+  try {
+    const t = await getTranslations('messages.profile.errors')
+    const user = await getCurrentUser()
+
+    if (!user) {
+      return { error: t('unauthorized') }
+    }
+
+    // Récupérer le profil existant
+    const existingProfile = await db.profile.findUnique({
+      where: { userId: user.id },
+      include: {
+        address: true,
+        addressInGabon: true,
+        emergencyContact: true,
+      }
+    })
+
+    if (!existingProfile) {
+      return { error: t('profile_not_found') }
+    }
+
+    // Traiter les fichiers si présents
+    const fileProcessingPromises: Promise<any>[] = []
+    const files = {
+      identityPictureFile: formData.get('identityPictureFile') as File,
+      passportFile: formData.get('passportFile') as File,
+      birthCertificateFile: formData.get('birthCertificateFile') as File,
+      residencePermitFile: formData.get('residencePermitFile') as File,
+      addressProofFile: formData.get('addressProofFile') as File,
+    }
+
+    Object.entries(files).forEach(([key, file]) => {
+      if (file) {
+        fileProcessingPromises.push(processFileData(file))
+      }
+    })
+
+    const processedFiles = await Promise.all(fileProcessingPromises)
+
+    // Récupérer les données JSON de la section
+    const sectionData = formData.get(section)
+    if (!sectionData) {
+      return { error: t('invalid_data') }
+    }
+
+    const data = JSON.parse(sectionData as string)
+
+    // Préparer les données de mise à jour en fonction de la section
+    let updateData: any = {}
+
+    switch (section) {
+      case 'basicInfo':
+        updateData = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          gender: data.gender,
+          birthDate: data.birthDate,
+          birthPlace: data.birthPlace,
+          birthCountry: data.birthCountry,
+          nationality: data.nationality,
+          acquisitionMode: data.acquisitionMode,
+          passportNumber: data.passportNumber,
+          passportIssueDate: new Date(data.passportIssueDate),
+          passportExpiryDate: new Date(data.passportExpiryDate),
+          passportIssueAuthority: data.passportIssueAuthority,
+          ...(processedFiles[0] && { identityPicture: processedFiles[0].url }),
+        }
+        break
+
+      case 'contactInfo':
+        updateData = {
+          email: data.email,
+          phone: data.phone,
+          address: {
+            upsert: {
+              create: data.address,
+              update: data.address,
+            },
+          },
+          ...(data.addressInGabon && {
+            addressInGabon: {
+              upsert: {
+                create: data.addressInGabon,
+                update: data.addressInGabon,
+              },
+            },
+          }),
+        }
+        break
+
+      case 'familyInfo':
+        const emergencyContact = {
+          fullName: data.emergencyContact.fullName,
+          relationship: data.emergencyContact.relationship,
+          phone: data.emergencyContact.phone
+        }
+        updateData = {
+          maritalStatus: data.maritalStatus,
+          fatherFullName: data.fatherFullName,
+          motherFullName: data.motherFullName,
+          spouseFullName: data.spouseFullName,
+          ...(data.emergencyContact && {
+            emergencyContact: {
+              upsert: {
+                create: emergencyContact,
+                update: emergencyContact,
+              },
+            },
+          }),
+        }
+        break
+
+      case 'professionalInfo':
+        updateData = {
+          workStatus: data.workStatus,
+          profession: data.profession,
+          employer: data.employer,
+          employerAddress: data.employerAddress,
+          activityInGabon: data.lastActivityGabon,
+        }
+        break
+
+      default:
+        return { error: t('invalid_section') }
+    }
+
+    // Mettre à jour le profil
+    const updatedProfile = await db.profile.update({
+      where: { id: existingProfile.id },
+      data: updateData,
+      include: {
+        address: true,
+        addressInGabon: true,
+        emergencyContact: true,
+      }
+    })
+
+    // Revalider les pages qui affichent ces données
+    revalidatePath(PAGE_ROUTES.profile)
+    revalidatePath(PAGE_ROUTES.dashboard)
+
+    return { data: updatedProfile }
+  } catch (error) {
+    console.error('Update profile error:', error)
+    return {
+      error: error instanceof Error ? error.message : 'messages.errors.unknown_error'
+    }
+  }
 }

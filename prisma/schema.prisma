@@ -132,6 +132,7 @@ model Profile {
   address          Address?          @relation(fields: [addressId], references: [id])
   addressId        String?           @unique
   phone            String?
+  email            String?
   emergencyContact EmergencyContact?
 
   // Gabonese specific

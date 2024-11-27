@@ -93,7 +93,7 @@ function DocumentCard({ type, document, required = true, onView, onDownload }: D
                 </>
               ) : (
                 <Badge
-                  variant={required ? "destructive" : "secondary"}
+                  variant={required ? "destructive" : "outline"}
                   className="mt-2"
                 >
                   {required ? t('status.required') : t('status.optional')}

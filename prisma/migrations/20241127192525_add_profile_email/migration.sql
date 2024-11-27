@@ -2,7 +2,7 @@
 CREATE TYPE "UserRole" AS ENUM ('USER', 'RESPONSIBLE', 'ADMIN', 'SUPER_ADMIN');
 
 -- CreateEnum
-CREATE TYPE "DocumentType" AS ENUM ('FIRST_REQUEST', 'RENEWAL', 'MODIFICATION');
+CREATE TYPE "RequestType" AS ENUM ('FIRST_REQUEST', 'RENEWAL', 'MODIFICATION');
 
 -- CreateEnum
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
@@ -17,7 +17,19 @@ CREATE TYPE "WorkStatus" AS ENUM ('EMPLOYEE', 'ENTREPRENEUR', 'UNEMPLOYED', 'RET
 CREATE TYPE "NationalityAcquisition" AS ENUM ('BIRTH', 'NATURALIZATION', 'MARRIAGE', 'OTHER');
 
 -- CreateEnum
-CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'INCOMPLETE');
+CREATE TYPE "DocumentStatus" AS ENUM ('PENDING', 'VALIDATED', 'REJECTED', 'EXPIRED', 'EXPIRING');
+
+-- CreateEnum
+CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'INCOMPLETE', 'IN_PROGRESS', 'COMPLETED', 'VALID');
+
+-- CreateEnum
+CREATE TYPE "DocumentType" AS ENUM ('PASSPORT', 'IDENTITY_CARD', 'BIRTH_CERTIFICATE', 'RESIDENCE_PERMIT', 'PROOF_OF_ADDRESS', 'MARRIAGE_CERTIFICATE', 'DEATH_CERTIFICATE', 'DIVORCE_DECREE', 'NATIONALITY_CERTIFICATE', 'OTHER');
+
+-- CreateEnum
+CREATE TYPE "AppointmentType" AS ENUM ('DOCUMENT_SUBMISSION', 'DOCUMENT_COLLECTION', 'CONSULTATION', 'OTHER');
+
+-- CreateEnum
+CREATE TYPE "AppointmentStatus" AS ENUM ('SCHEDULED', 'CONFIRMED', 'CANCELLED', 'COMPLETED', 'MISSED');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -32,6 +44,7 @@ CREATE TABLE "User" (
     "consulateId" TEXT,
     "emailVerified" TIMESTAMP(3),
     "phoneVerified" TIMESTAMP(3),
+    "lastLogin" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -49,24 +62,53 @@ CREATE TABLE "Profile" (
     "nationality" TEXT NOT NULL,
     "maritalStatus" "MaritalStatus",
     "workStatus" "WorkStatus",
+    "acquisitionMode" "NationalityAcquisition" DEFAULT 'BIRTH',
+    "passportNumber" TEXT NOT NULL,
+    "passportIssueDate" TIMESTAMP(3) NOT NULL,
+    "passportExpiryDate" TIMESTAMP(3) NOT NULL,
+    "passportIssueAuthority" TEXT NOT NULL,
     "identityPicture" TEXT,
-    "passport" TEXT,
-    "birthCertificate" TEXT,
-    "residencePermit" TEXT,
-    "addressProof" TEXT,
+    "passportId" TEXT,
+    "birthCertificateId" TEXT,
+    "residencePermitId" TEXT,
+    "addressProofId" TEXT,
     "addressId" TEXT,
     "phone" TEXT,
+    "email" TEXT,
+    "activityInGabon" TEXT,
     "fatherFullName" TEXT,
     "motherFullName" TEXT,
     "spouseFullName" TEXT,
     "profession" TEXT,
     "employer" TEXT,
     "employerAddress" TEXT,
-    "status" TEXT NOT NULL DEFAULT 'PENDING',
+    "status" "RequestStatus" NOT NULL DEFAULT 'INCOMPLETE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "EmergencyContact" (
+    "id" TEXT NOT NULL,
+    "fullName" TEXT NOT NULL,
+    "relationship" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "profileId" TEXT NOT NULL,
+
+    CONSTRAINT "EmergencyContact_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AddressGabon" (
+    "id" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "district" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "profileId" TEXT NOT NULL,
+
+    CONSTRAINT "AddressGabon_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -111,7 +153,7 @@ CREATE TABLE "Country" (
 -- CreateTable
 CREATE TABLE "Request" (
     "id" TEXT NOT NULL,
-    "type" "DocumentType" NOT NULL,
+    "type" "RequestType" NOT NULL,
     "status" "RequestStatus" NOT NULL DEFAULT 'PENDING',
     "userId" TEXT NOT NULL,
     "consulateId" TEXT NOT NULL,
@@ -193,6 +235,38 @@ CREATE TABLE "VerificationToken" (
     CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Document" (
+    "id" TEXT NOT NULL,
+    "type" "DocumentType" NOT NULL,
+    "status" "DocumentStatus" NOT NULL DEFAULT 'PENDING',
+    "fileUrl" TEXT NOT NULL,
+    "issuedAt" TIMESTAMP(3),
+    "expiresAt" TIMESTAMP(3),
+    "metadata" JSONB,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "profileId" TEXT,
+
+    CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Appointment" (
+    "id" TEXT NOT NULL,
+    "type" "AppointmentType" NOT NULL,
+    "status" "AppointmentStatus" NOT NULL DEFAULT 'SCHEDULED',
+    "date" TIMESTAMP(3) NOT NULL,
+    "description" TEXT,
+    "notes" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "profileId" TEXT NOT NULL,
+    "consulateId" TEXT NOT NULL,
+
+    CONSTRAINT "Appointment_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -203,7 +277,25 @@ CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
 CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Profile_passportId_key" ON "Profile"("passportId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_birthCertificateId_key" ON "Profile"("birthCertificateId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_residencePermitId_key" ON "Profile"("residencePermitId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_addressProofId_key" ON "Profile"("addressProofId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Profile_addressId_key" ON "Profile"("addressId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EmergencyContact_profileId_key" ON "EmergencyContact"("profileId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "AddressGabon_profileId_key" ON "AddressGabon"("profileId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Consulate_addressId_key" ON "Consulate"("addressId");
@@ -227,7 +319,25 @@ ALTER TABLE "User" ADD CONSTRAINT "User_consulateId_fkey" FOREIGN KEY ("consulat
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_passportId_fkey" FOREIGN KEY ("passportId") REFERENCES "Document"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_birthCertificateId_fkey" FOREIGN KEY ("birthCertificateId") REFERENCES "Document"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_residencePermitId_fkey" FOREIGN KEY ("residencePermitId") REFERENCES "Document"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_addressProofId_fkey" FOREIGN KEY ("addressProofId") REFERENCES "Document"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EmergencyContact" ADD CONSTRAINT "EmergencyContact_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AddressGabon" ADD CONSTRAINT "AddressGabon_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Consulate" ADD CONSTRAINT "Consulate_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -258,3 +368,12 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Document" ADD CONSTRAINT "Document_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_consulateId_fkey" FOREIGN KEY ("consulateId") REFERENCES "Consulate"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
