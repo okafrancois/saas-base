@@ -3,7 +3,7 @@
 .pnp.js
 .yarn/install-state.gz
 /coverage
-/.next/
+/.next
 /out/
 /build
 .DS_Store
@@ -26,3 +26,13 @@ next-env.d.ts
 /public
 .code_base.md
 /src/components/ui
+/src/components/admin
+/src/components/auth
+/src/components/chat
+/src/components/consular
+/src/components/layouts
+/src/components/public
+/src/actions/consular
+/translations/en.json
+/translations/es.json
+/translations/fr.json

@@ -199,6 +199,7 @@ model Consulate {
   addressId String?  @unique
   website   String?
   isGeneral Boolean  @default(false)
+  logo      String?
 
   // Relations
   users        User[]

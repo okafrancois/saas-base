@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import { getDashboardStats } from '@/lib/services/dashboard'
+import { getDashboardStats } from '@/lib/services/dashboard/dashboard'
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton'
-import { ProfileSection } from '@/components/dashboard/sections/profile-section'
-import { RequestsSection } from '@/components/dashboard/sections/requests-section'
-import { AppointmentsSection } from '@/components/dashboard/sections/appointments-section'
-import { DocumentsSection } from '@/components/dashboard/sections/documents-section'
+import { ProfileSection } from '@/components/profile/dashboard/sections/profile-section'
+import { RequestsSection } from '@/components/profile/dashboard/sections/requests-section'
+import { AppointmentsSection } from '@/components/profile/dashboard/sections/appointments-section'
+import { DocumentsSection } from '@/components/profile/dashboard/sections/documents-section'
 import { getCurrentUser } from '@/actions/user'
 
 export default async function DashboardPage() {

@@ -1168,7 +1168,7 @@
       }
     },
     "card": {
-      "title": "Carte consulaire",
+      "title": "Carte Consulaire",
       "preview": "Voir ma carte",
       "photo_alt": "Photo d'identité",
       "birth": "Né(e) le",
@@ -1180,7 +1180,68 @@
       "email": "Email",
       "legal_notice": "Cette carte est la propriété de l'État gabonais. Elle doit être présentée sur demande des autorités compétentes.",
       "click_to_flip": "Cliquez sur la carte pour la retourner",
-      "valid_until": "Valide jusqu'au"
+      "valid_until": "Valide jusqu'au",
+      "actions": {
+        "download": "Télécharger",
+        "share": "Partager",
+        "qr_code": "Code QR",
+        "view": "Voir la carte",
+        "print": "Imprimer",
+        "add_to_wallet": "Ajouter au portefeuille"
+      },
+      "mobile": {
+        "title": "Version mobile",
+        "add_to_wallet": "Ajouter à votre portefeuille mobile",
+        "description": "Accédez à votre carte même hors connexion",
+        "instructions": "Suivez les instructions pour ajouter la carte à votre portefeuille"
+      },
+      "qr_code": {
+        "title": "Code QR de la carte",
+        "description": "Scannez ce code pour accéder à la version numérique de la carte",
+        "instructions": "Utilisez l'appareil photo de votre téléphone pour scanner ce code",
+        "validity": "Ce code est unique et lié à votre carte"
+      },
+      "share": {
+        "title": "Partager la carte",
+        "description": "Choisissez comment partager votre carte consulaire",
+        "email": "Envoyer par email",
+        "download": "Télécharger en PDF",
+        "system": "Partager via...",
+        "message": "Ma carte consulaire numérique",
+        "success": "Carte partagée avec succès",
+        "error": "Erreur lors du partage de la carte"
+      },
+      "download": {
+        "title": "Télécharger la carte",
+        "description": "Format PDF haute qualité",
+        "processing": "Génération du PDF...",
+        "success": "Carte téléchargée avec succès",
+        "error": "Erreur lors du téléchargement"
+      },
+      "status": {
+        "active": "Active",
+        "expired": "Expirée",
+        "pending": "En attente",
+        "suspended": "Suspendue"
+      },
+      "security": {
+        "verified": "Document vérifié",
+        "secure": "Sécurisé",
+        "official": "Document officiel",
+        "watermark": "Avec filigrane numérique"
+      },
+      "info": {
+        "issued_by": "Délivrée par",
+        "issued_on": "Délivrée le",
+        "expires_on": "Expire le",
+        "card_number": "N° de carte"
+      },
+      "validation": {
+        "front_side": "Recto de la carte",
+        "back_side": "Verso de la carte",
+        "official_document": "République Gabonaise",
+        "verify_online": "Vérifier l'authenticité en ligne"
+      }
     },
     "assistant": {
       "title": "Assistant de profil",

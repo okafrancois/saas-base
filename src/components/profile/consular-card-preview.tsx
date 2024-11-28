@@ -12,10 +12,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { FullProfile } from '@/types'
+import { QRCode } from '@/components/ui/qr-code'
 
 interface ConsularCardPreviewProps {
   profile: FullProfile
 }
+
+const APP_URL = process.env.NEXT_PUBLIC_URL
 
 export function ConsularCardPreview({ profile }: ConsularCardPreviewProps) {
   const t = useTranslations('profile.card')
@@ -85,8 +88,8 @@ export function ConsularCardPreview({ profile }: ConsularCardPreviewProps) {
                         </div>
 
                         {/* QR Code */}
-                        <div className="absolute bottom-4 right-4 h-24 w-24 rounded-lg bg-white p-2">
-                          {/* Implementer le QR code ici */}
+                        <div className="absolute bottom-4 right-4 h-24 w-24">
+                          <QRCode value={`${APP_URL}/view/profile/${profile.id}`}/>
                         </div>
                       </CardContent>
                     </Card>
