@@ -76,6 +76,9 @@ export default async function ProfilePage() {
           completionRate={completionRate}
           fieldStatus={fieldStatus}
         />
+        <ProfileCompletionAssistant
+          profile={profile}
+        />
 
         <div className="grid gap-6 md:grid-cols-2">
           {profile && (
@@ -97,12 +100,6 @@ export default async function ProfilePage() {
               addressProof: profile.addressProof
             }}
             className="md:col-span-2"
-          />
-        </div>
-
-        <div className="space-y-6">
-          <ProfileCompletionAssistant
-            profile={profile}
           />
         </div>
       </Suspense>

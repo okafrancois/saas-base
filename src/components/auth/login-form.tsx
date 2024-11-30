@@ -22,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { sendOTP } from '@/actions/auth'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
 import { LoginInput, LoginSchema } from '@/schemas/user'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle, CheckCircle } from 'lucide-react'
 
 interface LoginFormProps {
@@ -36,6 +36,7 @@ export function LoginForm({
                             customSubTitle
                           }: LoginFormProps) {
   const t = useTranslations('auth.login')
+  const t_callback = useTranslations('common.callbacks')
   const [isOTPSent, setIsOTPSent] = useState(false)
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
@@ -223,6 +224,16 @@ export function LoginForm({
           </form>
         </Form>
       </CardContent>
+      {callbackUrl && (
+        <CardFooter>
+          <p className="text-center text-sm text-muted-foreground">
+            {t_callback('label')}
+            <span className={"font-bold"}>
+              {t_callback(`${callbackUrl}`)}
+            </span>
+          </p>
+        </CardFooter>
+      )}
     </Card>
   )
 }

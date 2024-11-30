@@ -142,6 +142,10 @@
         "download": "Télécharger"
       },
       "expires_on": "Expire le "
+    },
+    "callbacks": {
+      "label": "Vous allez être redirigé sur la page ",
+      "/registration": "Inscription consulaire"
     }
   },
   "feedback": {
