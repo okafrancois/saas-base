@@ -77,7 +77,6 @@ export function DocumentUploadSection({
 
     // Collecter les documents et leurs champs d'analyse respectifs
     Object.entries(form.getValues()).forEach(([key, fileList]) => {
-      console.log(key, fileList)
       const doc = requiredDocuments.find(d => d.id === key)
       if (fileList && doc) {
         analysisFields.push({

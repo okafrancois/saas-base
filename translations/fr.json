@@ -1518,14 +1518,16 @@
         "analyzing": "Analyse en cours...",
         "help": "L'analyse automatique des documents permet de pré-remplir vos informations",
         "success": {
-          "title": "Documents analysés",
+          "title": "Analyse terminée",
           "description": "Les informations ont été extraites avec succès",
+          "description_with_sections": "Les sections suivantes ont été mises à jour : {sections}",
           "action": "Continuer"
         },
         "error": {
           "title": "Erreur d'analyse",
-          "unknown": "Une erreur est survenue lors de l'analyse",
-          "no_document": "Veuillez télécharger au moins un document"
+          "no_documents": "Aucun document à analyser",
+          "no_document": "Aucun document à analyser",
+          "unknown": "Une erreur est survenue lors de l'analyse"
         }
       },
       "tips": {
@@ -1733,6 +1735,12 @@
         "naturalization": "Par naturalisation",
         "other": "Autre"
       }
+    },
+    "sections": {
+      "basicinfo": "Informations personnelles",
+      "contactinfo": "Coordonnées",
+      "familyinfo": "Situation familiale",
+      "professionalinfo": "Situation professionnelle"
     }
   },
   "consular": {

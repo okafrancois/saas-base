@@ -32,6 +32,7 @@ import { ReviewForm } from '@/components/registration/review'
 import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
 import { postProfile } from '@/actions/profile'
 import { AnalysisData } from '@/types'
+import { updateFormsFromAnalysis } from '@/lib/form/update-helpers'
 
 type StepKey = 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
 
@@ -149,76 +150,52 @@ export function RegistrationForm() {
     setError(undefined)
 
     try {
-      if (data) {
-        basicInfoForm.reset({
-          ...basicInfoForm.getValues(),
-          firstName: data.firstName,
-          lastName: data.lastName,
-          gender: data.gender,
-          birthDate: data.birthDate,
-          birthPlace: data.birthPlace,
-          birthCountry: data.birthCountry,
-          nationality: data.nationality,
-          acquisitionMode: data.acquisitionMode,
-          passportNumber: data.passportNumber,
-          passportIssueDate: data.passportIssueDate,
-          passportExpiryDate: data.passportExpiryDate,
-          passportIssueAuthority: data.passportIssueAuthority,
-        })
+      const updateResult = updateFormsFromAnalysis(data, {
+        basicInfo: basicInfoForm,
+        contactInfo: contactInfoForm,
+        familyInfo: familyInfoForm,
+        professionalInfo: professionalInfoForm,
+      })
 
-        // Informations de contact
-        if (data.address) {
-          contactInfoForm.reset({
-            ...contactInfoForm.getValues(),
-            address: {
-              firstLine: data.address.firstLine,
-              secondLine: data.address.secondLine || '',
-              city: data.address.city,
-              zipCode: data.address.zipCode || '',
-              country: data.address.country,
-            }
-          })
-        }
+      // Mettre à jour le state global uniquement pour les formulaires modifiés
+      const updatedFormData: Partial<ConsularFormData> = {}
 
-        // Informations familiales
-        familyInfoForm.reset({
-          ...familyInfoForm.getValues(),
-          maritalStatus: data.maritalStatus,
-          fatherFullName: data.fatherFullName,
-          motherFullName: data.motherFullName,
-        })
-
-        // Informations professionnelles
-        if (data.workStatus || data.profession || data.employer) {
-          professionalInfoForm.reset({
-            ...professionalInfoForm.getValues(),
-            workStatus: data.workStatus,
-            profession: data.profession,
-            employer: data.employer,
-            employerAddress: data.employerAddress,
-          })
-        }
-
-        // Mettre à jour le state global
-        setFormData(prev => ({
-          ...prev,
-          basicInfo: basicInfoForm.getValues(),
-          contactInfo: contactInfoForm.getValues(),
-          familyInfo: familyInfoForm.getValues(),
-          professionalInfo: professionalInfoForm.getValues(),
-        }))
-
-        toast({
-          title: t('documents.analysis.success.title'),
-          description: t('documents.analysis.success.description'),
-          variant: "success",
-          action: (
-            <Button onClick={() => setCurrentStep(prev => prev + 1)} size="sm">
-              {t('documents.analysis.success.action')}
-            </Button>
-          ),
-        })
+      if (updateResult.hasBasicInfo) {
+        updatedFormData.basicInfo = basicInfoForm.getValues()
       }
+      if (updateResult.hasContactInfo) {
+        updatedFormData.contactInfo = contactInfoForm.getValues()
+      }
+      if (updateResult.hasFamilyInfo) {
+        updatedFormData.familyInfo = familyInfoForm.getValues()
+      }
+      if (updateResult.hasProfessionalInfo) {
+        updatedFormData.professionalInfo = professionalInfoForm.getValues()
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        ...updatedFormData,
+      }))
+
+      // Afficher un toast avec les sections mises à jour
+      const updatedSections = Object.entries(updateResult)
+        .filter(([, hasUpdates]) => hasUpdates)
+        .map(([key]) => t(`sections.${key.replace('has', '').toLowerCase()}`))
+
+      toast({
+        title: t('documents.analysis.success.title'),
+        description: t('documents.analysis.success.description_with_sections', {
+          sections: updatedSections.join(', '),
+        }),
+        variant: "success",
+        action: updatedSections.length > 0 ? (
+          <Button onClick={() => setCurrentStep(prev => prev + 1)} size="sm">
+            {t('documents.analysis.success.action')}
+          </Button>
+        ) : undefined,
+      })
+
     } catch (error) {
       setError(error instanceof Error ? error.message : t('errors.unknown'))
       toast({
