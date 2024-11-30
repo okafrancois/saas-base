@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { useTranslations } from 'next-intl'
-import { cn, DocumentField } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Icons } from '@/components/ui/icons'
 import { FormError } from '@/components/ui/form-error'
 import { Button } from '@/components/ui/button'
@@ -25,14 +25,13 @@ import { MobileProgress } from '@/components/registration/mobile-progress'
 import { StepGuide } from '@/components/registration/step-guide'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getFieldsForDocument } from '@/lib/document-fields'
-import { analyzeDocuments } from '@/actions/documents'
 import { FamilyInfoForm } from '@/components/registration/family-info'
 import { ContactInfoForm } from '@/components/registration/contact-form'
 import { ProfessionalInfoForm } from '@/components/registration/professional-info'
 import { ReviewForm } from '@/components/registration/review'
 import { Gender, MaritalStatus, NationalityAcquisition, WorkStatus } from '@prisma/client'
 import { postProfile } from '@/actions/profile'
+import { AnalysisData } from '@/types'
 
 type StepKey = 'documents' | 'identity' | 'family' | 'contact' | 'professional' | 'review'
 
@@ -70,73 +69,31 @@ export function RegistrationForm() {
 
   const documentsForm = useForm<DocumentsFormData>({
     resolver: zodResolver(DocumentsSchema),
-    defaultValues: {
-      passportFile: null,
-      birthCertificateFile: null,
-      residencePermitFile: null,
-      addressProofFile: null,
-    },
-    reValidateMode: 'onChange'
   })
 
   const basicInfoForm = useForm<BasicInfoFormData>({
     resolver: zodResolver(BasicInfoSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
       gender: Gender.MALE,
-      birthDate: '',
-      birthPlace: '',
-      birthCountry: '',
-      nationality: '',
       acquisitionMode: NationalityAcquisition.BIRTH,
-      identityPictureFile: null,
     }
   })
 
   const familyInfoForm = useForm<FamilyInfoFormData>({
     resolver: zodResolver(FamilyInfoSchema),
     defaultValues: {
-      maritalStatus: MaritalStatus.SINGLE,
-      fatherFullName: '',
-      motherFullName: '',
-      spouseFullName: '',
-      emergencyContact: {
-        fullName: '',
-        relationship: '',
-        phone: '',
-      }
+      maritalStatus: MaritalStatus.SINGLE
     }
   })
 
   const contactInfoForm = useForm<ContactInfoFormData>({
     resolver: zodResolver(ContactInfoSchema),
-    defaultValues: {
-      email: '',
-      phone: '',
-      address: {
-        firstLine: '',
-        secondLine: '',
-        city: '',
-        zipCode: '',
-        country: '',
-      },
-      addressInGabon: {
-        address: '',
-        district: '',
-        city: '',
-      }
-    }
   })
 
   const professionalInfoForm = useForm<ProfessionalInfoFormData>({
     resolver: zodResolver(ProfessionalInfoSchema),
     defaultValues: {
       workStatus: WorkStatus.UNEMPLOYED,
-      profession: '',
-      employer: '',
-      employerAddress: '',
-      lastActivityGabon: '',
     }
   })
 
@@ -187,115 +144,80 @@ export function RegistrationForm() {
     sessionStorage.setItem('consularFormData', JSON.stringify(formData))
   }, [formData])
 
-  const handleDocumentsAnalysis = async () => {
-    const analysisFormData = new FormData()
-    const analysisFields: {key: keyof DocumentsFormData, fields: DocumentField[]}[] = []
-
-    // Collecter les documents et leurs champs respectifs
-    Object.entries(documentsForm.getValues()).forEach(([key, fileList]) => {
-      if (fileList) {
-        const documentFields = getFieldsForDocument(key as keyof DocumentsFormData)
-        analysisFields.push({
-          key: key as keyof DocumentsFormData,
-          fields: documentFields
-        })
-        analysisFormData.append(key, fileList)
-      }
-    })
-
-    if (analysisFields.length === 0) {
-      toast({
-        title: t('documents.analysis.error.title'),
-        description: t('documents.analysis.error.no_document'),
-        variant: "destructive"
-      })
-      setError(t('documents.analysis.error.no_document'))
-      return
-    }
-
+  const handleDocumentsAnalysis = async (data: AnalysisData) => {
     setIsLoading(true)
     setError(undefined)
 
     try {
-      const results = await analyzeDocuments(analysisFormData, analysisFields, 'gpt')
+      if (data) {
+        basicInfoForm.reset({
+          ...basicInfoForm.getValues(),
+          firstName: data.firstName,
+          lastName: data.lastName,
+          gender: data.gender,
+          birthDate: data.birthDate,
+          birthPlace: data.birthPlace,
+          birthCountry: data.birthCountry,
+          nationality: data.nationality,
+          acquisitionMode: data.acquisitionMode,
+          passportNumber: data.passportNumber,
+          passportIssueDate: data.passportIssueDate,
+          passportExpiryDate: data.passportExpiryDate,
+          passportIssueAuthority: data.passportIssueAuthority,
+        })
 
-      if (results.success && results.mergedData) {
-        // Pré-remplir les formulaires avec les données extraites
-        const { mergedData } = results
-
-        // Informations de base
-        if (mergedData) {
-          basicInfoForm.reset({
-            ...basicInfoForm.getValues(),
-            firstName: mergedData.firstName,
-            lastName: mergedData.lastName,
-            gender: mergedData.gender,
-            birthDate: mergedData.birthDate,
-            birthPlace: mergedData.birthPlace,
-            birthCountry: mergedData.birthCountry,
-            nationality: mergedData.nationality,
-            acquisitionMode: mergedData.acquisitionMode,
-            passportNumber: mergedData.passportNumber,
-            passportIssueDate: mergedData.passportIssueDate,
-            passportExpiryDate: mergedData.passportExpiryDate,
-            passportIssueAuthority: mergedData.passportIssueAuthority,
-          })
-
-          // Informations de contact
-          if (mergedData.address) {
-            contactInfoForm.reset({
-              ...contactInfoForm.getValues(),
-              address: {
-                firstLine: mergedData.address.firstLine,
-                secondLine: mergedData.address.secondLine || '',
-                city: mergedData.address.city,
-                zipCode: mergedData.address.zipCode || '',
-                country: mergedData.address.country,
-              }
-            })
-          }
-
-          // Informations familiales
-          familyInfoForm.reset({
-            ...familyInfoForm.getValues(),
-            maritalStatus: mergedData.maritalStatus,
-            fatherFullName: mergedData.fatherFullName,
-            motherFullName: mergedData.motherFullName,
-          })
-
-          // Informations professionnelles
-          if (mergedData.workStatus || mergedData.profession || mergedData.employer) {
-            professionalInfoForm.reset({
-              ...professionalInfoForm.getValues(),
-              workStatus: mergedData.workStatus,
-              profession: mergedData.profession,
-              employer: mergedData.employer,
-              employerAddress: mergedData.employerAddress,
-            })
-          }
-
-          // Mettre à jour le state global
-          setFormData(prev => ({
-            ...prev,
-            basicInfo: basicInfoForm.getValues(),
-            contactInfo: contactInfoForm.getValues(),
-            familyInfo: familyInfoForm.getValues(),
-            professionalInfo: professionalInfoForm.getValues(),
-          }))
-
-          toast({
-            title: t('documents.analysis.success.title'),
-            description: t('documents.analysis.success.description'),
-            variant: "success",
-            action: (
-              <Button onClick={() => setCurrentStep(prev => prev + 1)} size="sm">
-                {t('documents.analysis.success.action')}
-              </Button>
-            )
+        // Informations de contact
+        if (data.address) {
+          contactInfoForm.reset({
+            ...contactInfoForm.getValues(),
+            address: {
+              firstLine: data.address.firstLine,
+              secondLine: data.address.secondLine || '',
+              city: data.address.city,
+              zipCode: data.address.zipCode || '',
+              country: data.address.country,
+            }
           })
         }
-      } else {
-        throw new Error(results.error || t('documents.analysis.error.unknown'))
+
+        // Informations familiales
+        familyInfoForm.reset({
+          ...familyInfoForm.getValues(),
+          maritalStatus: data.maritalStatus,
+          fatherFullName: data.fatherFullName,
+          motherFullName: data.motherFullName,
+        })
+
+        // Informations professionnelles
+        if (data.workStatus || data.profession || data.employer) {
+          professionalInfoForm.reset({
+            ...professionalInfoForm.getValues(),
+            workStatus: data.workStatus,
+            profession: data.profession,
+            employer: data.employer,
+            employerAddress: data.employerAddress,
+          })
+        }
+
+        // Mettre à jour le state global
+        setFormData(prev => ({
+          ...prev,
+          basicInfo: basicInfoForm.getValues(),
+          contactInfo: contactInfoForm.getValues(),
+          familyInfo: familyInfoForm.getValues(),
+          professionalInfo: professionalInfoForm.getValues(),
+        }))
+
+        toast({
+          title: t('documents.analysis.success.title'),
+          description: t('documents.analysis.success.description'),
+          variant: "success",
+          action: (
+            <Button onClick={() => setCurrentStep(prev => prev + 1)} size="sm">
+              {t('documents.analysis.success.action')}
+            </Button>
+          ),
+        })
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : t('errors.unknown'))
@@ -467,7 +389,7 @@ export function RegistrationForm() {
         return (
           <DocumentUploadSection
             form={documentsForm}
-            handleAnalysis={handleDocumentsAnalysis}
+            onAnalysisComplete={handleDocumentsAnalysis}
             handleSubmit={() => {
               goToNextStep()
             }}

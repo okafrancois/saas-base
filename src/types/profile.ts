@@ -1,4 +1,15 @@
-import { Prisma, Gender, AddressGabon, MaritalStatus, WorkStatus, Address, User, Profile, DocumentStatus } from '@prisma/client'
+import {
+  Prisma,
+  Gender,
+  AddressGabon,
+  MaritalStatus,
+  WorkStatus,
+  Address,
+  User,
+  Profile,
+  DocumentStatus,
+  NationalityAcquisition,
+} from '@prisma/client'
 
 export type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
@@ -54,7 +65,8 @@ export type AnalysisData = {
   workStatus?: WorkStatus
   profession?: string
   employer?: string
-  employerAddress?: string
+  employerAddress?: string,
+  acquisitionMode?: NationalityAcquisition
 }
 
 export interface UserProfileData extends User{
