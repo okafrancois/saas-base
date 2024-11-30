@@ -22,6 +22,7 @@ import { useTranslations } from 'next-intl'
 import { MaritalStatus } from '@prisma/client'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { FamilyInfoFormData } from '@/schemas/registration'
+import { Separator } from '@/components/ui/separator'
 
 interface FamilyInfoFormProps {
   form: UseFormReturn<FamilyInfoFormData>
@@ -44,159 +45,160 @@ export function FamilyInfoForm({
 
   return (
     <Form {...form}>
-      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)}>
         {/* État civil */}
-        <Card>
-          <CardContent className="pt-6">
-            <FormField
-              control={form.control}
-              name="maritalStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('form.marital_status')}</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('form.select_marital_status')} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(MaritalStatus).map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {tAssets(`marital_status.${status.toLowerCase()}`)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <TradFormMessage />
-                </FormItem>
-              )}
-            />
 
-            {/* Champs spécifiques si marié(e) */}
-            {showSpouseFields && (
-              <div className="mt-4">
-                <FormField
-                  control={form.control}
-                  name="spouseFullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('form.spouse_name')}</FormLabel>
+        <Card>
+          <CardContent className={'space-y-6 pt-4'}>
+            <div>
+              <FormField
+                control={form.control}
+                name="maritalStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('form.marital_status')}</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder={t('form.spouse_name_placeholder')}
-                        />
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('form.select_marital_status')} />
+                        </SelectTrigger>
                       </FormControl>
-                      <TradFormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                      <SelectContent>
+                        {Object.values(MaritalStatus).map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {tAssets(`marital_status.${status.toLowerCase()}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
 
-        {/* Informations des parents */}
-        <Card>
-          <CardContent className="grid gap-4 pt-6">
-            <FormField
-              control={form.control}
-              name="fatherFullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('form.father_name')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t('form.father_name_placeholder')}
-                    />
-                  </FormControl>
-                  <TradFormMessage />
-                </FormItem>
+              {/* Champs spécifiques si marié(e) */}
+              {showSpouseFields && (
+                <div className="mt-4">
+                  <FormField
+                    control={form.control}
+                    name="spouseFullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('form.spouse_name')}</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t('form.spouse_name_placeholder')}
+                          />
+                        </FormControl>
+                        <TradFormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               )}
-            />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="motherFullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('form.mother_name')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t('form.mother_name_placeholder')}
-                    />
-                  </FormControl>
-                  <TradFormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
+            <Separator />
 
-        {/* Contact d'urgence */}
-        <Card>
-          <CardContent className="grid gap-4 pt-6">
-            <h3 className="text-lg font-semibold">{t('form.emergency_contact')}</h3>
-            <FormDescription>
-              {t('form.emergency_contact_description')}
-            </FormDescription>
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="fatherFullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('form.father_name')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={t('form.father_name_placeholder')}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="emergencyContact.fullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('form.emergency_contact_name')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t('form.emergency_contact_name_placeholder')}
-                    />
-                  </FormControl>
-                  <TradFormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="motherFullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('form.mother_name')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={t('form.mother_name_placeholder')}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="emergencyContact.relationship"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('form.emergency_contact_relationship')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t('form.emergency_contact_relationship_placeholder')}
-                    />
-                  </FormControl>
-                  <TradFormMessage />
-                </FormItem>
-              )}
-            />
+            <Separator />
 
-            <FormField
-              name="emergencyContact.phone"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('form.emergency_contact_phone')}</FormLabel>
-                  <FormControl>
-                    <PhoneInput
-                      placeholder={t('form.emergency_contact_phone_placeholder')}
-                      {...field}
-                    />
-                  </FormControl>
-                  <TradFormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid gap-4">
+              <h3 className="text-lg font-semibold">{t('form.emergency_contact')}</h3>
+              <FormDescription>
+                {t('form.emergency_contact_description')}
+              </FormDescription>
+
+              <FormField
+                control={form.control}
+                name="emergencyContact.fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('form.emergency_contact_name')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={t('form.emergency_contact_name_placeholder')}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="emergencyContact.relationship"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('form.emergency_contact_relationship')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={t('form.emergency_contact_relationship_placeholder')}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                name="emergencyContact.phone"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('form.emergency_contact_phone')}</FormLabel>
+                    <FormControl>
+                      <PhoneInput
+                        placeholder={t('form.emergency_contact_phone_placeholder')}
+                        {...field}
+                      />
+                    </FormControl>
+                    <TradFormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </CardContent>
         </Card>
       </form>

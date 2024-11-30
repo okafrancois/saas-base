@@ -3,7 +3,7 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ScanBarcode } from 'lucide-react'
 import LottieAnimation from '@/components/ui/lottie-animation'
@@ -119,71 +119,76 @@ export function DocumentUploadSection({
     <Form {...form}>
       <form ref={formRef} onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         {/* Section des documents */}
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2">
-          <AnimatePresence mode="sync">
-            {requiredDocuments.map((doc, index) => (
-              <motion.div
-                key={doc.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <FormField
-                  control={form.control}
-                  name={doc.id}
-                  render={({ field }) => (
-                    <DocumentUploadField
-                      id={doc.id}
-                      field={field}
-                      label={doc.label}
-                      required={doc.required}
-                      description={doc.description}
-                      accept={doc.acceptedTypes.join(',')}
-                      maxSize={doc.maxSize}
-                      form={form}
-                      disabled={isLoading}
-                    />
-                  )}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-
-        {/* Section d'analyse */}
         <Card className="overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <Button
-                type="button"
-                onClick={handleAnalysis}
-                disabled={isAnalyzing || isLoading}
-                className="w-full gap-2 md:w-auto"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <LottieAnimation
-                      src="https://lottie.host/3dcbeb73-3c3f-4dbe-93de-a973430b6c4c/aX6F1INJXN.json"
-                      className="h-5 w-5"
-                    />
-                    {t('documents.analysis.analyzing')}
-                  </>
-                ) : (
-                  <>
-                    <ScanBarcode className="h-5 w-5" />
-                    {t('documents.analysis.start')}
-                  </>
-                )}
-              </Button>
-              <p className="text-sm text-muted-foreground">
-                {t('documents.analysis.help')}
-              </p>
-            </div>
+          <CardContent className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 pt-4">
+            <AnimatePresence mode="sync">
+              {requiredDocuments.map((doc, index) => (
+                <motion.div
+                  key={doc.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <FormField
+                    control={form.control}
+                    name={doc.id}
+                    render={({ field }) => (
+                      <DocumentUploadField
+                        id={doc.id}
+                        field={field}
+                        label={doc.label}
+                        required={doc.required}
+                        description={doc.description}
+                        accept={doc.acceptedTypes.join(',')}
+                        maxSize={doc.maxSize}
+                        form={form}
+                        disabled={isLoading}
+                      />
+                    )}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </CardContent>
-        </Card>
+          <CardFooter>
+            <div className={"space-y-4"}>
+              {/* Section d'analyse */}
+              <Card className="overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center gap-4 text-center">
+                    <Button
+                      type="button"
+                      onClick={handleAnalysis}
+                      disabled={isAnalyzing || isLoading}
+                      className="w-full gap-2 md:w-auto"
+                    >
+                      {isAnalyzing ? (
+                        <>
+                          <LottieAnimation
+                            src="https://lottie.host/3dcbeb73-3c3f-4dbe-93de-a973430b6c4c/aX6F1INJXN.json"
+                            className="h-5 w-5"
+                          />
+                          {t('documents.analysis.analyzing')}
+                        </>
+                      ) : (
+                        <>
+                          <ScanBarcode className="h-5 w-5" />
+                          {t('documents.analysis.start')}
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      {t('documents.analysis.help')}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
 
-        {/* Guide d'aide */}
-        <DocumentUploadGuide />
+              {/* Guide d'aide */}
+              <DocumentUploadGuide />
+            </div>
+          </CardFooter>
+        </Card>
       </form>
     </Form>
   )

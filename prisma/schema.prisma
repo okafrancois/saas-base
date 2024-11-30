@@ -130,7 +130,6 @@ model Profile {
 
   // Contact
   address          Address?          @relation(fields: [addressId], references: [id])
-  addressId        String?           @unique
   phone            String?
   email            String?
   emergencyContact EmergencyContact?
@@ -155,6 +154,7 @@ model Profile {
   status    RequestStatus @default(INCOMPLETE)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  addressId String?
 }
 
 model EmergencyContact {
@@ -184,10 +184,10 @@ model Address {
   country    String
 
   // Relations
-  profile   Profile?
   consulate Consulate?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  Profile   Profile[]
 }
 
 model Consulate {

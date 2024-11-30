@@ -1519,12 +1519,14 @@
         "success": {
           "title": "",
           "description": "",
+          "description_with_sections": "",
           "action": ""
         },
         "error": {
           "title": "",
-          "unknown": "",
-          "no_document": ""
+          "no_documents": "",
+          "no_document": "",
+          "unknown": ""
         }
       },
       "tips": {
@@ -1732,6 +1734,12 @@
         "naturalization": "",
         "other": ""
       }
+    },
+    "sections": {
+      "basicinfo": "",
+      "contactinfo": "",
+      "familyinfo": "",
+      "professionalinfo": ""
     }
   },
   "consular": {

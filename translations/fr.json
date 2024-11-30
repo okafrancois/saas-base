@@ -1741,6 +1741,9 @@
       "contactinfo": "Coordonnées",
       "familyinfo": "Situation familiale",
       "professionalinfo": "Situation professionnelle"
+    },
+    "actions": {
+      "edit": "Modifier"
     }
   },
   "consular": {
