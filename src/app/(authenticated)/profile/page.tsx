@@ -18,7 +18,6 @@ import { BasicInfoSection } from '@/components/profile/sections/basic-info-secti
 import { ContactInfoSection } from '@/components/profile/sections/contact-info-section'
 import { FamilyInfoSection } from '@/components/profile/sections/family-info-section'
 import { ProfessionalInfoSection } from '@/components/profile/sections/professional-info-section'
-import { DocumentsSection } from '@/components/profile/sections/documents-section'
 import { ProfileCompletionAssistant } from '@/components/profile/profile-completion-assistant'
 
 export default async function ProfilePage() {
@@ -92,7 +91,7 @@ export default async function ProfilePage() {
             </>
           )}
 
-          <DocumentsSection
+          {/**<DocumentsSection
             documents={{
               passport: profile.passport,
               birthCertificate: profile.birthCertificate,
@@ -100,7 +99,7 @@ export default async function ProfilePage() {
               addressProof: profile.addressProof
             }}
             className="md:col-span-2"
-          />
+          />*/}
         </div>
       </Suspense>
     </div>

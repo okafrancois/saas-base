@@ -2,7 +2,7 @@
 
 import { getTranslations } from 'next-intl/server'
 import { ActionResult } from '@/lib/auth/action'
-import { DocumentStatus, DocumentType, Profile } from '@prisma/client'
+import { DocumentType, Profile } from '@prisma/client'
 import { db } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { PAGE_ROUTES } from '@/schemas/app-routes'
@@ -10,16 +10,17 @@ import { getCurrentUser } from '@/actions/user'
 import { processFileData } from '@/actions/utils'
 import {
   BasicInfoFormData,
-  ContactInfoFormData,
+  ContactInfoFormData, DocumentsFormData,
   FamilyInfoFormData,
   ProfessionalInfoFormData,
 } from '@/schemas/registration'
-import { ProfileAction, ProfileStats } from '@/types'
-import { getDocumentStats } from '@/lib/db/document'
+import { deleteFiles } from '@/actions/uploads'
 
 export async function postProfile(
   formData: FormData
 ): Promise<ActionResult<{ id: string }>> {
+  const uploadedFiles: { key: string; url: string }[] = []
+
   try {
     const t = await getTranslations('messages.profile')
     const user = await getCurrentUser()
@@ -79,6 +80,13 @@ export async function postProfile(
       addressProof
     ] = await Promise.all(filesPromises)
 
+    // Garder une trace des fichiers uploadés pour pouvoir les supprimer en cas d'erreur
+    if (identityPicture) uploadedFiles.push(identityPicture)
+    if (passport) uploadedFiles.push(passport)
+    if (birthCertificate) uploadedFiles.push(birthCertificate)
+    if (residencePermit) uploadedFiles.push(residencePermit)
+    if (addressProof) uploadedFiles.push(addressProof)
+
     // Récupérer et parser les données du formulaire
     const basicInfo = JSON.parse(formData.get('basicInfo') as string)
     const contactInfo = JSON.parse(formData.get('contactInfo') as string)
@@ -93,6 +101,10 @@ export async function postProfile(
       const inThreeMonths = new Date(now.setMonth(now.getMonth() + 3))
       const inOneYear = new Date(now.setFullYear(now.getFullYear() + 1))
       const inFiveYears = new Date(now.setFullYear(now.getFullYear() + 5))
+
+      const address = await tx.address.create({
+        data: contactInfo.address
+      })
 
       const profile = await tx.profile.create({
         data: {
@@ -124,6 +136,8 @@ export async function postProfile(
           phone: contactInfo.phone,
           email: contactInfo.email,
 
+          // Documents
+
           // Informations professionnelles
           workStatus: professionalInfo.workStatus,
           profession: professionalInfo.profession || null,
@@ -132,9 +146,7 @@ export async function postProfile(
           activityInGabon: professionalInfo.lastActivityGabon,
 
           // Relations
-          address: contactInfo.address ? {
-            create: contactInfo.address
-          } : undefined,
+          addressId: address.id,
           addressInGabon: contactInfo.addressInGabon ? {
             create: contactInfo.addressInGabon
           } : undefined,
@@ -146,7 +158,7 @@ export async function postProfile(
 
       // 2. Créer les documents associés
       if (passport) {
-        await tx.document.create({
+        const passportDoc = await tx.document.create({
           data: {
             type: DocumentType.PASSPORT,
             fileUrl: passport.url,
@@ -159,21 +171,37 @@ export async function postProfile(
             }
           }
         })
+
+        // Mettre à jour le profil avec le document du passeport
+        await tx.profile.update({
+          where: { id: profile.id },
+          data: {
+            passportId: passportDoc.id
+          }
+        })
       }
 
       // Créer les autres documents si présents
       if (birthCertificate) {
-        await tx.document.create({
+        const birthCertificateDoc = await tx.document.create({
           data: {
             type: DocumentType.BIRTH_CERTIFICATE,
             fileUrl: birthCertificate.url,
             profileId: profile.id
           }
         })
+
+        // Mettre à jour le profil avec le document du certificat de naissance
+        await tx.profile.update({
+          where: { id: profile.id },
+          data: {
+            birthCertificateId: birthCertificateDoc.id
+          }
+        })
       }
 
       if (residencePermit) {
-        await tx.document.create({
+        const residencePermitDoc = await tx.document.create({
           data: {
             type: DocumentType.RESIDENCE_PERMIT,
             fileUrl: residencePermit.url,
@@ -182,16 +210,32 @@ export async function postProfile(
             profileId: profile.id
           }
         })
+
+        // Mettre à jour le profil avec le document du titre de séjour
+        await tx.profile.update({
+          where: { id: profile.id },
+          data: {
+            residencePermitId: residencePermitDoc.id
+          }
+        })
       }
 
       if (addressProof) {
-        await tx.document.create({
+        const addressProofDoc = await tx.document.create({
           data: {
             type: DocumentType.PROOF_OF_ADDRESS,
             fileUrl: addressProof.url,
             issuedAt: now,
             expiresAt: inThreeMonths,
             profileId: profile.id
+          }
+        })
+
+        // Mettre à jour le profil avec le document de justificatif de domicile
+        await tx.profile.update({
+          where: { id: profile.id },
+          data: {
+            addressProofId: addressProofDoc.id
           }
         })
       }
@@ -206,104 +250,19 @@ export async function postProfile(
     return { data: { id: profile.id } }
 
   } catch (error) {
-    console.error('Profile creation/update error:', error)
+    if (uploadedFiles.length > 0) {
+      try {
+        await deleteFiles(uploadedFiles.map(file => file.key))
+      } catch (deleteError) {
+        console.error('Error deleting files:', deleteError)
+      }
+    }
+
+    console.error('Profile creation error:', error)
     return {
       error: error instanceof Error ? error.message : 'messages.errors.unknown_error'
     }
   }
-}
-
-export async function getProfileActions(): Promise<ProfileAction[]> {
-  try {
-    const user = await getCurrentUser()
-    if (!user) return []
-
-    const profile = await db.profile.findUnique({
-      where: { userId: user.id }
-    })
-
-    const actions: ProfileAction[] = []
-
-    // Logique pour déterminer les actions nécessaires
-    if (!profile) {
-      actions.push({
-        id: 'complete-profile',
-        label: 'complete_profile',
-        description: 'complete_profile_description',
-        status: 'pending',
-        priority: 'high'
-      })
-    }
-
-    // Ajouter d'autres vérifications selon les besoins
-
-    return actions
-  } catch (error) {
-    console.error('Error fetching profile actions:', error)
-    return []
-  }
-}
-
-export async function getProfileStats(): Promise<ProfileStats | null> {
-  try {
-    const user = await getCurrentUser()
-    if (!user) return null
-
-    const [documentStats, requestsCount] = await Promise.all([
-      getDocumentStats(user.id),
-      db.request.count({
-        where: {
-          userId: user.id,
-          status: { in: ['PENDING', 'INCOMPLETE'] }
-        }
-      })
-    ])
-
-    const profile = await db.profile.findUnique({
-      where: { userId: user.id },
-      include: { address: true }
-    })
-
-    return {
-      documentsCount: documentStats.total,
-      documentsValidated: documentStats.validated,
-      documentsPending: documentStats.pending,
-      documentsExpired: documentStats.expired,
-      requestsCount,
-      lastLogin: user.lastLogin ?? undefined,
-      profileCompletion: calculateProfileCompletion(profile)
-    }
-  } catch (error) {
-    console.error('Error fetching profile stats:', error)
-    return null
-  }
-}
-
-function calculateProfileCompletion(profile: any): number {
-  if (!profile) return 0
-
-  const fields = {
-    required: [
-      'firstName',
-      'lastName',
-      'birthDate',
-      'nationality',
-      'gender'
-    ],
-    optional: [
-      'phone',
-      'profession',
-      'address'
-    ]
-  }
-
-  const requiredScore = fields.required.filter(f => !!profile[f]).length * 2
-  const optionalScore = fields.optional.filter(f => !!profile[f]).length
-
-  const maxScore = (fields.required.length * 2) + fields.optional.length
-  const currentScore = requiredScore + optionalScore
-
-  return Math.round((currentScore / maxScore) * 100)
 }
 
 type UpdateProfileSection = {
@@ -311,22 +270,26 @@ type UpdateProfileSection = {
   contactInfo?: ContactInfoFormData
   familyInfo?: FamilyInfoFormData
   professionalInfo?: ProfessionalInfoFormData
-  documents?: any
+  documents?: DocumentsFormData
 }
 
+/**
 type DocumentUpdate = {
   fileUrl: string
   type: DocumentType
   status?: DocumentStatus
   issuedAt?: Date
   expiresAt?: Date
-  metadata?: any
-}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  metadata?: Record<string, any>
+}*/
 
 export async function updateProfile(
   formData: FormData,
   section: keyof UpdateProfileSection
 ): Promise<ActionResult<Profile>> {
+  const uploadedFiles: { key: string; url: string }[] = []
+
   try {
     const t = await getTranslations('messages.profile.errors')
     const user = await getCurrentUser()
@@ -350,6 +313,7 @@ export async function updateProfile(
     }
 
     // Traiter les fichiers si présents
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fileProcessingPromises: Promise<any>[] = []
     const files = {
       identityPictureFile: formData.get('identityPictureFile') as File,
@@ -359,13 +323,20 @@ export async function updateProfile(
       addressProofFile: formData.get('addressProofFile') as File,
     }
 
-    Object.entries(files).forEach(([key, file]) => {
+    Object.entries(files).forEach(file => {
       if (file) {
-        fileProcessingPromises.push(processFileData(file))
+        const formData = new FormData()
+        formData.append('files', file[0])
+        fileProcessingPromises.push(processFileData(formData))
       }
     })
 
     const processedFiles = await Promise.all(fileProcessingPromises)
+
+    // Garder une trace des fichiers uploadés pour pouvoir les supprimer en cas d'erreur
+    processedFiles.forEach(file => {
+      if (file) uploadedFiles.push(file)
+    })
 
     // Récupérer les données JSON de la section
     const sectionData = formData.get(section)
@@ -376,6 +347,7 @@ export async function updateProfile(
     const data = JSON.parse(sectionData as string)
 
     // Préparer les données de mise à jour en fonction de la section
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let updateData: any = {}
 
     switch (section) {
@@ -454,89 +426,6 @@ export async function updateProfile(
         return { error: t('invalid_section') }
     }
 
-    // Si c'est une mise à jour de documents
-    if (section === 'documents') {
-      const documentUpdates: DocumentUpdate[] = []
-
-      // Traiter chaque type de document possible
-      const documentTypes = [
-        'passportFile',
-        'birthCertificateFile',
-        'residencePermitFile',
-        'addressProofFile'
-      ]
-
-      for (const docType of documentTypes) {
-        const file = formData.get(docType) as File
-        if (file) {
-          const processedFile = await processFileData(file)
-          if (processedFile) {
-            documentUpdates.push({
-              fileUrl: processedFile.url,
-              type: docType.replace('File', '').toUpperCase() as DocumentType,
-              status: DocumentStatus.PENDING,
-              issuedAt: new Date(),
-              // Pour le passeport et le titre de séjour, on ajoute une date d'expiration
-              ...(docType === 'passportFile' || docType === 'residencePermitFile' ? {
-                expiresAt: new Date(formData.get(`${docType}ExpiryDate`) as string),
-                metadata: {
-                  documentNumber: formData.get(`${docType}Number`),
-                  issuingAuthority: formData.get(`${docType}Authority`),
-                }
-              } : {})
-            })
-          }
-        }
-      }
-
-      // Mise à jour ou création des documents
-      const updatePromises = documentUpdates.map(async (doc) => {
-        return db.document.upsert({
-          where: {
-            profileId_type: {
-              profileId: user.id,
-              type: doc.type
-            }
-          },
-          create: {
-            ...doc,
-            profileId: user.id
-          },
-          update: {
-            ...doc
-          }
-        })
-      })
-
-      await Promise.all(updatePromises)
-
-      // Récupérer le profil mis à jour avec les documents
-      const updatedProfile = await db.profile.findUnique({
-        where: { userId: user.id },
-        include: {
-          documents: true,
-          passport: true,
-          birthCertificate: true,
-          residencePermit: true,
-          addressProof: true,
-          address: true,
-          addressInGabon: true,
-          emergencyContact: true,
-        }
-      })
-
-      if (!updatedProfile) {
-        return { error: t('profile_not_found') }
-      }
-
-      // Revalider les pages
-      revalidatePath(PAGE_ROUTES.profile)
-      revalidatePath(PAGE_ROUTES.dashboard)
-      revalidatePath(PAGE_ROUTES.documents)
-
-      return { data: updatedProfile }
-    }
-
     // Mettre à jour le profil
     const updatedProfile = await db.profile.update({
       where: { id: existingProfile.id },
@@ -554,6 +443,14 @@ export async function updateProfile(
 
     return { data: updatedProfile }
   } catch (error) {
+    if (uploadedFiles.length > 0) {
+      try {
+        await deleteFiles(uploadedFiles.map(file => file.key))
+      } catch (deleteError) {
+        console.error('Error deleting files:', deleteError)
+      }
+    }
+
     console.error('Update profile error:', error)
     return {
       error: error instanceof Error ? error.message : 'messages.errors.unknown_error'

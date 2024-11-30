@@ -4,7 +4,6 @@ import { LoadingSkeleton } from '@/components/ui/loading-skeleton'
 import { ProfileSection } from '@/components/profile/dashboard/sections/profile-section'
 import { RequestsSection } from '@/components/profile/dashboard/sections/requests-section'
 import { AppointmentsSection } from '@/components/profile/dashboard/sections/appointments-section'
-import { DocumentsSection } from '@/components/profile/dashboard/sections/documents-section'
 import { getCurrentUser } from '@/actions/user'
 
 export default async function DashboardPage() {
@@ -27,10 +26,9 @@ export default async function DashboardPage() {
           </div>
 
           {/* Grille responsive pour les autres sections */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <RequestsSection stats={stats.requests} />
-            <AppointmentsSection stats={stats.appointments} />
-            <DocumentsSection stats={stats.documents} />
+          <div className="grid gap-4 md:grid-cols-2">
+            <RequestsSection stats={stats.requests}/>
+            <AppointmentsSection stats={stats.appointments}/>
           </div>
         </Suspense>
       </div>

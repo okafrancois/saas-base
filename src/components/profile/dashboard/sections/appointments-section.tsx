@@ -5,13 +5,13 @@ import { Calendar, Clock, MapPin, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DashboardSectionStats } from '@/types/dashboard'
-import { Badge } from '@/components/ui/badge'
+import { Badge, BadgeVariant } from '@/components/ui/badge'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 interface AppointmentsSectionProps {
   stats: DashboardSectionStats['appointments']
-  onAction: (action: string) => void
+  onAction?: (action: string) => void
 }
 
 export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProps) {
@@ -30,7 +30,7 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onAction('schedule_appointment')}
+            onClick={() => onAction?.('schedule_appointment')}
           >
             <Plus className="h-4 w-4 md:mr-2" />
             <span className="hidden md:inline">{t('actions.schedule')}</span>
@@ -44,7 +44,7 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
           <div className="rounded-lg border p-3">
             <div className="flex items-center justify-between">
               <h4 className="font-medium">{t('next_appointment')}</h4>
-              <Badge variant={stats.upcoming.status.toLowerCase()}>
+              <Badge variant={stats.upcoming.status.toLowerCase() as BadgeVariant}>
                 {t(`status.${stats.upcoming.status.toLowerCase()}`)}
               </Badge>
             </div>
@@ -64,7 +64,7 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onAction('reschedule_appointment')}
+                onClick={() => onAction?.('reschedule_appointment')}
                 className="flex-1 md:flex-none"
               >
                 {t('actions.reschedule')}
@@ -72,7 +72,7 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onAction('cancel_appointment')}
+                onClick={() => onAction?.('cancel_appointment')}
                 className="flex-1 md:flex-none"
               >
                 {t('actions.cancel')}
@@ -87,7 +87,7 @@ export function AppointmentsSection({ stats, onAction }: AppointmentsSectionProp
             <Button
               className="mt-2"
               size="sm"
-              onClick={() => onAction('schedule_appointment')}
+              onClick={() => onAction?.('schedule_appointment')}
             >
               {t('actions.schedule')}
             </Button>

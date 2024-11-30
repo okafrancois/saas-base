@@ -8,7 +8,7 @@ import { DashboardSectionStats } from '@/types/dashboard'
 
 interface RequestsSectionProps {
   stats: DashboardSectionStats['requests']
-  onAction: (action: string) => void
+  onAction?: (action: string) => void
 }
 
 export function RequestsSection({ stats, onAction }: RequestsSectionProps) {
@@ -24,7 +24,7 @@ export function RequestsSection({ stats, onAction }: RequestsSectionProps) {
             <FileText className="h-5 w-5" />
             {t('title')}
           </CardTitle>
-          <Button variant="outline" size="sm" onClick={() => onAction('new_request')}>
+          <Button variant="outline" size="sm" onClick={() => onAction?.('new_request')}>
             <Plus className="h-4 w-4 md:mr-2" />
             <span className="hidden md:inline">{t('actions.new')}</span>
           </Button>
@@ -61,7 +61,7 @@ export function RequestsSection({ stats, onAction }: RequestsSectionProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onAction('view_request')}
+                onClick={() => onAction?.('view_request')}
                 className="h-8 w-8 p-0 md:h-9 md:w-auto md:px-3"
               >
                 <ArrowRight className="h-4 w-4 md:mr-2" />

@@ -136,12 +136,12 @@ export interface ProfileStats {
 
 interface FullProfileOthers {
   address: Address
-  documents?: Document[]
-  passport?: Document
-  birthCertificate?: Document
-  residencePermit?: Document
-  addressProof?: Document
-  addressInGabon?: AddressGabon
+  documents: Document[]
+  passport: Document
+  birthCertificate: Document
+  residencePermit: Document
+  addressProof: Document
+  addressInGabon: AddressGabon
 }
 
 export type FullProfile = Profile & FullProfileOthers

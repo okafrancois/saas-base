@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress'
 
 interface DocumentsSectionProps {
   stats: DashboardSectionStats['documents']
-  onAction: (action: string) => void
+  onAction?: (action: string) => void
 }
 
 export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
@@ -28,7 +28,7 @@ export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onAction('upload_document')}
+            onClick={() => onAction?.('upload_document')}
           >
             <Upload className="size-4 md:mr-2" />
             <span className="hidden md:inline">{t('actions.upload')}</span>
@@ -73,7 +73,7 @@ export function DocumentsSection({ stats, onAction }: DocumentsSectionProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onAction('view_document')}
+                onClick={() => onAction?.('view_document')}
                 className="size-8 p-0 md:h-9 md:w-auto md:px-3"
               >
                 <ArrowRight className="size-4 md:mr-2" />

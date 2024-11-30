@@ -1274,6 +1274,32 @@
       "analyzing": "Analyse en cours..."
     }
   },
+  "documents": {
+    "title": "Mes documents",
+    "description": "Gérez vos documents officiels et suivez leur statut",
+    "empty": {
+      "title": "Aucun document",
+      "description": "Vous n'avez pas encore téléchargé de documents"
+    },
+    "types": {
+      "passport": "Passeport",
+      "birth_certificate": "Acte de naissance",
+      "residence_permit": "Titre de séjour",
+      "proof_of_address": "Justificatif de domicile",
+      "identity_card": "Carte d'identité"
+    },
+    "status": {
+      "pending": "En attente",
+      "validated": "Validé",
+      "rejected": "Rejeté",
+      "expired": "Expiré"
+    },
+    "expires_on": "Expire le",
+    "actions": {
+      "view": "Voir",
+      "download": "Télécharger"
+    }
+  },
   "consular_registration": {
     "form": {
       "title": "Formulaire d'inscription consulaire",
@@ -1744,6 +1770,18 @@
     },
     "actions": {
       "edit": "Modifier"
+    },
+    "submission": {
+        "success": {
+            "title": "Demande envoyée",
+            "description": "Votre demande a été envoyée avec succès",
+            "action": "Voir mon espace",
+            "action_hint": "Aller à mon espace personnel"
+        },
+        "error": {
+            "title": "Erreur",
+            "unknown": "Une erreur est survenue lors de l'envoi"
+        }
     }
   },
   "consular": {

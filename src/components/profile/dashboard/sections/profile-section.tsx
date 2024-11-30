@@ -12,7 +12,7 @@ import { PAGE_ROUTES } from '@/schemas/app-routes'
 
 interface ProfileSectionProps {
   stats: DashboardSectionStats['profile']
-  onAction: (action: string) => void
+  onAction?: (action: string) => void
 }
 
 export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
@@ -40,9 +40,9 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span>{t('completion')}</span>
-            <span>{stats.completionRate}%</span>
+            <span>{stats?.completionRate}%</span>
           </div>
-          <Progress value={stats.completionRate} />
+          <Progress value={stats?.completionRate} />
         </div>
 
         {/* Champs manquants - masqués sur mobile si plus de 2 */}
@@ -71,12 +71,12 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
             variant="outline"
             size="sm"
             className="hidden md:inline-flex"
-            onClick={() => onAction('view_profile')}
+            onClick={() => onAction?.('view_profile')}
           >
             {t('actions.view')}
           </Button>
           <Link
-            onClick={() => onAction('complete_profile')}
+            onClick={() => onAction?.('complete_profile')}
             className={buttonVariants({ variant: 'default', size: 'sm' })}
             href={PAGE_ROUTES.profile}
           >

@@ -1740,6 +1740,21 @@
       "contactinfo": "",
       "familyinfo": "",
       "professionalinfo": ""
+    },
+    "actions": {
+      "edit": ""
+    },
+    "submission": {
+      "success": {
+        "title": "",
+        "description": "",
+        "action": "",
+        "action_hint": ""
+      },
+      "error": {
+        "title": "",
+        "unknown": ""
+      }
     }
   },
   "consular": {

@@ -15,7 +15,6 @@ import { StepIndicator } from './step-indicator'
 import { MobileProgress } from './mobile-progress'
 import { updateFormsFromAnalysis } from '@/lib/form/update-helpers'
 import { FormError, handleFormError } from '@/lib/form/errors'
-import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { AnalysisData } from '@/types'
@@ -156,7 +155,7 @@ export function RegistrationForm() {
       // Ajouter les fichiers
       const documents = forms.documents.getValues()
       Object.entries(documents).forEach(([key, file]) => {
-        if (file) formDataToSend.append(key, file)
+        if (file) formDataToSend.append(key, file as File)
       })
 
       // Ajouter les données JSON des formulaires

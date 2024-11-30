@@ -57,7 +57,7 @@ export async function getUserProfile(id: string) {
 
 export async function getUserFullProfile(id: string): Promise<FullProfile | null> {
   try {
-    return await db.profile.findFirst({
+    return db.profile.findFirst({
       where: {
         userId: id,
       },

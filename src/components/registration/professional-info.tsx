@@ -1,6 +1,5 @@
 import React from 'react'
-import { useForm, UseFormReturn } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { UseFormReturn } from 'react-hook-form'
 import {
   Form,
   FormControl,
@@ -69,7 +68,7 @@ export function ProfessionalInfoForm({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger disabled={isLoading}>
                         <SelectValue placeholder={t('form.select_work_status')} />
                       </SelectTrigger>
                     </FormControl>

@@ -151,7 +151,7 @@ export function DocumentUploadSection({
             </AnimatePresence>
           </CardContent>
           <CardFooter>
-            <div className={"space-y-4"}>
+            <div className={"space-y-4 w-full"}>
               {/* Section d'analyse */}
               <Card className="overflow-hidden">
                 <CardContent className="p-6">

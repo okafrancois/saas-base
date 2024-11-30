@@ -357,8 +357,6 @@ export async function getUserDocumentsList(): Promise<DocumentWithMetadata[]> {
 
     const documents = await getProfileDocuments(profile.id)
 
-    console.log('User documents:', documents)
-
     return documents as DocumentWithMetadata[]
   } catch (error) {
     console.error('Error fetching user documents:', error)

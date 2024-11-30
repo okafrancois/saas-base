@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { ReviewFields } from '@/components/registration/review-fields'
 
 interface ReviewProps {
-  data: FormState
+  data: ConsularFormData
   onEdit: (step: number) => void
 }
 
