@@ -500,12 +500,6 @@ export function RegistrationForm() {
         </CardContent>
       </Card>
 
-      {/* Guide de l'étape */}
-      <StepGuide
-        stepKey={steps[currentStep]?.key}
-        isOptional={steps[currentStep]?.isOptional}
-      />
-
       {/* Progression mobile */}
       <MobileProgress
         currentStep={currentStep}
