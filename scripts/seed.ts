@@ -7,7 +7,6 @@ import {
   NationalityAcquisition,
   DocumentType,
   DocumentStatus,
-  RequestStatus,
 } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -78,7 +77,28 @@ async function main() {
             passportIssueDate: new Date("2020-01-01"),
             passportExpiryDate: new Date("2030-01-01"),
             passportIssueAuthority: "Ambassade du Gabon",
-            status: RequestStatus.INCOMPLETE,
+            passport: {
+              create: {
+                type: DocumentType.PASSPORT,
+                status: DocumentStatus.PENDING,
+                fileUrl: "https://utfs.io/f/yMD4lMLsSKvzCwNoT5d18tkLi9WuUPrXjgdzRhvo5IVe4fbs",
+                issuedAt: new Date("2020-01-01"),
+                expiresAt: new Date("2030-01-01"),
+                metadata: {
+                  documentNumber: "GA123456",
+                  issuingAuthority: "Ambassade du Gabon",
+                }
+              }
+            },
+            birthCertificate: {
+              create: {
+                type: DocumentType.BIRTH_CERTIFICATE,
+                status: DocumentStatus.PENDING,
+                fileUrl: "https://utfs.io/f/yMD4lMLsSKvzCwNoT5d18tkLi9WuUPrXjgdzRhvo5IVe4fbs",
+                issuedAt: new Date("2020-01-01"),
+                expiresAt: new Date("2030-01-01"),
+              }
+            },
             address: {
               create: {
                 firstLine: "15 rue des Lilas",
@@ -102,19 +122,6 @@ async function main() {
                 phone: "+33687654321"
               }
             },
-            documents: {
-              create: {
-                type: DocumentType.PASSPORT,
-                status: DocumentStatus.PENDING,
-                fileUrl: "https://utfs.io/f/yMD4lMLsSKvzCwNoT5d18tkLi9WuUPrXjgdzRhvo5IVe4fbs",
-                issuedAt: new Date("2020-01-01"),
-                expiresAt: new Date("2030-01-01"),
-                metadata: {
-                  documentNumber: "GA123456",
-                  issuingAuthority: "Ambassade du Gabon",
-                }
-              }
-            }
           }
         }
       }

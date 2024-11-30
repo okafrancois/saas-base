@@ -57,20 +57,6 @@ export function getMissingFields(profile: Profile | null): string[] {
     .map(field => field.name)
 }
 
-export function getProfileStatus(profile: Profile | null): 'ACTIVE' | 'PENDING' | 'EXPIRED' {
-  if (!profile) return 'PENDING'
-  if (!profile.passport) return 'PENDING'
-
-  const passportExpiryDate = new Date(profile.passportExpiryDate)
-  const now = new Date()
-
-  if (isBefore(passportExpiryDate, now)) {
-    return 'EXPIRED'
-  }
-
-  return profile.status === 'VALIDATED' ? 'ACTIVE' : 'PENDING'
-}
-
 export function calculateDocumentsStats(documents: Document[]) {
   const now = new Date()
   const threeMonthsFromNow = addMonths(now, 3)

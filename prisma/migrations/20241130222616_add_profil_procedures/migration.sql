@@ -2,7 +2,7 @@
 CREATE TYPE "UserRole" AS ENUM ('USER', 'RESPONSIBLE', 'ADMIN', 'SUPER_ADMIN');
 
 -- CreateEnum
-CREATE TYPE "RequestType" AS ENUM ('FIRST_REQUEST', 'RENEWAL', 'MODIFICATION');
+CREATE TYPE "RequestType" AS ENUM ('FIRST_REQUEST', 'RENEWAL', 'MODIFICATION', 'CONSULAR_REGISTRATION', 'PASSPORT_REQUEST', 'ID_CARD_REQUEST');
 
 -- CreateEnum
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
@@ -20,7 +20,7 @@ CREATE TYPE "NationalityAcquisition" AS ENUM ('BIRTH', 'NATURALIZATION', 'MARRIA
 CREATE TYPE "DocumentStatus" AS ENUM ('PENDING', 'VALIDATED', 'REJECTED', 'EXPIRED', 'EXPIRING');
 
 -- CreateEnum
-CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'INCOMPLETE', 'IN_PROGRESS', 'COMPLETED', 'VALID');
+CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'INCOMPLETE', 'IN_PROGRESS', 'COMPLETED', 'VALID', 'DRAFT', 'SUBMITTED', 'IN_REVIEW', 'ADDITIONAL_INFO_NEEDED', 'VALIDATED');
 
 -- CreateEnum
 CREATE TYPE "DocumentType" AS ENUM ('PASSPORT', 'IDENTITY_CARD', 'BIRTH_CERTIFICATE', 'RESIDENCE_PERMIT', 'PROOF_OF_ADDRESS', 'MARRIAGE_CERTIFICATE', 'DEATH_CERTIFICATE', 'DIVORCE_DECREE', 'NATIONALITY_CERTIFICATE', 'OTHER');
@@ -72,7 +72,6 @@ CREATE TABLE "Profile" (
     "birthCertificateId" TEXT,
     "residencePermitId" TEXT,
     "addressProofId" TEXT,
-    "addressId" TEXT,
     "phone" TEXT,
     "email" TEXT,
     "activityInGabon" TEXT,
@@ -85,6 +84,7 @@ CREATE TABLE "Profile" (
     "status" "RequestStatus" NOT NULL DEFAULT 'INCOMPLETE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "addressId" TEXT,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -134,6 +134,7 @@ CREATE TABLE "Consulate" (
     "addressId" TEXT,
     "website" TEXT,
     "isGeneral" BOOLEAN NOT NULL DEFAULT false,
+    "logo" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -267,6 +268,21 @@ CREATE TABLE "Appointment" (
     CONSTRAINT "Appointment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Procedure" (
+    "id" TEXT NOT NULL,
+    "type" "RequestType" NOT NULL,
+    "status" "RequestStatus" NOT NULL DEFAULT 'DRAFT',
+    "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "submittedAt" TIMESTAMP(3),
+    "completedAt" TIMESTAMP(3),
+    "metadata" JSONB,
+
+    CONSTRAINT "Procedure_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -287,9 +303,6 @@ CREATE UNIQUE INDEX "Profile_residencePermitId_key" ON "Profile"("residencePermi
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_addressProofId_key" ON "Profile"("addressProofId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Profile_addressId_key" ON "Profile"("addressId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "EmergencyContact_profileId_key" ON "EmergencyContact"("profileId");
@@ -377,3 +390,6 @@ ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_profileId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_consulateId_fkey" FOREIGN KEY ("consulateId") REFERENCES "Consulate"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Procedure" ADD CONSTRAINT "Procedure_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

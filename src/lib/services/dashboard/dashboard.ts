@@ -65,7 +65,7 @@ export async function getDashboardStats(userId: string) {
         completionRate: calculateProfileCompletion(profile),
         lastUpdate: profile?.updatedAt ?? new Date(),
         missingFields: getMissingFields(profile),
-        status: getProfileStatus(profile)
+        status: profile?.status ?? 'INCOMPLETE',
       },
       requests: {
         total: requests.length,

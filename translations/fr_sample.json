@@ -16,7 +16,8 @@
       "settings": "",
       "logout": "",
       "requests": "",
-      "documents": ""
+      "documents": "",
+      "procedures": ""
     },
     "form": {
       "required_field": "",
@@ -746,7 +747,8 @@
       "dashboard": "",
       "requests": "",
       "profile": "",
-      "documents": ""
+      "documents": "",
+      "procedures": ""
     }
   },
   "actions": {
@@ -1272,6 +1274,32 @@
         "add": ""
       },
       "analyzing": ""
+    }
+  },
+  "documents": {
+    "title": "",
+    "description": "",
+    "empty": {
+      "title": "",
+      "description": ""
+    },
+    "types": {
+      "passport": "",
+      "birth_certificate": "",
+      "residence_permit": "",
+      "proof_of_address": "",
+      "identity_card": ""
+    },
+    "status": {
+      "pending": "",
+      "validated": "",
+      "rejected": "",
+      "expired": ""
+    },
+    "expires_on": "",
+    "actions": {
+      "view": "",
+      "download": ""
     }
   },
   "consular_registration": {
@@ -1932,6 +1960,43 @@
         },
         "and_more": ""
       }
+    }
+  },
+  "procedures": {
+    "title": "",
+    "description": "",
+    "types": {
+      "CONSULAR_REGISTRATION": {
+        "title": "",
+        "description": "",
+        "requirements": {
+          "passport": "",
+          "birth_certificate": "",
+          "proof_of_address": "",
+          "identity_photo": ""
+        }
+      }
+    },
+    "status": {
+      "DRAFT": "",
+      "SUBMITTED": "",
+      "IN_REVIEW": "",
+      "ADDITIONAL_INFO_NEEDED": "",
+      "APPROVED": "",
+      "REJECTED": "",
+      "COMPLETED": ""
+    },
+    "estimated_time": "",
+    "cost": "",
+    "urgent": "",
+    "start_procedure": "",
+    "requirements": {
+      "title": "",
+      "description": "",
+      "document_ready": "",
+      "document_missing": "",
+      "information_ready": "",
+      "information_missing": ""
     }
   }
 }

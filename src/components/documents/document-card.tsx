@@ -38,12 +38,12 @@ export function DocumentCard({ document }: DocumentCardProps) {
       const response = await fetch(document.fileUrl)
       const blob = await response.blob()
       const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
+      const a = window.document.createElement('a')
       a.href = url
       a.download = `${document.type.toLowerCase()}.${document.fileUrl.split('.').pop()}`
-      document.body.appendChild(a)
+      window.document.body.appendChild(a)
       a.click()
-      document.body.removeChild(a)
+      window.document.body.removeChild(a)
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Error downloading document:', error)

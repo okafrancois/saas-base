@@ -79,22 +79,6 @@ const DocumentFileSchemaOptional = z.union([
     )
 ])
 
-const PASSPORT_MIN_VALIDITY_MONTHS = 6;
-const PASSPORT_MAX_VALIDITY_YEARS = 10;
-
-// Helper functions pour la validation des dates
-const addMonths = (date: Date, months: number) => {
-  const newDate = new Date(date);
-  newDate.setMonth(newDate.getMonth() + months);
-  return newDate;
-};
-
-const addYears = (date: Date, years: number) => {
-  const newDate = new Date(date);
-  newDate.setFullYear(newDate.getFullYear() + years);
-  return newDate;
-};
-
 export const BasicInfoSchema = z.object({
   gender: z.nativeEnum(Gender, {
     required_error: 'messages.errors.gender_required'

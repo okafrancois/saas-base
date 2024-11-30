@@ -3,11 +3,13 @@
 import { getCurrentUser } from '@/actions/user';
 import { ContextBuilder } from '@/lib/ai/context-builder';
 import { AssistantFactory } from '@/lib/ai/assistant-factory';
+import { getUserFullProfile } from '@/lib/user/getters'
+import { FullProfile } from '@/types'
 
 export async function chatWithAssistant(message: string) {
   try {
     const user = await getCurrentUser();
-    const profile = user;
+    const profile = user?.id ? await getUserFullProfile(user.id) ?? user as unknown as FullProfile : user as unknown as FullProfile
     const consulate = null;
 
     const context = await ContextBuilder.buildContext(user, profile, consulate);

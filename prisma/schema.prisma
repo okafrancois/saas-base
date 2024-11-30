@@ -16,9 +16,12 @@ enum UserRole {
 }
 
 enum RequestType {
-  FIRST_REQUEST // Première demande
-  RENEWAL // Renouvellement
-  MODIFICATION // Modification
+  FIRST_REQUEST
+  RENEWAL
+  MODIFICATION
+  CONSULAR_REGISTRATION
+  PASSPORT_REQUEST
+  ID_CARD_REQUEST
 }
 
 enum Gender {
@@ -66,6 +69,11 @@ enum RequestStatus {
   IN_PROGRESS
   COMPLETED
   VALID
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  ADDITIONAL_INFO_NEEDED
+  VALIDATED
 }
 
 // Modèles principaux
@@ -86,6 +94,7 @@ model User {
   requests      Request[]
   messages      Message[]
   notifications Notification[]
+  procedures    Procedure[]
 
   // Auth related
   emailVerified DateTime?
@@ -313,6 +322,10 @@ enum DocumentType {
   DIVORCE_DECREE
   NATIONALITY_CERTIFICATE
   OTHER
+  VISA_PAGES
+  EMPLOYMENT_PROOF
+  NATURALIZATION_DECREE
+  IDENTITY_PHOTO
 }
 
 enum AppointmentType {
@@ -369,4 +382,17 @@ model Appointment {
   profile     Profile   @relation(fields: [profileId], references: [id])
   consulateId String
   consulate   Consulate @relation(fields: [consulateId], references: [id])
+}
+
+model Procedure {
+  id          String        @id @default(cuid())
+  type        RequestType
+  status      RequestStatus @default(DRAFT)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  submittedAt DateTime?
+  completedAt DateTime?
+  metadata    Json?
 }

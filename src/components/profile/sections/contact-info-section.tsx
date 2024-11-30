@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge'
 import { MapPin, Mail, Phone } from 'lucide-react'
 import { ContactInfoForm } from '@/components/registration/contact-form'
 import { FullProfile } from '@/types'
+import { Address, AddressGabon } from '@prisma/client'
 
 interface ContactInfoSectionProps {
   profile: FullProfile
@@ -59,7 +60,7 @@ function AddressDisplay({
                           address,
                           title
                         }: {
-  address: ContactInfoSectionProps['profile']['address'] | ContactInfoSectionProps['profile']['addressInGabon']
+  address: Address | AddressGabon
   title: string
 }) {
   const t_countries = useTranslations('countries')
@@ -70,7 +71,14 @@ function AddressDisplay({
     <div className="space-y-1">
       <div className="font-medium">{title}</div>
       <div className="text-sm">
-        {address?.address || address?.firstLine}
+        {('address' in address && address.address) && (
+          <>, {address.address}</>
+        )}
+        {
+          ('firstLine' in address && address.firstLine) && (
+            <>, {address.firstLine}</>
+          )
+        }
         {('secondLine' in address && address.secondLine) && (
           <>, {address.secondLine}</>
         )}
@@ -101,12 +109,20 @@ export function ContactInfoSection({ profile }: ContactInfoSectionProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  const profileAddrress = profile?.address ?? undefined
+
   const form = useForm<ContactInfoFormData>({
     resolver: zodResolver(ContactInfoSchema),
     defaultValues: {
       email: profile?.email ?? undefined,
       phone: profile.phone ?? undefined,
-      address: profile?.address ?? undefined,
+      address: {
+        firstLine: profileAddrress?.firstLine ?? undefined,
+        secondLine: profileAddrress?.secondLine ?? undefined,
+        city: profileAddrress?.city ?? undefined,
+        zipCode: profileAddrress?.zipCode ?? undefined,
+        country: profileAddrress?.country ?? undefined,
+      },
       addressInGabon: profile.addressInGabon || undefined,
     }
   })

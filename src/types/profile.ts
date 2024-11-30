@@ -134,14 +134,15 @@ export interface ProfileStats {
   profileCompletion: number
 }
 
-interface FullProfileOthers {
-  address: Address
-  documents: Document[]
-  passport: Document
-  birthCertificate: Document
-  residencePermit: Document
-  addressProof: Document
-  addressInGabon: AddressGabon
-}
-
-export type FullProfile = Profile & FullProfileOthers
+export type FullProfile = Prisma.ProfileGetPayload<{
+  include: {
+    documents: true
+    passport: true
+    birthCertificate: true
+    residencePermit: true
+    address: true
+    addressProof: true
+    addressInGabon: true
+    emergencyContact: true
+  }
+}>

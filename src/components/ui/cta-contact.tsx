@@ -32,7 +32,7 @@ export default async function CtaContact() {
           </CardHeader>
           <CardContent>
             <Link
-              href={PAGE_ROUTES.my_profile}
+              href={PAGE_ROUTES.profile}
               className={
                 buttonVariants({ variant: 'secondary' }) +
                 ' !text-primary-foreground hover:!text-secondary-foreground'

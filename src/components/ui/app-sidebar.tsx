@@ -1,5 +1,4 @@
 import {
-  Command,
   LifeBuoy,
   Send,Home, FileText, User, Folder, LayoutDashboard, Users, Settings,
 } from 'lucide-react'
@@ -38,8 +37,8 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
       icon: <Home />,
     },
     {
-      title: t_user('nav.requests'),
-      href: PAGE_ROUTES.requests,
+      title: t_user('nav.procedures'),
+      href: PAGE_ROUTES.procedures,
       icon: <FileText/>,
     },
     {
