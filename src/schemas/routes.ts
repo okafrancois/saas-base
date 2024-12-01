@@ -24,6 +24,7 @@ export const ROUTES = {
   procedure: '/procedures/:id' as Route<string>,
   procedure_edit: (id: string) => `/procedures/${id.toLowerCase()}/edit` as Route<string>,
   procedure_start: (id: string) => `/procedures/${id.toLowerCase()}/start` as Route<string>,
+  procedure_requests: '/requests/requests' as Route<string>,
 
   // Pages admin
   admin: '/admin' as Route<string>,
