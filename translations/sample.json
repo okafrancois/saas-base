@@ -1961,42 +1961,5 @@
         "and_more": ""
       }
     }
-  },
-  "procedures": {
-    "title": "",
-    "description": "",
-    "types": {
-      "CONSULAR_REGISTRATION": {
-        "title": "",
-        "description": "",
-        "requirements": {
-          "passport": "",
-          "birth_certificate": "",
-          "proof_of_address": "",
-          "identity_photo": ""
-        }
-      }
-    },
-    "status": {
-      "DRAFT": "",
-      "SUBMITTED": "",
-      "IN_REVIEW": "",
-      "ADDITIONAL_INFO_NEEDED": "",
-      "APPROVED": "",
-      "REJECTED": "",
-      "COMPLETED": ""
-    },
-    "estimated_time": "",
-    "cost": "",
-    "urgent": "",
-    "start_procedure": "",
-    "requirements": {
-      "title": "",
-      "description": "",
-      "document_ready": "",
-      "document_missing": "",
-      "information_ready": "",
-      "information_missing": ""
-    }
   }
 }

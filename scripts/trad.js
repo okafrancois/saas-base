@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const frJsonPath = path.join(__dirname, '../translations', 'fr.json');
-const frSampleJsonPath = path.join(__dirname, '../translations', 'fr_sample.json');
+const frSampleJsonPath = path.join(__dirname, '../translations', 'sample.json');
 
 // Function to recursively replace all string values with empty strings
 const replaceStrings = (obj) => {
@@ -21,7 +21,7 @@ const frJson = JSON.parse(fs.readFileSync(frJsonPath, 'utf8'));
 // Replace all string values with empty strings
 replaceStrings(frJson);
 
-// Write the updated content to fr_sample.json
+// Write the updated content to sample.json
 fs.writeFileSync(frSampleJsonPath, JSON.stringify(frJson, null, 2), 'utf8');
 
-console.log('fr_sample.json has been created with empty string values.');
+console.log('sample.json has been created with empty string values.');

@@ -8,6 +8,7 @@ generator client {
 }
 
 // Énumérations
+
 enum UserRole {
   USER
   RESPONSIBLE // Responsable (Sous-administrateur)
@@ -76,6 +77,38 @@ enum RequestStatus {
   VALIDATED
 }
 
+enum DocumentType {
+  PASSPORT
+  IDENTITY_CARD
+  BIRTH_CERTIFICATE
+  RESIDENCE_PERMIT
+  PROOF_OF_ADDRESS
+  MARRIAGE_CERTIFICATE
+  DEATH_CERTIFICATE
+  DIVORCE_DECREE
+  NATIONALITY_CERTIFICATE
+  OTHER
+  VISA_PAGES
+  EMPLOYMENT_PROOF
+  NATURALIZATION_DECREE
+  IDENTITY_PHOTO
+}
+
+enum AppointmentType {
+  DOCUMENT_SUBMISSION
+  DOCUMENT_COLLECTION
+  CONSULTATION
+  OTHER
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  MISSED
+}
+
 // Modèles principaux
 model User {
   id        String   @id @default(cuid())
@@ -88,12 +121,9 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  profile       Profile?
-  consulateId   String?
-  consulate     Consulate?     @relation(fields: [consulateId], references: [id])
-  requests      Request[]
-  messages      Message[]
-  notifications Notification[]
+  profile     Profile?
+  consulateId String?
+  consulate   Consulate? @relation(fields: [consulateId], references: [id])
 
   // Auth related
   emailVerified DateTime?
@@ -212,7 +242,6 @@ model Consulate {
   // Relations
   users        User[]
   countries    Country[]
-  requests     Request[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   appointments Appointment[]
@@ -224,52 +253,6 @@ model Country {
   code        String
   consulateId String
   consulate   Consulate @relation(fields: [consulateId], references: [id])
-}
-
-model Request {
-  id          String        @id @default(cuid())
-  type        RequestType
-  status      RequestStatus @default(PENDING)
-  userId      String
-  user        User          @relation(fields: [userId], references: [id])
-  consulateId String
-  consulate   Consulate     @relation(fields: [consulateId], references: [id])
-
-  // Métadonnées
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  messages Message[]
-  notes    Note[]
-}
-
-model Message {
-  id        String   @id @default(cuid())
-  content   String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  requestId String
-  request   Request  @relation(fields: [requestId], references: [id])
-  createdAt DateTime @default(now())
-}
-
-model Note {
-  id        String   @id @default(cuid())
-  content   String
-  requestId String
-  request   Request  @relation(fields: [requestId], references: [id])
-  createdAt DateTime @default(now())
-}
-
-model Notification {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
 }
 
 // Auth related models
@@ -308,38 +291,6 @@ model VerificationToken {
   type       String
 
   @@unique([identifier, token])
-}
-
-enum DocumentType {
-  PASSPORT
-  IDENTITY_CARD
-  BIRTH_CERTIFICATE
-  RESIDENCE_PERMIT
-  PROOF_OF_ADDRESS
-  MARRIAGE_CERTIFICATE
-  DEATH_CERTIFICATE
-  DIVORCE_DECREE
-  NATIONALITY_CERTIFICATE
-  OTHER
-  VISA_PAGES
-  EMPLOYMENT_PROOF
-  NATURALIZATION_DECREE
-  IDENTITY_PHOTO
-}
-
-enum AppointmentType {
-  DOCUMENT_SUBMISSION
-  DOCUMENT_COLLECTION
-  CONSULTATION
-  OTHER
-}
-
-enum AppointmentStatus {
-  SCHEDULED
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-  MISSED
 }
 
 // Mettre à jour le modèle Document
