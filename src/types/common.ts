@@ -1,4 +1,6 @@
+import { JsonObject } from '@prisma/client/runtime/library'
 import { SortDirection } from './enums'
+import { JsonArray } from 'type-fest'
 
 export interface ApiResponse<T> {
   success: boolean
@@ -25,3 +27,11 @@ export interface PaginatedResponse<T> {
 // Types utilitaires
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
 export type RequireOnly<T, K extends keyof T> = Partial<T> & Pick<T, K>
+
+export declare type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonObject
+  | JsonArray

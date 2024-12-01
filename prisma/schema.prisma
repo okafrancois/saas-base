@@ -109,16 +109,37 @@ enum AppointmentStatus {
   MISSED
 }
 
+enum ProcedureType {
+  PASSPORT_REQUEST
+  VISA_REQUEST
+  BIRTH_REGISTRATION
+  MARRIAGE_REGISTRATION
+  DEATH_REGISTRATION
+  CERTIFICATE_REQUEST
+  CONSULAR_CARD
+  CONSULAR_REGISTRATION
+  DOCUMENT_LEGALIZATION
+  OTHER
+}
+
+enum ProcedureStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  ADDITIONAL_INFO_NEEDED
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
 // Modèles principaux
 model User {
-  id        String   @id @default(cuid())
-  email     String?  @unique
-  phone     String?  @unique
-  password  String? // Hashed password if needed
-  name      String?
-  role      UserRole @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       String   @id @default(cuid())
+  email    String?  @unique
+  phone    String?  @unique
+  password String? // Hashed password if needed
+  name     String?
+  role     UserRole @default(USER)
 
   // Relations
   profile     Profile?
@@ -126,11 +147,16 @@ model User {
   consulate   Consulate? @relation(fields: [consulateId], references: [id])
 
   // Auth related
-  emailVerified DateTime?
-  phoneVerified DateTime?
-  accounts      Account[]
-  sessions      Session[]
-  lastLogin     DateTime?
+  emailVerified     DateTime?
+  phoneVerified     DateTime?
+  accounts          Account[]
+  sessions          Session[]
+  lastLogin         DateTime?
+  procedureRequests ProcedureRequest[]
+  Message           Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Profile {
@@ -240,11 +266,12 @@ model Consulate {
   logo      String?
 
   // Relations
-  users        User[]
-  countries    Country[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  appointments Appointment[]
+  users             User[]
+  countries         Country[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  appointments      Appointment[]
+  procedureRequests ProcedureRequest[]
 }
 
 model Country {
@@ -310,10 +337,12 @@ model Document {
   profile   Profile? @relation(name: "profileDocuments", fields: [profileId], references: [id], onDelete: Cascade)
 
   // Relations inverses spécifiques
-  passportProfile         Profile? @relation("passport")
-  birthCertificateProfile Profile? @relation("birthCertificate")
-  residencePermitProfile  Profile? @relation("residencePermit")
-  addressProofProfile     Profile? @relation("addressProof")
+  passportProfile         Profile?          @relation("passport")
+  birthCertificateProfile Profile?          @relation("birthCertificate")
+  residencePermitProfile  Profile?          @relation("residencePermit")
+  addressProofProfile     Profile?          @relation("addressProof")
+  ProcedureRequest        ProcedureRequest? @relation(fields: [procedureRequestId], references: [id])
+  procedureRequestId      String?
 }
 
 // Ajouter le modèle Appointment
@@ -332,4 +361,99 @@ model Appointment {
   profile     Profile   @relation(fields: [profileId], references: [id])
   consulateId String
   consulate   Consulate @relation(fields: [consulateId], references: [id])
+}
+
+// Modèle pour les procédures disponibles
+model Procedure {
+  id          String        @id @default(cuid())
+  type        ProcedureType
+  title       String
+  description String?
+  isActive    Boolean       @default(true)
+
+  // Configuration de la procédure
+  requiredDocuments DocumentType[] // Types de documents requis
+  optionalDocuments DocumentType[] // Types de documents optionnels
+  estimatedTime     String? // Temps estimé de traitement
+  price             Float? // Coût de la procédure si applicable
+
+  // Relations
+  steps    ProcedureStep[]
+  requests ProcedureRequest[]
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Étapes d'une procédure
+model ProcedureStep {
+  id          String  @id @default(cuid())
+  order       Int // Ordre de l'étape
+  title       String
+  description String?
+  isRequired  Boolean @default(true)
+
+  // Relations
+  procedureId String
+  procedure   Procedure @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+
+  // Champs de formulaire pour cette étape
+  fields Json? // Configuration des champs de formulaire
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Demande de procédure
+model ProcedureRequest {
+  id     String          @id @default(cuid())
+  status ProcedureStatus @default(DRAFT)
+
+  // Relations
+  procedureId String
+  procedure   Procedure @relation(fields: [procedureId], references: [id])
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  consulateId String
+  consulate   Consulate @relation(fields: [consulateId], references: [id])
+
+  // Données de la demande
+  formData  Json? // Données du formulaire
+  documents Document[] // Documents fournis
+  notes     Note[] // Notes administratives
+  messages  Message[] // Communications
+
+  // Suivi
+  submittedAt DateTime?
+  completedAt DateTime?
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([procedureId])
+  @@index([consulateId])
+}
+
+model Message {
+  id                 String            @id @default(cuid())
+  content            String
+  userId             String
+  user               User              @relation(fields: [userId], references: [id])
+  requestId          String
+  createdAt          DateTime          @default(now())
+  procedure          ProcedureRequest? @relation(fields: [procedureRequestId], references: [id])
+  procedureRequestId String?
+}
+
+model Note {
+  id                 String            @id @default(cuid())
+  content            String
+  requestId          String
+  createdAt          DateTime          @default(now())
+  procedure          ProcedureRequest? @relation(fields: [procedureRequestId], references: [id])
+  procedureRequestId String?
 }
