@@ -2,7 +2,7 @@
 
 import { useCurrentUser } from '@/hooks/use-current-user'
 import { useTranslations } from 'next-intl'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import {
   Calendar,
   FileText, FolderOpen,
@@ -14,7 +14,7 @@ import {
 import { UserRole } from '@prisma/client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { NavItem } from '@/components/layouts/types'
+import { NavItem } from '@/types/navigation'
 import { cn } from '@/lib/utils'
 
 export function MenuBarMobile() {
@@ -26,50 +26,50 @@ export function MenuBarMobile() {
   const userMenu: NavItem[] = [
     {
       title: t('nav.profile'),
-      href: PAGE_ROUTES.profile,
+      href: ROUTES.profile,
       icon: <User className={"size-5"}/>,
     },
     {
       title: t('nav.requests'),
       icon: <FileText className={"size-5"}/>,
-      href: PAGE_ROUTES.requests
+      href: ROUTES.requests
     },
     {
       title: t('nav.appointments'),
       icon: <Calendar className={"size-5"} />,
-      href: PAGE_ROUTES.appointments
+      href: ROUTES.appointments
     },
     {
       title: t('nav.documents'),
       icon: <FolderOpen className={"size-5"} />,
-      href: PAGE_ROUTES.documents
+      href: ROUTES.documents
     },
     {
       title: t('nav.settings'),
       icon: <Settings className={"size-5"} />,
-      href: PAGE_ROUTES.settings
+      href: ROUTES.settings
     }
   ]
 
   const adminMenu: NavItem[] = [
     {
       title: t_admin('nav.dashboard'),
-      href: PAGE_ROUTES.admin_dashboard,
+      href: ROUTES.admin_dashboard,
       icon: <LayoutDashboard/>,
     },
     {
       title: t_admin('nav.users'),
-      href: PAGE_ROUTES.admin_users,
+      href: ROUTES.admin_users,
       icon: <Users/>,
     },
     {
       title: t_admin('nav.requests'),
-      href: PAGE_ROUTES.admin_requests,
+      href: ROUTES.admin_requests,
       icon: <FileText/>,
     },
     {
       title: t_admin('nav.settings'),
-      href: PAGE_ROUTES.admin_settings,
+      href: ROUTES.admin_settings,
       icon: <Settings/>,
     }
   ]

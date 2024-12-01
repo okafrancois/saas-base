@@ -15,9 +15,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { UserRole } from '@prisma/client'
-import { NavItem } from '@/components/layouts/types'
+import { NavItem } from '@/types/navigation'
 import { getCurrentUser } from '@/actions/user'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
@@ -33,22 +33,22 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
   const userMenu: NavItem[] = [
     {
       title: t_user('nav.dashboard'),
-      href: PAGE_ROUTES.dashboard,
+      href: ROUTES.dashboard,
       icon: <Home />,
     },
     {
       title: t_user('nav.procedures'),
-      href: PAGE_ROUTES.procedures,
+      href: ROUTES.procedures,
       icon: <FileText/>,
     },
     {
       title: t_user('nav.profile'),
-      href: PAGE_ROUTES.profile,
+      href: ROUTES.profile,
       icon: <User />,
     },
     {
       title: t_user('nav.documents'),
-      href: PAGE_ROUTES.documents,
+      href: ROUTES.documents,
       icon: <Folder/>,
     }
   ]
@@ -56,22 +56,22 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
   const adminMenu: NavItem[] = [
     {
       title: t_admin('nav.dashboard'),
-      href: PAGE_ROUTES.admin_dashboard,
+      href: ROUTES.admin_dashboard,
       icon: <LayoutDashboard/>,
     },
     {
       title: t_admin('nav.users'),
-      href: PAGE_ROUTES.admin_users,
+      href: ROUTES.admin_users,
       icon: <Users/>,
     },
     {
       title: t_admin('nav.requests'),
-      href: PAGE_ROUTES.admin_requests,
+      href: ROUTES.admin_requests,
       icon: <FileText/>,
     },
     {
       title: t_admin('nav.settings'),
-      href: PAGE_ROUTES.admin_settings,
+      href: ROUTES.admin_settings,
       icon: <Settings/>,
     }
   ]
@@ -86,13 +86,13 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
 
   const navSecondary: NavItem[] = [{
     title: t_nav('assistance'),
-    href: PAGE_ROUTES.base,
+    href: ROUTES.base,
     icon: <LifeBuoy />,
     isActive: false,
   },
     {
       title: t_nav('feedback'),
-      href: PAGE_ROUTES.base,
+      href: ROUTES.base,
       icon: <Send/>,
       isActive: false,
     }]
@@ -110,7 +110,7 @@ export default async function AppSidebar({ ...props }: React.ComponentProps<type
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href={PAGE_ROUTES.base}>
+              <Link href={ROUTES.base}>
                 <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Image
                     src="/images/logo_consulat_ga_512.jpeg"

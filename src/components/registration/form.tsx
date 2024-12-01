@@ -3,7 +3,7 @@
 import { useRegistrationForm } from '@/hooks/use-registration-form'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { FormNavigation } from './navigation'
 import { DocumentUploadSection } from './document-upload-section'
 import { BasicInfoForm } from './basic-info'
@@ -178,7 +178,7 @@ export function RegistrationForm() {
         description: t('submission.success.description'),
       })
 
-      router.push(PAGE_ROUTES.dashboard)
+      router.push(ROUTES.dashboard)
     } catch (error) {
       const { title, description } = handleFormError(error, t)
       toast({ title, description, variant: "destructive" })

@@ -7,7 +7,7 @@ import {
   publicRoutes,
   roleRoutes,
 } from '@/routes'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { nanoid } from 'nanoid'
 import { NextResponse } from 'next/server'
 import { UserRole } from '@prisma/client'
@@ -28,7 +28,7 @@ export default auth((req) => {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isAuthRoute = authRoutes.some((route) => nextUrl.pathname === route)
   const isPublicRoute = publicRoutes.some((route) => {
-    if (route === PAGE_ROUTES.base) {
+    if (route === ROUTES.base) {
       return nextUrl.pathname === route
     }
     return nextUrl.pathname === route
@@ -57,7 +57,7 @@ export default auth((req) => {
   if (!isLoggedIn && !isAuthRoute) {
     const callbackUrl = nextUrl.pathname
     return Response.redirect(
-      new URL(`${PAGE_ROUTES.login}?callbackUrl=${encodeURIComponent(callbackUrl)}`, nextUrl)
+      new URL(`${ROUTES.login}?callbackUrl=${encodeURIComponent(callbackUrl)}`, nextUrl)
     )
   }
 
@@ -71,7 +71,7 @@ export default auth((req) => {
   })
 
   if (isRoleProtectedRoute) {
-    return Response.redirect(new URL(PAGE_ROUTES.unauthorized, nextUrl))
+    return Response.redirect(new URL(ROUTES.unauthorized, nextUrl))
   }
 
   // Autoriser l'accès pour toutes les autres routes

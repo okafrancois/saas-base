@@ -1,4 +1,4 @@
-import { AppointmentStatus, AppointmentType } from '@prisma/client'
+import { AppointmentStatus, AppointmentType, RequestStatus } from '@prisma/client'
 
 export interface DashboardStats {
   profile: {
@@ -62,7 +62,7 @@ export interface DashboardSectionStats {
     completionRate: number
     lastUpdate: Date
     missingFields: string[]
-    status: 'PENDING' | 'ACTIVE' | 'EXPIRED'
+    status: RequestStatus
   }
   requests?: {
     total: number

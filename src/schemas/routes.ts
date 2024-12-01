@@ -7,9 +7,7 @@ export const API_ROUTES = {
   login_api: '/api/auth/login' as Route<string>,
 } as const
 
-export type ApiRoute = (typeof API_ROUTES)[keyof typeof API_ROUTES]
-
-export const PAGE_ROUTES = {
+export const ROUTES = {
   base: '/' as Route<string>,
 
   // Pages d'authentification
@@ -48,4 +46,4 @@ export const PAGE_ROUTES = {
   terms: '#' as Route<string>,
 } as const
 
-export type PageRoute = (typeof PAGE_ROUTES)[keyof typeof PAGE_ROUTES]
+export type PageRoute = (typeof ROUTES)[keyof typeof ROUTES]

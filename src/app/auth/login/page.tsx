@@ -2,7 +2,7 @@ import { LoadingSuspense } from '@/components/ui/loading-suspense'
 import { LoginForm } from '@/components/auth/login-form'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import Image from 'next/image'
 import { ArrowLeft } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
@@ -14,7 +14,7 @@ export default async function LoginPage() {
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:px-0">
       <Link
-        href={PAGE_ROUTES.base}
+        href={ROUTES.base}
         className={
           buttonVariants({ variant: 'ghost' }) +
           ' absolute left-4 top-4 md:left-8 md:top-8'
@@ -49,14 +49,14 @@ export default async function LoginPage() {
 
           <p className="px-8 text-center text-sm text-muted-foreground">
             <Link
-              href={PAGE_ROUTES.privacy_policy}
+              href={ROUTES.privacy_policy}
               className="hover:text-primary underline underline-offset-4"
             >
               {t('footer.privacy_policy')}
             </Link>
             {' · '}
             <Link
-              href={PAGE_ROUTES.terms}
+              href={ROUTES.terms}
               className="hover:text-primary underline underline-offset-4"
             >
               {t('footer.terms')}

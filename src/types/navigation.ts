@@ -3,10 +3,6 @@ import { Route } from 'next'
 import { LucideProps } from 'lucide-react'
 import { ReactElement } from 'react'
 
-export type LayoutProps = {
-  children: React.ReactNode
-}
-
 export type NavItem = {
   title: string
   href: Route<string>

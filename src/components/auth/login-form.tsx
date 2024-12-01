@@ -20,7 +20,7 @@ import { signIn } from 'next-auth/react'
 import { Icons } from '@/components/ui/icons'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { sendOTP } from '@/actions/auth'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { LoginInput, LoginSchema } from '@/schemas/user'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle, CheckCircle } from 'lucide-react'
@@ -83,7 +83,7 @@ export function LoginForm({
         type: values.type,
         otp: values.otp,
         redirect: true,
-        redirectTo: callbackUrl || PAGE_ROUTES.dashboard,
+        redirectTo: callbackUrl || ROUTES.dashboard,
       })
 
       if (signInResult?.error) {

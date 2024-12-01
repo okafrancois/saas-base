@@ -19,7 +19,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { useTranslations } from 'next-intl'
-import { NavItem } from '@/components/layouts/types'
+import { NavItem } from '@/types/navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

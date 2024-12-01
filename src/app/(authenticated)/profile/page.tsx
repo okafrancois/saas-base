@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { getUserFullProfile } from '@/lib/user/getters'
 import { getCurrentUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 
 import { ProfileHeaderClient } from '@/components/profile/profile-header-client'
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton'
@@ -25,7 +25,7 @@ export default async function ProfilePage() {
   const t = await getTranslations('profile')
 
   if (!user) {
-    redirect(PAGE_ROUTES.login)
+    redirect(ROUTES.login)
   }
 
   const profile = await getUserFullProfile(user.id)
@@ -45,7 +45,7 @@ export default async function ProfilePage() {
           <CardContent className={"flex flex-col gap-4 items-center"}>
             <p className="text-muted-foreground">{t('no_profile')}</p>
             <Link
-              href={PAGE_ROUTES.registration}
+              href={ROUTES.registration}
               className={
                 buttonVariants({
                   variant: 'default',

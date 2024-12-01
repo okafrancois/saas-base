@@ -9,7 +9,7 @@ generator client {
 
 // Énumérations
 enum UserRole {
-  USER // Utilisateur standard (Ressortissant)
+  USER
   RESPONSIBLE // Responsable (Sous-administrateur)
   ADMIN // Administratif Consulaire
   SUPER_ADMIN // Super administrateur
@@ -94,7 +94,6 @@ model User {
   requests      Request[]
   messages      Message[]
   notifications Notification[]
-  procedures    Procedure[]
 
   // Auth related
   emailVerified DateTime?
@@ -382,17 +381,4 @@ model Appointment {
   profile     Profile   @relation(fields: [profileId], references: [id])
   consulateId String
   consulate   Consulate @relation(fields: [consulateId], references: [id])
-}
-
-model Procedure {
-  id          String        @id @default(cuid())
-  type        RequestType
-  status      RequestStatus @default(DRAFT)
-  userId      String
-  user        User          @relation(fields: [userId], references: [id])
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  submittedAt DateTime?
-  completedAt DateTime?
-  metadata    Json?
 }

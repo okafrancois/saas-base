@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge, BadgeVariant } from '@/components/ui/badge'
 import { DashboardSectionStats } from '@/types/dashboard'
 import Link from 'next/link'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 
 interface ProfileSectionProps {
   stats: DashboardSectionStats['profile']
@@ -78,7 +78,7 @@ export function ProfileSection({ stats, onAction }: ProfileSectionProps) {
           <Link
             onClick={() => onAction?.('complete_profile')}
             className={buttonVariants({ variant: 'default', size: 'sm' })}
-            href={PAGE_ROUTES.profile}
+            href={ROUTES.profile}
           >
             {t('actions.complete')}
           </Link>

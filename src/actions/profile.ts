@@ -5,7 +5,7 @@ import { ActionResult } from '@/lib/auth/action'
 import { DocumentType, Profile } from '@prisma/client'
 import { db } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { getCurrentUser } from '@/actions/user'
 import { processFileData } from '@/actions/utils'
 import {
@@ -244,8 +244,8 @@ export async function postProfile(
     })
 
     // Revalider les pages
-    revalidatePath(PAGE_ROUTES.profile)
-    revalidatePath(PAGE_ROUTES.dashboard)
+    revalidatePath(ROUTES.profile)
+    revalidatePath(ROUTES.dashboard)
 
     return { data: { id: profile.id } }
 
@@ -438,8 +438,8 @@ export async function updateProfile(
     })
 
     // Revalider les pages qui affichent ces données
-    revalidatePath(PAGE_ROUTES.profile)
-    revalidatePath(PAGE_ROUTES.dashboard)
+    revalidatePath(ROUTES.profile)
+    revalidatePath(ROUTES.dashboard)
 
     return { data: updatedProfile }
   } catch (error) {

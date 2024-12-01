@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from 'next/link'
-import { NavItem } from '@/components/layouts/types'
+import { NavItem } from '@/types/navigation'
 
 export function NavSecondary({
   items,

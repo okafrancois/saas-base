@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { db } from '@/lib/prisma'
 import { User } from '@prisma/client'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { getUserById } from '@/lib/user/getters'
 import authConfig from '@/auth.config'
 
@@ -20,8 +20,8 @@ export const {
 } = NextAuth({
   adapter: PrismaAdapter(db),
   pages: {
-    signIn: PAGE_ROUTES.login,
-    error: PAGE_ROUTES.auth_error,
+    signIn: ROUTES.login,
+    error: ROUTES.auth_error,
   },
   callbacks: {
     async session({ session, token }) {

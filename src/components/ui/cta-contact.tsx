@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import Link from 'next/link'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { buttonVariants } from '@/components/ui/button'
 import { ArrowUpRightIcon } from 'lucide-react'
 import * as React from 'react'
@@ -32,7 +32,7 @@ export default async function CtaContact() {
           </CardHeader>
           <CardContent>
             <Link
-              href={PAGE_ROUTES.profile}
+              href={ROUTES.profile}
               className={
                 buttonVariants({ variant: 'secondary' }) +
                 ' !text-primary-foreground hover:!text-secondary-foreground'

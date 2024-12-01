@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { PAGE_ROUTES } from '@/schemas/app-routes'
+import { ROUTES } from '@/schemas/routes'
 import { buttonVariants } from '@/components/ui/button'
 import imagePicture from '@/assets/contact-ga-image.png'
 import Image from 'next/image'
@@ -19,7 +19,7 @@ export default async function HomePage() {
         <p>{t('subtitle')}</p>
         <div className='actions flex flex-wrap items-center gap-4'>
           <Link
-            href={PAGE_ROUTES.registration}
+            href={ROUTES.registration}
             className={
               buttonVariants({
                 variant: 'default',
