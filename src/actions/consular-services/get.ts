@@ -71,3 +71,23 @@ export async function getServiceRequest(requestId: string) {
     throw new Error('Failed to fetch service request')
   }
 }
+
+export async function getServiceById(serviceId: string) {
+  try {
+    return await db.consularService.findUnique({
+      where: {
+        id: serviceId
+      },
+      include: {
+        steps: {
+          orderBy: {
+            order: 'asc'
+          }
+        }
+      }
+    })
+  } catch (error) {
+    console.error('Error fetching service:', error)
+    throw new Error('Failed to fetch service')
+  }
+}

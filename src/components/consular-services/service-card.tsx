@@ -4,16 +4,17 @@ import { ConsularService } from '@prisma/client'
 import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Clock, FileText, AlertCircle } from 'lucide-react'
+import Link from 'next/link'
+import { ROUTES } from '@/schemas/routes'
 
 interface ServiceCardProps {
   service: ConsularService
-  onStart?: (id: string) => void
   disabled?: boolean
 }
 
-export function ServiceCard({ service, onStart, disabled }: ServiceCardProps) {
+export function ServiceCard({ service, disabled }: ServiceCardProps) {
   const t = useTranslations('consular.services')
 
   return (
@@ -57,13 +58,15 @@ export function ServiceCard({ service, onStart, disabled }: ServiceCardProps) {
       </CardContent>
 
       <CardFooter>
-        <Button
-          onClick={() => onStart?.(service.id)}
-          disabled={disabled}
-          className="w-full"
+        <Link
+          href={ROUTES.service_view(service.id)}
+          className={buttonVariants({
+            variant: 'default',
+            className: `w-full ${disabled ? "cursor-not-allowed" : ""}`,
+          })}
         >
-          {t('actions.start')}
-        </Button>
+          {t('actions.view')}
+        </Link>
       </CardFooter>
     </Card>
   )

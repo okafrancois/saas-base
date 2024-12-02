@@ -32,7 +32,7 @@ export function MenuBarMobile() {
     {
       title: t('nav.procedures'),
       icon: <FileText className={"size-5"}/>,
-      href: ROUTES.procedures
+      href: ROUTES.services
     },
     {
       title: t('nav.appointments'),

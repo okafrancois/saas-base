@@ -136,7 +136,6 @@ export interface ProfileStats {
 
 export type FullProfile = Prisma.ProfileGetPayload<{
   include: {
-    documents: true
     passport: true
     birthCertificate: true
     residencePermit: true

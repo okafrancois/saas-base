@@ -62,7 +62,6 @@ export async function getUserFullProfile(id: string): Promise<FullProfile | null
         userId: id,
       },
       include: {
-        documents: true,
         passport: true,
         birthCertificate: true,
         residencePermit: true,

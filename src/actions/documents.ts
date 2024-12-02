@@ -7,6 +7,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { pdfToImages } from '@/actions/convert'
 import { getCurrentUser } from '@/actions/user'
 import { db } from '@/lib/prisma'
+import { UserDocument } from '@prisma/client'
 
 // Types
 interface DocumentAnalysisResult {
@@ -343,7 +344,7 @@ function createVisionAnalyzer(model: AIModel): VisionAnalyzer {
   }
 }
 
-export async function getUserDocumentsList(): Promise<Document[]> {
+export async function getUserDocumentsList(): Promise<UserDocument[]> {
   try {
     const user = await getCurrentUser()
     if (!user) return []

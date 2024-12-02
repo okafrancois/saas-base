@@ -1936,6 +1936,126 @@
         "canvas_not_supported": "",
         "dimensions_too_small": ""
       }
+    },
+    "services": {
+      "title": "",
+      "description": "",
+      "search": {
+        "placeholder": "",
+        "no_results": "",
+        "try_again": ""
+      },
+      "filter": {
+        "type": {
+          "placeholder": "",
+          "all": ""
+        }
+      },
+      "types": {
+        "passport_request": "",
+        "birth_registration": "",
+        "birth_transcription": "",
+        "marriage_registration": "",
+        "marriage_transcription": "",
+        "death_registration": "",
+        "death_transcription": "",
+        "celibacy_certificate": "",
+        "consular_card": "",
+        "consular_registration": "",
+        "document_legalization": "",
+        "power_of_attorney": "",
+        "address_certificate": "",
+        "travel_permit": "",
+        "other": ""
+      },
+      "subtypes": {
+        "certificate": {
+          "nationality": "",
+          "life": "",
+          "celibacy": "",
+          "residence": "",
+          "custom": ""
+        },
+        "legalization": {
+          "signature": "",
+          "copy": "",
+          "translation": "",
+          "document": ""
+        }
+      },
+      "status": {
+        "available": "",
+        "unavailable": ""
+      },
+      "estimated_time": {
+        "unknown": ""
+      },
+      "required_documents": "",
+      "messages": {
+        "complete_profile": ""
+      },
+      "actions": {
+        "start": ""
+      },
+      "empty": {
+        "title": "",
+        "description": ""
+      },
+      "form": {
+        "steps": {
+          "documents": "",
+          "documents_description": "",
+          "review": "",
+          "review_description": ""
+        },
+        "documents": {
+          "alert": {
+            "title": "",
+            "description": ""
+          },
+          "types": {
+            "passport": "",
+            "identity_card": "",
+            "birth_certificate": "",
+            "residence_permit": "",
+            "proof_of_address": "",
+            "marriage_certificate": "",
+            "death_certificate": ""
+          },
+          "descriptions": {
+            "passport": "",
+            "identity_card": "",
+            "birth_certificate": "",
+            "residence_permit": "",
+            "proof_of_address": "",
+            "marriage_certificate": "",
+            "death_certificate": ""
+          },
+          "status": {
+            "uploaded": "",
+            "missing": "",
+            "optional": ""
+          }
+        },
+        "review": {
+          "complete": {
+            "title": "",
+            "description": ""
+          },
+          "incomplete": {
+            "title": "",
+            "description": ""
+          },
+          "documents": {
+            "title": ""
+          }
+        },
+        "navigation": {
+          "previous": "",
+          "next": "",
+          "submit": ""
+        }
+      }
     }
   },
   "dashboard": {

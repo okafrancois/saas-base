@@ -4,8 +4,7 @@ import { ConsularService, ConsularServiceType } from '@prisma/client'
 import { ServiceCard } from './service-card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { FileText } from 'lucide-react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { ROUTES } from '@/schemas/routes'
+import { useSearchParams } from 'next/navigation'
 
 interface ServicesListProps {
   services: ConsularService[]
@@ -18,15 +17,10 @@ export function ServicesList({
                              }: ServicesListProps) {
   const t = useTranslations('consular.services')
   const searchParams = useSearchParams()
-  const router = useRouter()
 
   // Récupérer les paramètres de recherche et de filtre
   const query = searchParams.get('q')?.toLowerCase() || ''
   const type = searchParams.get('type') as ConsularServiceType | 'ALL' || 'ALL'
-
-  const handleStartService = (id: string) => {
-    router.push(ROUTES.service_start(id))
-  }
 
   // Filtrer les services
   const filteredServices = services.filter(service => {
@@ -55,7 +49,6 @@ export function ServicesList({
         <ServiceCard
           key={service.id}
           service={service}
-          onStart={() => handleStartService(service.id)}
           disabled={disabledServices.includes(service.id)}
         />
       ))}

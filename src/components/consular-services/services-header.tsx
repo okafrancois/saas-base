@@ -1,14 +1,40 @@
 'use client'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ConsularServiceType } from '@prisma/client'
+import { useCallback } from 'react'
+import { debounce } from 'lodash'
 
 export function ServicesHeader() {
   const t = useTranslations('consular.services')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedType, setSelectedType] = useState<ConsularServiceType | 'ALL'>('ALL')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Récupérer les valeurs actuelles des paramètres
+  const currentQuery = searchParams.get('q') || ''
+  const currentType = searchParams.get('type') || 'ALL'
+
+  // Fonction pour mettre à jour l'URL avec les paramètres de recherche
+  const updateSearchParams = useCallback((params: { q?: string; type?: string }) => {
+    const newSearchParams = new URLSearchParams(searchParams)
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        newSearchParams.set(key, value)
+      } else {
+        newSearchParams.delete(key)
+      }
+    })
+
+    router.push(`?${newSearchParams.toString()}`)
+  }, [router, searchParams])
+
+  // Debounce la recherche pour éviter trop de mises à jour
+  const debouncedSearch = debounce((value: string) => {
+    updateSearchParams({ q: value || undefined })
+  }, 300)
 
   return (
     <div className="mb-6 space-y-4">
@@ -20,14 +46,16 @@ export function ServicesHeader() {
       <div className="flex flex-col gap-4 sm:flex-row">
         <Input
           placeholder={t('search.placeholder')}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          defaultValue={currentQuery}
+          onChange={(e) => debouncedSearch(e.target.value)}
           className="sm:max-w-[300px]"
         />
 
         <Select
-          value={selectedType}
-          onValueChange={(value) => setSelectedType(value as ConsularServiceType | 'ALL')}
+          defaultValue={currentType}
+          onValueChange={(value) => {
+            updateSearchParams({ type: value === 'ALL' ? undefined : value })
+          }}
         >
           <SelectTrigger className="sm:max-w-[200px]">
             <SelectValue placeholder={t('filter.type.placeholder')} />

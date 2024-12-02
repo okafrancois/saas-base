@@ -1937,6 +1937,161 @@
         "canvas_not_supported": "Votre navigateur ne supporte pas le recadrage d'image",
         "dimensions_too_small": "Les dimensions sont trop petites"
       }
+    },
+    "services": {
+      "title": "Démarches consulaires",
+      "description": "Retrouvez l'ensemble des démarches consulaires disponibles",
+      "search": {
+        "placeholder": "Rechercher une démarche...",
+        "no_results": "Aucune démarche trouvée",
+        "try_again": "Essayez avec d'autres termes de recherche"
+      },
+      "filter": {
+        "type": {
+          "placeholder": "Type de démarche",
+          "all": "Toutes les démarches"
+        }
+      },
+      "types": {
+        "passport_request": "Demande de passeport",
+        "birth_registration": "Déclaration de naissance",
+        "birth_transcription": "Transcription d'acte de naissance",
+        "marriage_transcription": "Transcription d'acte de mariage",
+        "death_registration": "Déclaration de décès",
+        "death_transcription": "Transcription d'acte de décès",
+        "celibacy_certificate": "Certificat de célibat",
+        "consular_registration": "Inscription consulaire",
+        "address_certificate": "Attestation de résidence",
+        "travel_permit": "Laissez-passer",
+        "marriage_registration": "Enregistrement de mariage",
+        "consular_card": "Carte consulaire",
+        "document_legalization": "Légalisation de document",
+        "power_of_attorney": "Procuration",
+        "other": "Autre démarche"
+      },
+      "subtypes": {
+        "certificate": {
+          "nationality": "Certificat de nationalité",
+          "life": "Certificat de vie",
+          "celibacy": "Certificat de célibat",
+          "residence": "Certificat de résidence",
+          "custom": "Certificat sur mesure"
+        },
+        "legalization": {
+          "signature": "Légalisation de signature",
+          "copy": "Copie conforme",
+          "translation": "Traduction certifiée",
+          "document": "Document officiel"
+        }
+      },
+      "status": {
+        "available": "Disponible",
+        "unavailable": "Non disponible"
+      },
+      "estimated_time": {
+        "unknown": "Durée non précisée"
+      },
+      "required_documents": "{count} document(s) requis",
+      "messages": {
+        "complete_profile": "Complétez votre profil pour accéder à cette démarche"
+      },
+      "actions": {
+        "start_procedure": "Démarrer la procédure",
+        "complete_profile": "Compléter mon profil",
+        "start": "Commencer la démarche",
+        "view": "Voir les détails"
+      },
+      "empty": {
+        "title": "Aucune démarche disponible",
+        "description": "Il n'y a actuellement aucune démarche disponible"
+      },
+      "form": {
+        "steps": {
+          "documents": "Documents",
+          "documents_description": "Téléchargez les documents requis",
+          "review": "Récapitulatif",
+          "review_description": "Vérifiez vos informations"
+        },
+        "documents": {
+          "alert": {
+            "title": "Documents importants",
+            "description": "Assurez-vous que vos documents sont lisibles et à jour"
+          },
+          "types": {
+            "passport": "Passeport",
+            "identity_card": "Carte d'identité",
+            "birth_certificate": "Acte de naissance",
+            "residence_permit": "Titre de séjour",
+            "proof_of_address": "Justificatif de domicile",
+            "marriage_certificate": "Acte de mariage",
+            "death_certificate": "Acte de décès"
+          },
+          "descriptions": {
+            "passport": "Passeport en cours de validité",
+            "identity_card": "Carte d'identité recto-verso",
+            "birth_certificate": "Copie intégrale de l'acte de naissance",
+            "residence_permit": "Titre de séjour en cours de validité",
+            "proof_of_address": "Document de moins de 3 mois",
+            "marriage_certificate": "Copie intégrale de l'acte de mariage",
+            "death_certificate": "Copie intégrale de l'acte de décès"
+          },
+          "status": {
+            "uploaded": "Document téléchargé",
+            "missing": "Document manquant",
+            "optional": "Optionnel"
+          }
+        },
+        "review": {
+          "complete": {
+            "title": "Dossier complet",
+            "description": "Tous les documents requis ont été fournis"
+          },
+          "incomplete": {
+            "title": "Dossier incomplet",
+            "description": "Certains documents requis sont manquants"
+          },
+          "documents": {
+            "title": "Documents fournis"
+          }
+        },
+        "navigation": {
+          "previous": "Précédent",
+          "next": "Suivant",
+          "submit": "Soumettre la demande"
+        }
+      },
+      "details": {
+        "main_info": "Informations principales",
+        "duration": "Durée estimée",
+        "price": "Frais consulaires",
+        "price_value": "{{price}} €",
+        "price_free": "Gratuit",
+        "documents": "Documents",
+        "required_documents": "Documents requis",
+        "required_documents_count": "{count} document(s) requis",
+        "document_provided": "Document fourni",
+        "document_required": "Document requis",
+        "document_optional": "Document optionnel",
+        "document_to_provide": "Document à fournir"
+      },
+      "documents": {
+        "types": {
+          "birth_certificate": "Acte de naissance",
+          "proof_of_address": "Justificatif de domicile",
+          "marriage_certificate": "Acte de mariage",
+          "passport": "Passeport",
+          "identity_card": "Carte d'identité",
+          "residence_permit": "Titre de séjour"
+        },
+        "descriptions": {
+          "birth_certificate": "Copie intégrale de l'acte de naissance",
+          "proof_of_address": "Document de moins de 3 mois (facture électricité, gaz, etc.)",
+          "marriage_certificate": "Copie intégrale de l'acte de mariage",
+          "passport": "Passeport en cours de validité",
+          "identity_card": "Carte nationale d'identité en cours de validité",
+          "residence_permit": "Titre de séjour en cours de validité"
+        }
+      }
     }
   },
   "dashboard": {
