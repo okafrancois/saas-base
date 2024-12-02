@@ -8,12 +8,12 @@
     "start": "next start",
     "lint": "eslint src && tsc",
     "prisma-studio": "pnpx prisma studio",
-    "start:database": "docker-compose up -d",
+    "predev": "docker-compose up -d",
     "postinstall": "prisma generate",
     "format": "prettier --write .",
-    "ai-sum": "pnpx ai-digest -o ./.code_base.md --whitespace-removal --show-output-files",
+    "ai-sum": "pnpx ai-digest -o ai-sum/.code_base.md --whitespace-removal --show-output-files",
     "preai-sum": "node ./scripts/trad.js",
-    "db:reset": "pnpx prisma db push --force-reset",
+    "predb:seed": "pnpx prisma db push --force-reset",
     "db:seed": "NODE_ENV=development ts-node --project tsconfig.seed.json scripts/seed.ts"
   },
   "dependencies": {

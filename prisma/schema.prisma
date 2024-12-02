@@ -94,44 +94,6 @@ enum DocumentType {
   IDENTITY_PHOTO
 }
 
-enum AppointmentType {
-  DOCUMENT_SUBMISSION
-  DOCUMENT_COLLECTION
-  CONSULTATION
-  OTHER
-}
-
-enum AppointmentStatus {
-  SCHEDULED
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-  MISSED
-}
-
-enum ProcedureType {
-  PASSPORT_REQUEST
-  VISA_REQUEST
-  BIRTH_REGISTRATION
-  MARRIAGE_REGISTRATION
-  DEATH_REGISTRATION
-  CERTIFICATE_REQUEST
-  CONSULAR_CARD
-  CONSULAR_REGISTRATION
-  DOCUMENT_LEGALIZATION
-  OTHER
-}
-
-enum ProcedureStatus {
-  DRAFT
-  SUBMITTED
-  IN_REVIEW
-  ADDITIONAL_INFO_NEEDED
-  APPROVED
-  REJECTED
-  COMPLETED
-}
-
 // Modèles principaux
 model User {
   id       String   @id @default(cuid())
@@ -147,13 +109,14 @@ model User {
   consulate   Consulate? @relation(fields: [consulateId], references: [id])
 
   // Auth related
-  emailVerified     DateTime?
-  phoneVerified     DateTime?
-  accounts          Account[]
-  sessions          Session[]
-  lastLogin         DateTime?
-  procedureRequests ProcedureRequest[]
-  Message           Message[]
+  emailVerified DateTime?
+  phoneVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  lastLogin     DateTime?
+  messages      Message[]
+
+  documents Document[] @relation("userDocuments")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,15 +145,14 @@ model Profile {
   identityPicture        String?
 
   // Documents
-  documents          Document[] @relation("profileDocuments")
-  passport           Document?  @relation("passport", fields: [passportId], references: [id])
-  passportId         String?    @unique
-  birthCertificate   Document?  @relation("birthCertificate", fields: [birthCertificateId], references: [id])
-  birthCertificateId String?    @unique
-  residencePermit    Document?  @relation("residencePermit", fields: [residencePermitId], references: [id])
-  residencePermitId  String?    @unique
-  addressProof       Document?  @relation("addressProof", fields: [addressProofId], references: [id])
-  addressProofId     String?    @unique
+  passport           Document? @relation("passport", fields: [passportId], references: [id])
+  passportId         String?   @unique
+  birthCertificate   Document? @relation("birthCertificate", fields: [birthCertificateId], references: [id])
+  birthCertificateId String?   @unique
+  residencePermit    Document? @relation("residencePermit", fields: [residencePermitId], references: [id])
+  residencePermitId  String?   @unique
+  addressProof       Document? @relation("addressProof", fields: [addressProofId], references: [id])
+  addressProofId     String?   @unique
 
   // Contact
   address          Address?          @relation(fields: [addressId], references: [id])
@@ -211,8 +173,6 @@ model Profile {
   profession      String?
   employer        String?
   employerAddress String?
-
-  appointments Appointment[]
 
   // Métadonnées
   status    RequestStatus @default(INCOMPLETE)
@@ -266,12 +226,10 @@ model Consulate {
   logo      String?
 
   // Relations
-  users             User[]
-  countries         Country[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  appointments      Appointment[]
-  procedureRequests ProcedureRequest[]
+  users     User[]
+  countries Country[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Country {
@@ -332,128 +290,28 @@ model Document {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  // Relations
-  profileId String?
-  profile   Profile? @relation(name: "profileDocuments", fields: [profileId], references: [id], onDelete: Cascade)
+  userId String?
+  user   User?   @relation("userDocuments", fields: [userId], references: [id])
 
   // Relations inverses spécifiques
-  passportProfile         Profile?          @relation("passport")
-  birthCertificateProfile Profile?          @relation("birthCertificate")
-  residencePermitProfile  Profile?          @relation("residencePermit")
-  addressProofProfile     Profile?          @relation("addressProof")
-  ProcedureRequest        ProcedureRequest? @relation(fields: [procedureRequestId], references: [id])
-  procedureRequestId      String?
-}
-
-// Ajouter le modèle Appointment
-model Appointment {
-  id          String            @id @default(cuid())
-  type        AppointmentType
-  status      AppointmentStatus @default(SCHEDULED)
-  date        DateTime
-  description String?
-  notes       String?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-
-  // Relations
-  profileId   String
-  profile     Profile   @relation(fields: [profileId], references: [id])
-  consulateId String
-  consulate   Consulate @relation(fields: [consulateId], references: [id])
-}
-
-// Modèle pour les procédures disponibles
-model Procedure {
-  id          String        @id @default(cuid())
-  type        ProcedureType
-  title       String
-  description String?
-  isActive    Boolean       @default(true)
-
-  // Configuration de la procédure
-  requiredDocuments DocumentType[] // Types de documents requis
-  optionalDocuments DocumentType[] // Types de documents optionnels
-  estimatedTime     String? // Temps estimé de traitement
-  price             Float? // Coût de la procédure si applicable
-
-  // Relations
-  steps    ProcedureStep[]
-  requests ProcedureRequest[]
-
-  // Métadonnées
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Étapes d'une procédure
-model ProcedureStep {
-  id          String  @id @default(cuid())
-  order       Int // Ordre de l'étape
-  title       String
-  description String?
-  isRequired  Boolean @default(true)
-
-  // Relations
-  procedureId String
-  procedure   Procedure @relation(fields: [procedureId], references: [id], onDelete: Cascade)
-
-  // Champs de formulaire pour cette étape
-  fields Json? // Configuration des champs de formulaire
-
-  // Métadonnées
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Demande de procédure
-model ProcedureRequest {
-  id     String          @id @default(cuid())
-  status ProcedureStatus @default(DRAFT)
-
-  // Relations
-  procedureId String
-  procedure   Procedure @relation(fields: [procedureId], references: [id])
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  consulateId String
-  consulate   Consulate @relation(fields: [consulateId], references: [id])
-
-  // Données de la demande
-  formData  Json? // Données du formulaire
-  documents Document[] // Documents fournis
-  notes     Note[] // Notes administratives
-  messages  Message[] // Communications
-
-  // Suivi
-  submittedAt DateTime?
-  completedAt DateTime?
-
-  // Métadonnées
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([procedureId])
-  @@index([consulateId])
+  passportProfile         Profile? @relation("passport")
+  birthCertificateProfile Profile? @relation("birthCertificate")
+  residencePermitProfile  Profile? @relation("residencePermit")
+  addressProofProfile     Profile? @relation("addressProof")
 }
 
 model Message {
-  id                 String            @id @default(cuid())
-  content            String
-  userId             String
-  user               User              @relation(fields: [userId], references: [id])
-  requestId          String
-  createdAt          DateTime          @default(now())
-  procedure          ProcedureRequest? @relation(fields: [procedureRequestId], references: [id])
-  procedureRequestId String?
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  requestId String
+  createdAt DateTime @default(now())
 }
 
 model Note {
-  id                 String            @id @default(cuid())
-  content            String
-  requestId          String
-  createdAt          DateTime          @default(now())
-  procedure          ProcedureRequest? @relation(fields: [procedureRequestId], references: [id])
-  procedureRequestId String?
+  id        String   @id @default(cuid())
+  content   String
+  requestId String
+  createdAt DateTime @default(now())
 }
