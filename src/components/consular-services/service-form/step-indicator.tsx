@@ -1,6 +1,5 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
@@ -17,8 +16,6 @@ interface StepIndicatorProps {
 }
 
 export function StepIndicator({ steps, currentStep, totalSteps }: StepIndicatorProps) {
-  const t = useTranslations('procedures.form')
-
   return (
     <div className="relative">
       {/* Barre de progression */}

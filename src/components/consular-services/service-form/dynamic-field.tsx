@@ -1,21 +1,40 @@
 'use client'
-
 import { useTranslations } from 'next-intl'
 import { FieldValues, UseFormReturn } from 'react-hook-form'
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from '@/components/ui/form'
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
 
 interface FieldConfig extends FieldValues {
   name: string
-  type: 'text' | 'select' | 'radio' | 'checkbox' | 'textarea'
+  type: 'text' | 'select' | 'radio' | 'checkbox' | 'textarea' | 'date' | 'email' | 'tel'
   label: string
   description?: string
   required?: boolean
   options?: { value: string; label: string }[]
+  validation?: {
+    minLength?: number
+    maxLength?: number
+    pattern?: string
+    min?: string
+    max?: string
+  }
 }
 
 interface DynamicFieldProps {
@@ -24,7 +43,7 @@ interface DynamicFieldProps {
 }
 
 export function DynamicField({ field, form }: DynamicFieldProps) {
-  const t = useTranslations('procedures.form')
+  const t = useTranslations('consular.services.form')
 
   const renderFieldControl = () => {
     switch (field.type) {
@@ -84,6 +103,39 @@ export function DynamicField({ field, form }: DynamicFieldProps) {
             <Textarea
               {...form.register(field.name)}
               placeholder={t('enter_text')}
+            />
+          </FormControl>
+        )
+
+      case 'date':
+        return (
+          <FormControl>
+            <Input
+              {...form.register(field.name)}
+              type="date"
+              placeholder={t('select_date')}
+            />
+          </FormControl>
+        )
+
+      case 'email':
+        return (
+          <FormControl>
+            <Input
+              {...form.register(field.name)}
+              type="email"
+              placeholder={t('enter_email')}
+            />
+          </FormControl>
+        )
+
+      case 'tel':
+        return (
+          <FormControl>
+            <Input
+              {...form.register(field.name)}
+              type="tel"
+              placeholder={t('enter_phone')}
             />
           </FormControl>
         )

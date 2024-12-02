@@ -1,13 +1,12 @@
 'use client'
-
 import { useTranslations } from 'next-intl'
-import { ProcedureStep } from '@prisma/client'
+import { ServiceStep } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { Form } from '@/components/ui/form'
 import { DynamicField } from './dynamic-field'
 
 interface StepFormProps {
-  step: ProcedureStep
+  step: ServiceStep
   onSubmit: (data: any) => void
   defaultValues?: any
 }
@@ -17,19 +16,18 @@ export function StepForm({
                            onSubmit,
                            defaultValues
                          }: StepFormProps) {
-  const t = useTranslations('procedures.form')
+  const t = useTranslations('consular.services.form')
   const form = useForm({
     defaultValues: defaultValues || {}
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const fields = step.fields as any[]
+  const fields = JSON.parse(step.fields as string)
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-6">
-          {fields.map((field) => (
+          {fields.map((field: any) => (
             <DynamicField
               key={field.name}
               field={field}

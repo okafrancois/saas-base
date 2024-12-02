@@ -1,31 +1,37 @@
 'use client'
-
 import { useTranslations } from 'next-intl'
-import { Procedure, ProcedureStep } from '@prisma/client'
+import { ConsularService, ServiceStep } from '@prisma/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertTriangle, CheckCircle2 } from 'lucide-react'
 
 interface ReviewStepProps {
-  procedure: Procedure & {
-    steps: ProcedureStep[]
-  }
+  service: ConsularService & { steps: ServiceStep[] }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (data: any) => void
 }
 
-export function ReviewStep({ procedure, data, onSubmit }: ReviewStepProps) {
-  const t = useTranslations('procedures.form')
+export function ReviewStep({
+                             service,
+                             data,
+                             onSubmit
+                           }: ReviewStepProps) {
+  const t = useTranslations('consular.services.form')
 
   const renderDocumentStatus = (type: string) => {
     const document = data.documents?.[type]
-    const isRequired = procedure.requiredDocuments.includes(type)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const isRequired = service.requiredDocuments.includes(type as any)
 
     return (
       <div className="flex items-center justify-between">
         <span>{t(`documents.types.${type.toLowerCase()}`)}</span>
-        <Badge variant={document ? "success" : isRequired ? "destructive" : "secondary"}>
+        <Badge
+          variant={document ? "success" : isRequired ? "destructive" : "secondary"}
+        >
           {document
             ? t('documents.status.uploaded')
             : isRequired
@@ -37,7 +43,7 @@ export function ReviewStep({ procedure, data, onSubmit }: ReviewStepProps) {
     )
   }
 
-  const renderStepData = (step: ProcedureStep) => {
+  const renderStepData = (step: ServiceStep) => {
     const stepData = data[`step_${step.id}`]
     if (!stepData) return null
 
@@ -55,7 +61,7 @@ export function ReviewStep({ procedure, data, onSubmit }: ReviewStepProps) {
     )
   }
 
-  const isComplete = procedure.requiredDocuments.every(
+  const isComplete = service.requiredDocuments.every(
     type => data.documents?.[type]
   )
 
@@ -86,7 +92,7 @@ export function ReviewStep({ procedure, data, onSubmit }: ReviewStepProps) {
           <CardTitle>{t('review.documents.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {[...procedure.requiredDocuments, ...procedure.optionalDocuments].map(type => (
+          {[...service.requiredDocuments, ...service.optionalDocuments].map(type => (
             <div key={type}>
               {renderDocumentStatus(type)}
             </div>
@@ -94,7 +100,7 @@ export function ReviewStep({ procedure, data, onSubmit }: ReviewStepProps) {
         </CardContent>
       </Card>
 
-      {procedure.steps.map(step => (
+      {service.steps.map(step => (
         <Card key={step.id}>
           <CardHeader>
             <CardTitle>{step.title}</CardTitle>

@@ -116,6 +116,8 @@ model User {
   lastLogin     DateTime?
   messages      Message[]
 
+  serviceRequests ServiceRequest[]
+
   documents Document[] @relation("userDocuments")
 
   createdAt DateTime @default(now())
@@ -225,6 +227,8 @@ model Consulate {
   isGeneral Boolean  @default(false)
   logo      String?
 
+  serviceRequests ServiceRequest[]
+
   // Relations
   users     User[]
   countries Country[]
@@ -293,6 +297,9 @@ model Document {
   userId String?
   user   User?   @relation("userDocuments", fields: [userId], references: [id])
 
+  serviceRequest   ServiceRequest? @relation(fields: [serviceRequestId], references: [id])
+  serviceRequestId String?
+
   // Relations inverses spécifiques
   passportProfile         Profile? @relation("passport")
   birthCertificateProfile Profile? @relation("birthCertificate")
@@ -301,17 +308,146 @@ model Document {
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  content   String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  requestId String
-  createdAt DateTime @default(now())
+  id      String @id @default(cuid())
+  content String
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+
+  serviceRequest   ServiceRequest? @relation(fields: [serviceRequestId], references: [id])
+  serviceRequestId String?
+  createdAt        DateTime        @default(now())
 }
 
 model Note {
-  id        String   @id @default(cuid())
-  content   String
-  requestId String
+  id      String @id @default(cuid())
+  content String
+
+  serviceRequest   ServiceRequest? @relation(fields: [serviceRequestId], references: [id])
+  serviceRequestId String?
+
   createdAt DateTime @default(now())
+}
+
+// Types de démarches disponibles
+enum ConsularServiceType {
+  // Documents d'identité
+  PASSPORT_REQUEST
+  CONSULAR_CARD
+  ID_CARD_REQUEST
+
+  // État civil
+  BIRTH_REGISTRATION
+  MARRIAGE_REGISTRATION
+  DEATH_REGISTRATION
+
+  // Attestations et certificats
+  NATIONALITY_CERTIFICATE
+  LIFE_CERTIFICATE
+  RESIDENCE_CERTIFICATE
+  SINGLE_STATUS_CERTIFICATE
+
+  // Services notariaux
+  POWER_OF_ATTORNEY
+  DOCUMENT_CERTIFICATION
+  SIGNATURE_AUTHENTICATION
+
+  // Visas
+  VISA_REQUEST
+  VISA_EXTENSION
+}
+
+// Statut de la démarche
+enum ServiceRequestStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  ADDITIONAL_INFO_NEEDED
+  APPROVED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+// Priorité de la démarche
+enum ServicePriority {
+  STANDARD
+  URGENT
+}
+
+// Modèle pour les types de démarches
+model ConsularService {
+  id                String              @id @default(cuid())
+  type              ConsularServiceType
+  title             String
+  description       String?
+  requiredDocuments DocumentType[] // Types de documents requis
+  optionalDocuments DocumentType[] // Types de documents optionnels
+  estimatedTime     String? // Temps estimé de traitement
+  price             Float? // Coût de la démarche
+  isActive          Boolean             @default(true)
+
+  // Configuration du workflow
+  steps        ServiceStep[]
+  requirements Json? // Conditions d'éligibilité
+  validations  Json? // Règles de validation
+
+  // Relations
+  requests ServiceRequest[]
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modèle pour les étapes d'une démarche
+model ServiceStep {
+  id          String  @id @default(cuid())
+  order       Int // Ordre de l'étape
+  title       String
+  description String?
+  isRequired  Boolean @default(true)
+
+  // Configuration du formulaire
+  fields Json? // Structure des champs à remplir
+
+  // Relations
+  serviceId String
+  service   ConsularService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modèle pour les demandes de démarches
+model ServiceRequest {
+  id       String               @id @default(cuid())
+  status   ServiceRequestStatus @default(DRAFT)
+  priority ServicePriority      @default(STANDARD)
+
+  // Relations
+  serviceId   String
+  service     ConsularService @relation(fields: [serviceId], references: [id])
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  consulateId String
+  consulate   Consulate       @relation(fields: [consulateId], references: [id])
+
+  // Données de la demande
+  formData  Json? // Données du formulaire
+  documents Document[] // Documents fournis
+  notes     Note[] // Notes administratives
+  messages  Message[] // Communications
+
+  // Suivi
+  submittedAt DateTime?
+  completedAt DateTime?
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([serviceId])
+  @@index([consulateId])
 }

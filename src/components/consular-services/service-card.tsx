@@ -1,27 +1,27 @@
 'use client'
 
-import { Procedure } from '@prisma/client'
+import { ConsularService } from '@prisma/client'
 import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Clock, FileText, AlertCircle } from 'lucide-react'
 
-interface ProcedureCardProps {
-  procedure: Procedure
+interface ServiceCardProps {
+  service: ConsularService
   onStart?: (id: string) => void
   disabled?: boolean
 }
 
-export function ProcedureCard({ procedure, onStart, disabled }: ProcedureCardProps) {
-  const t = useTranslations('procedures')
+export function ServiceCard({ service, onStart, disabled }: ServiceCardProps) {
+  const t = useTranslations('consular.services')
 
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-base">
-            {t(`types.${procedure.type.toLowerCase()}`)}
+            {t(`types.${service.type.toLowerCase()}`)}
           </CardTitle>
           <Badge variant={disabled ? "outline" : "default"}>
             {disabled ? t('status.unavailable') : t('status.available')}
@@ -31,19 +31,19 @@ export function ProcedureCard({ procedure, onStart, disabled }: ProcedureCardPro
 
       <CardContent className="space-y-2">
         <p className="text-sm text-muted-foreground">
-          {procedure.description}
+          {service.description}
         </p>
 
         <div className="flex items-center gap-2 text-sm">
           <Clock className="h-4 w-4 text-muted-foreground" />
-          <span>{procedure.estimatedTime || t('estimated_time.unknown')}</span>
+          <span>{service.estimatedTime || t('estimated_time.unknown')}</span>
         </div>
 
-        {procedure.requiredDocuments.length > 0 && (
+        {service.requiredDocuments.length > 0 && (
           <div className="flex items-center gap-2 text-sm">
             <FileText className="h-4 w-4 text-muted-foreground" />
             <span>
-              {t('required_documents', { count: procedure.requiredDocuments.length })}
+              {t('required_documents', { count: service.requiredDocuments.length })}
             </span>
           </div>
         )}
@@ -58,7 +58,7 @@ export function ProcedureCard({ procedure, onStart, disabled }: ProcedureCardPro
 
       <CardFooter>
         <Button
-          onClick={() => onStart?.(procedure.id)}
+          onClick={() => onStart?.(service.id)}
           disabled={disabled}
           className="w-full"
         >

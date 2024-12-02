@@ -20,11 +20,10 @@ export const ROUTES = {
   settings: '/settings' as Route<string>,
   requests: '/requests' as Route<string>,
   documents: '/documents' as Route<string>,
-  procedures: '/procedures' as Route<string>,
-  procedure: '/procedures/:id' as Route<string>,
-  procedure_edit: (id: string) => `/procedures/${id.toLowerCase()}/edit` as Route<string>,
-  procedure_start: (id: string) => `/procedures/${id.toLowerCase()}/start` as Route<string>,
-  procedure_requests: '/requests/requests' as Route<string>,
+  services: '/services' as Route<string>,
+  service_start: (id: string) => `/services/${id}/start` as Route<string>,
+  service_edit: (id: string) => `/services/${id}/edit` as Route<string>,
+  service_requests: '/services/requests' as Route<string>,
 
   // Pages admin
   admin: '/admin' as Route<string>,
