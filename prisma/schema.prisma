@@ -118,7 +118,7 @@ model User {
 
   serviceRequests ServiceRequest[]
 
-  documents Document[] @relation("userDocuments")
+  documents UserDocument[] @relation("userDocuments")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -147,14 +147,14 @@ model Profile {
   identityPicture        String?
 
   // Documents
-  passport           Document? @relation("passport", fields: [passportId], references: [id])
-  passportId         String?   @unique
-  birthCertificate   Document? @relation("birthCertificate", fields: [birthCertificateId], references: [id])
-  birthCertificateId String?   @unique
-  residencePermit    Document? @relation("residencePermit", fields: [residencePermitId], references: [id])
-  residencePermitId  String?   @unique
-  addressProof       Document? @relation("addressProof", fields: [addressProofId], references: [id])
-  addressProofId     String?   @unique
+  passport           UserDocument? @relation("passport", fields: [passportId], references: [id])
+  passportId         String?       @unique
+  birthCertificate   UserDocument? @relation("birthCertificate", fields: [birthCertificateId], references: [id])
+  birthCertificateId String?       @unique
+  residencePermit    UserDocument? @relation("residencePermit", fields: [residencePermitId], references: [id])
+  residencePermitId  String?       @unique
+  addressProof       UserDocument? @relation("addressProof", fields: [addressProofId], references: [id])
+  addressProofId     String?       @unique
 
   // Contact
   address          Address?          @relation(fields: [addressId], references: [id])
@@ -283,7 +283,7 @@ model VerificationToken {
 }
 
 // Mettre à jour le modèle Document
-model Document {
+model UserDocument {
   id        String         @id @default(cuid())
   type      DocumentType
   status    DocumentStatus @default(PENDING)
@@ -435,7 +435,7 @@ model ServiceRequest {
 
   // Données de la demande
   formData  Json? // Données du formulaire
-  documents Document[] // Documents fournis
+  documents UserDocument[] // Documents fournis
   notes     Note[] // Notes administratives
   messages  Message[] // Communications
 

@@ -5,10 +5,7 @@ import sharp from 'sharp'
 import { DocumentField } from '@/lib/utils'
 import Anthropic from '@anthropic-ai/sdk'
 import { pdfToImages } from '@/actions/convert'
-import { DocumentWithMetadata } from '@/types/document'
 import { getCurrentUser } from '@/actions/user'
-import { getUserByIdWithProfile, getUserProfile } from '@/lib/user/getters'
-import { getProfileDocuments } from '@/lib/db/document'
 import { db } from '@/lib/prisma'
 
 // Types
@@ -346,18 +343,15 @@ function createVisionAnalyzer(model: AIModel): VisionAnalyzer {
   }
 }
 
-export async function getUserDocumentsList(): Promise<DocumentWithMetadata[]> {
+export async function getUserDocumentsList(): Promise<Document[]> {
   try {
     const user = await getCurrentUser()
     if (!user) return []
 
-    const profile = await getUserProfile(user.id)
-
-    if (!profile) return []
-
-    const documents = await getProfileDocuments(profile.id)
-
-    return documents as DocumentWithMetadata[]
+    return await db.userDocument.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' }
+    })
   } catch (error) {
     console.error('Error fetching user documents:', error)
     return []
@@ -384,5 +378,5 @@ export async function getUserProfileDocuments(userId: string) {
     profileWithDocument.addressProof
   ]
 
-  return documents.filter(Boolean) as DocumentWithMetadata[]
+  return documents.filter(Boolean) as UserDocument[]
 }

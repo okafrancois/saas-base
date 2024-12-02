@@ -7,7 +7,9 @@ import { ConsularServiceType } from '@prisma/client'
 export async function getAvailableServices(type?: ConsularServiceType) {
   try {
     const authResult = await checkAuth()
-    if (authResult.error) return { error: authResult.error }
+    if (authResult.error) {
+      throw new Error(authResult.error)
+    }
 
     const where = {
       isActive: true,

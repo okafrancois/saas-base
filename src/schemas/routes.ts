@@ -23,7 +23,7 @@ export const ROUTES = {
   services: '/services' as Route<string>,
   service_start: (id: string) => `/services/${id}/start` as Route<string>,
   service_edit: (id: string) => `/services/${id}/edit` as Route<string>,
-  service_requests: '/services/requests' as Route<string>,
+  service_view: (id: string) => `/services/${id}` as Route<string>,
 
   // Pages admin
   admin: '/admin' as Route<string>,
