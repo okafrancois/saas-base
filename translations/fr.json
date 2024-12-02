@@ -2039,6 +2039,10 @@
             "uploaded": "Document téléchargé",
             "missing": "Document manquant",
             "optional": "Optionnel"
+          },
+          "existing": {
+            "title": "Documents déjà fournis",
+            "already_provided": "Document déjà fourni"
           }
         },
         "review": {
