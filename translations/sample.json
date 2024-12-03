@@ -2038,6 +2038,10 @@
             "uploaded": "",
             "missing": "",
             "optional": ""
+          },
+          "existing": {
+            "title": "",
+            "already_provided": ""
           }
         },
         "review": {
@@ -2057,7 +2061,9 @@
           "previous": "",
           "next": "",
           "submit": ""
-        }
+        },
+        "prefilled_fields_info": "",
+        "prefilled": ""
       },
       "details": {
         "main_info": "",

@@ -2,18 +2,34 @@
 import { useTranslations } from 'next-intl'
 import { DocumentType } from '@prisma/client'
 import { useForm } from 'react-hook-form'
-import { Form } from '@/components/ui/form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Form, FormField } from '@/components/ui/form'
 import { DocumentUploadField } from '@/components/ui/document-upload'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+// Définir le schéma de validation pour les documents
+const createDocumentsSchema = (requiredDocuments: DocumentType[]) => {
+  const schema: Record<string, z.ZodType> = {}
+
+  requiredDocuments.forEach(doc => {
+    schema[doc] = requiredDocuments.includes(doc)
+      ? z.any().refine((file) => file instanceof File, 'required_document')
+      : z.any().optional()
+  })
+
+  return z.object(schema)
+}
 
 interface DocumentsStepProps {
   existingDocuments: DocumentType[]
   requiredDocuments: DocumentType[]
   optionalDocuments?: DocumentType[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSubmit: (data: any) => void
+  onSubmit: (data: Record<string, unknown>) => void
+  defaultValues?: Record<string, unknown>
   isLoading?: boolean
 }
 
@@ -22,10 +38,16 @@ export function DocumentsStep({
                                 requiredDocuments,
                                 optionalDocuments = [],
                                 onSubmit,
-                                isLoading
+                                isLoading,
+  defaultValues
                               }: DocumentsStepProps) {
   const t = useTranslations('consular.services.form')
-  const form = useForm()
+
+  // Initialiser le formulaire avec le schéma
+  const form = useForm({
+    resolver: zodResolver(createDocumentsSchema(requiredDocuments)),
+    defaultValues
+  })
 
   return (
     <Form {...form}>
@@ -76,16 +98,22 @@ export function DocumentsStep({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <DocumentUploadField
-                    id={`documents.${doc.toLowerCase()}`}
-                    label={t(`documents.types.${doc.toLowerCase()}`)}
-                    description={t(`documents.descriptions.${doc.toLowerCase()}`)}
-                    accept="image/*,.pdf"
-                    maxSize={5 * 1024 * 1024}
-                    required={requiredDocuments.includes(doc)}
-                    form={form}
-                    field={form.register(`documents.${doc.toLowerCase()}`)}
-                    disabled={isLoading}
+                  <FormField
+                    control={form.control}
+                    name={doc}
+                    render={({ field }) => (
+                      <DocumentUploadField
+                        id={doc.toLowerCase()}
+                        label={t(`documents.types.${doc.toLowerCase()}`)}
+                        description={t(`documents.descriptions.${doc.toLowerCase()}`)}
+                        accept="image/*,.pdf"
+                        maxSize={5 * 1024 * 1024}
+                        required={requiredDocuments.includes(doc)}
+                        disabled={isLoading}
+                        field={field}
+                        form={form}
+                      />
+                    )}
                   />
                 </motion.div>
               ))}

@@ -9,28 +9,28 @@ import { AlertTriangle, CheckCircle2 } from 'lucide-react'
 interface ReviewStepProps {
   service: ConsularService & { steps: ServiceStep[] }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any
+  data: Record<string, any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSubmit: (data: any) => void
+  onSubmit: (data: Record<string, any>) => void
 }
 
-export function ReviewStep({
-                             service,
-                             data,
-                             onSubmit
-                           }: ReviewStepProps) {
+export function ReviewStep({ service, data, onSubmit }: ReviewStepProps) {
   const t = useTranslations('consular.services.form')
 
   const renderDocumentStatus = (type: string) => {
     const document = data.documents?.[type]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const isRequired = service.requiredDocuments.includes(type as any)
 
     return (
       <div className="flex items-center justify-between">
         <span>{t(`documents.types.${type.toLowerCase()}`)}</span>
         <Badge
-          variant={document ? "success" : isRequired ? "destructive" : "secondary"}
+          variant={document
+            ? "success"
+            : isRequired
+              ? "destructive"
+              : "secondary"
+          }
         >
           {document
             ? t('documents.status.uploaded')
@@ -61,12 +61,14 @@ export function ReviewStep({
     )
   }
 
+  // Vérifier si tous les documents requis sont fournis
   const isComplete = service.requiredDocuments.every(
     type => data.documents?.[type]
   )
 
   return (
     <div className="space-y-6">
+      {/* Alerte de statut */}
       <Alert variant={isComplete ? "default" : "destructive"}>
         {isComplete ? (
           <CheckCircle2 className="h-4 w-4" />
@@ -87,6 +89,7 @@ export function ReviewStep({
         </AlertDescription>
       </Alert>
 
+      {/* Section Documents */}
       <Card>
         <CardHeader>
           <CardTitle>{t('review.documents.title')}</CardTitle>
@@ -100,6 +103,7 @@ export function ReviewStep({
         </CardContent>
       </Card>
 
+      {/* Sections pour chaque étape */}
       {service.steps.map(step => (
         <Card key={step.id}>
           <CardHeader>

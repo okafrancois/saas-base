@@ -2062,7 +2062,9 @@
           "previous": "Précédent",
           "next": "Suivant",
           "submit": "Soumettre la demande"
-        }
+        },
+        "prefilled_fields_info": "Les champs pré-remplis sont basés sur les informations de votre profil",
+        "prefilled": "Pré-rempli"
       },
       "details": {
         "main_info": "Informations principales",

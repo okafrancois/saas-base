@@ -5,6 +5,8 @@ import { ServiceForm } from '@/components/consular-services/service-form'
 import { redirect } from 'next/navigation'
 import { ROUTES } from '@/schemas/routes'
 import { getUserDocumentsList } from '@/actions/documents'
+import { getUserFullProfile } from '@/lib/user/getters'
+import { getCurrentUser } from '@/actions/user'
 
 interface ServiceStartPageProps {
   params: {
@@ -13,9 +15,16 @@ interface ServiceStartPageProps {
 }
 
 export default async function ServiceStartPage({ params }: ServiceStartPageProps) {
-  const [service, documents] = await Promise.all([
+  const user = await getCurrentUser()
+
+  if (!user) {
+    return null
+  }
+
+  const [service, documents, profile] = await Promise.all([
     getServiceById(params.id),
-    getUserDocumentsList()
+    getUserDocumentsList(),
+    getUserFullProfile(user.id)
   ])
 
   if (!service) {
@@ -28,6 +37,8 @@ export default async function ServiceStartPage({ params }: ServiceStartPageProps
         <ServiceForm
           service={service}
           documents={documents}
+          profile={profile}
+          defaultValues={profile ?? {} as Record<string, unknown>}
         />
       </Suspense>
     </div>
