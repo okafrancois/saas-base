@@ -9,8 +9,6 @@ import {
   APP_NAME,
   APP_TITLE_TEMPLATE,
 } from '@/lib/utils'
-import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages } from 'next-intl/server'
 import { ChatToggle } from '@/components/chat/chat-toggle'
 import { Toaster } from '@/components/ui/toaster'
 
@@ -70,24 +68,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = await getLocale()
-  const messages = await getMessages()
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={"en"} suppressHydrationWarning>
       <body className={GeistSans.className}>
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='light'
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <ChatToggle />
-            <Toaster  />
-          </ThemeProvider>
-        </NextIntlClientProvider>
+      <ThemeProvider
+        attribute='class'
+        defaultTheme='light'
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+        <Toaster  />
+      </ThemeProvider>
       </body>
     </html>
   )

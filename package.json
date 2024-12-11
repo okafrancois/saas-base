@@ -11,7 +11,7 @@
     "predev": "docker-compose up -d",
     "postinstall": "prisma generate",
     "format": "prettier --write .",
-    "ai-sum": "pnpx ai-digest -o ai-sum/.code_base.md --whitespace-removal --show-output-files",
+    "ai-sum": "pnpx ai-digest -o ai-sum/.code_base.md --whitespace-removal --show-output-files"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.29.2",
