@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { Profile } from '@prisma/client'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -208,8 +209,6 @@ export function useFormStorage() {
     clearData,
   }
 }
-
-import { Profile } from '@prisma/client'
 
 interface ProfileFieldStatus {
   required: {
