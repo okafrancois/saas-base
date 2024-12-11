@@ -98,10 +98,13 @@ async function analyzeDocument(
 ## 🚀 Pour Commencer
 
 1. Clonez le repository
-2. Installez les dépendances : `pnpm install`
-3. Lancez la base de données : `docker-compose up -d`
-4. Démarrez le serveur de développement : `pnpm dev`
-5. Ouvrez [http://localhost:3000](http://localhost:3000)
+2. configurez votre fichier `.env` en vous basant sur le fichier `.env.example`
+3. Attention à bien copier POSTGRES_URL avec l'url dans le fichier `.env`
+4. Rajouter la clé API OpenAI dans le fichier `.env`
+5. Installez les dépendances : `pnpm install`
+6. Lancez la base de données : `docker-compose up -d`
+7. Démarrez le serveur de développement : `pnpm dev`
+8. Ouvrez [http://localhost:3000](http://localhost:3000)
 
 ## 📦 Livrable Attendu
 
