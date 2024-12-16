@@ -1,5 +1,5 @@
 import { type Provider } from 'next-auth/providers'
-import { db } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { validateOTP } from '@/lib/user/otp'
 
 export interface AuthPayload {
@@ -44,12 +44,12 @@ export const CredentialsAuthProvider = (): Provider => ({
         ? { email: identifier }
         : { phone: identifier }
 
-      let user = await db.user.findFirst({
+      let user = await prisma.user.findFirst({
         where: userWhere
       })
 
       if (!user) {
-        user = await db.user.create({
+        user = await prisma.user.create({
           data: {
             ...(type === 'EMAIL'
               ? { email: identifier }

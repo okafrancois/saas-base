@@ -1,12 +1,15 @@
 import { PrismaClient } from '@prisma/client'
 
-declare global {
-  // eslint-disable-next-line no-var
-  var prisma: PrismaClient | undefined
-}
+// Gestion de plusieurs instances de Prisma en mode développement
+const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
-export const db = globalThis.prisma ?? new PrismaClient()
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: ['query'], // Active les logs des requêtes pour debug
+  })
 
+// Prévention de multiples instanciations dans un environnement de développement
 if (process.env.NODE_ENV !== 'production') {
-  globalThis.prisma = db
+  globalForPrisma.prisma = prisma
 }

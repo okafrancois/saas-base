@@ -1,10 +1,10 @@
 import { Profile, User } from '@prisma/client'
-import { db } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { FullProfile } from '@/types'
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   try {
-    return await db.user.findFirst({
+    return await prisma.user.findFirst({
       where: {
         email: email,
       },
@@ -16,7 +16,7 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 
 export async function getUserById(id: string): Promise<User | null> {
   try {
-    return await db.user.findFirst({
+    return await prisma.user.findFirst({
       where: {
         id: id,
       },
@@ -30,7 +30,7 @@ export async function getUserByIdWithProfile(id: string): Promise<User & {
   profile: Profile | null
 } | null> {
   try {
-    return await db.user.findFirst({
+    return await prisma.user.findFirst({
       where: {
         id: id,
       },
@@ -45,7 +45,7 @@ export async function getUserByIdWithProfile(id: string): Promise<User & {
 
 export async function getUserProfile(id: string) {
   try {
-    return await db.profile.findFirst({
+    return await prisma.profile.findFirst({
       where: {
         userId: id,
       },
@@ -57,7 +57,7 @@ export async function getUserProfile(id: string) {
 
 export async function getUserFullProfile(id: string): Promise<FullProfile | null> {
   try {
-    return db.profile.findFirst({
+    return prisma.profile.findFirst({
       where: {
         userId: id,
       },

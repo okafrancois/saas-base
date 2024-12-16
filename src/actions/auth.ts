@@ -3,7 +3,7 @@
 import { signOut } from '@/auth'
 import { ROUTES } from '@/schemas/routes'
 import { redirect } from 'next/navigation'
-import { db } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { generateOTP } from '@/lib/user/otp'
 import { sendOTPEmail, sendSMSOTP } from '@/actions/email'
 
@@ -18,7 +18,7 @@ export async function sendOTP(identifier: string, type: AuthType) {
     const generatedOTP = await generateOTP()
 
     // Supprimer tout OTP existant pour cet identifiant
-    await db.verificationToken.deleteMany({
+    await prisma.verificationToken.deleteMany({
       where: {
         identifier,
         type,
@@ -26,7 +26,7 @@ export async function sendOTP(identifier: string, type: AuthType) {
     })
 
     // Créer nouveau token
-    await db.verificationToken.create({
+    await prisma.verificationToken.create({
       data: {
         identifier,
         token: generatedOTP,

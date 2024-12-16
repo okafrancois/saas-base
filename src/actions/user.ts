@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-import { db } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 
 export const getCurrentUser = async () => {
   const session = await auth()
@@ -10,7 +10,7 @@ export const getCurrentUser = async () => {
 }
 
 export const checkUserExist = async (userId: string) => {
-  const user = await db.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       id: userId
     }

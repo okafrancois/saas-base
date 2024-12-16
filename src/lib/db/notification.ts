@@ -1,8 +1,8 @@
-import { db } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import type { NotificationData } from '@/types'
 
 export async function createNotification(data: NotificationData) {
-  return db.notification.create({
+  return prisma.notification.create({
     data: {
       title: data.title,
       content: data.content,
@@ -12,14 +12,14 @@ export async function createNotification(data: NotificationData) {
 }
 
 export async function markNotificationAsRead(id: string) {
-  return db.notification.update({
+  return prisma.notification.update({
     where: { id },
     data: { read: true }
   })
 }
 
 export async function getUnreadNotifications(userId: string) {
-  return db.notification.findMany({
+  return prisma.notification.findMany({
     where: {
       userId,
       read: false

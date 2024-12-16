@@ -1,4 +1,4 @@
-import { db } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { customAlphabet } from 'nanoid'
 
 export const generateOTP = async () => {
@@ -16,7 +16,7 @@ export const validateOTP = async ({
   type: 'EMAIL' | 'PHONE'
 }) => {
   try {
-    const token = await db.verificationToken.findFirst({
+    const token = await prisma.verificationToken.findFirst({
       where: {
         identifier,
         token: otp,
@@ -30,7 +30,7 @@ export const validateOTP = async ({
     if (!token) return false
 
     // Supprimer le token après utilisation
-    await db.verificationToken.delete({
+    await prisma.verificationToken.delete({
       where: { id: token.id }
     })
 

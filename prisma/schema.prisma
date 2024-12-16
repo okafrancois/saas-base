@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URL")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -71,4 +71,11 @@ model VerificationToken {
   type       String
 
   @@unique([identifier, token])
+}
+
+model DocumentAnalysis {
+  id        Int      @id @default(autoincrement())
+  fileName  String
+  metadata  Json
+  createdAt DateTime @default(now())
 }
